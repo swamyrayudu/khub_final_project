@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { usePathname } from 'next/navigation';
 import SellerHeader from '@/components/seller/SellerHeader';
 import SellerSidebar from '@/components/seller/SellerSidebar';
+import Footer from '@/components/layouts/Footer';
 
 export default function SellerLayout({
   children,
@@ -79,6 +80,9 @@ export default function SellerLayout({
       <main className={showHeader ? 'pt-0' : ''}>
         {children}
       </main>
+      
+      {/* Footer */}
+      {showHeader && <Footer />}
     </div>
   );
 }

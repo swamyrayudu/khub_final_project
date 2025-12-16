@@ -1,6 +1,7 @@
 "use client";
 
 import AdminHeader from "@/components/layouts/AdminHeader";
+import Footer from "@/components/layouts/Footer";
 import { usePathname } from "next/navigation";
 import React from "react";
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -13,6 +14,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     <>
       {!hideHeader && <AdminHeader />}
       {children}
+      {!hideHeader && <Footer />}
     </>
   );
 }

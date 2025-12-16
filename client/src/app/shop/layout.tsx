@@ -4,6 +4,7 @@
 
 import React from 'react';
 import ShopHeader from "@/components/layouts/header";
+import Footer from "@/components/layouts/Footer";
 import { WishlistProvider } from "@/contexts/WishlistContext";
 import { LocationModal } from "@/components/ui/location-modal";
 import { useSession } from "next-auth/react";
@@ -53,6 +54,7 @@ export default function ShopLayout({ children } :{children:React.ReactNode}) {
     <WishlistProvider>
       <ShopHeader/>
       {children}
+      <Footer />
       {!isCheckingProfile && (
         <LocationModal open={showLocationModal} onLocationSet={handleLocationSet} />
       )}
