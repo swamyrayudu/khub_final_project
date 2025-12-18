@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { ShoppingBag, Store, ArrowRight, Star, Users, Shield, Moon, Sun } from 'lucide-react';
+import Footer from '@/components/layouts/Footer';
 
 export default function Home() {
   const router = useRouter();
@@ -181,26 +182,7 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-muted/30 mt-20 border-t border-border">
-        <div className="container mx-auto px-4 py-12">
-          <div className="text-center">
-            <h4 className="text-2xl font-bold text-foreground mb-4">Localhunt</h4>
-            <p className="text-muted-foreground mb-8 max-w-md mx-auto">
-              Connecting buyers and sellers in a seamless, secure, and enjoyable marketplace experience.
-            </p>
-            <div className="flex justify-center space-x-8 text-sm text-muted-foreground">
-              <button className="hover:text-foreground transition-colors">Privacy Policy</button>
-              <button className="hover:text-foreground transition-colors">Terms of Service</button>
-              <button className="hover:text-foreground transition-colors">Support</button>
-            </div>
-            <div className="mt-8 pt-8 border-t border-border">
-              <p className="text-muted-foreground">
-                &copy; 2025 Localhunt. All rights reserved.
-              </p>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }
