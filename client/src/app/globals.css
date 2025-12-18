@@ -176,3 +176,104 @@
 .Toastify__toast--warning {
   @apply border-l-yellow-500;
 }
+
+/* ==========================================
+   GLASSY ORANGE ANIMATIONS
+   ========================================== */
+
+@keyframes glassy-border-flow {
+  0% {
+    background-position: 0% 50%;
+    border-color: rgba(249, 115, 22, 0.3);
+    box-shadow: 0 0 20px rgba(249, 115, 22, 0.2);
+  }
+  50% {
+    background-position: 100% 50%;
+    border-color: rgba(249, 115, 22, 0.6);
+    box-shadow: 0 0 40px rgba(249, 115, 22, 0.4);
+  }
+  100% {
+    background-position: 0% 50%;
+    border-color: rgba(249, 115, 22, 0.3);
+    box-shadow: 0 0 20px rgba(249, 115, 22, 0.2);
+  }
+}
+
+@keyframes glass-shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+@keyframes activity-slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes activity-pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+/* Glassy card with orange flowing border */
+.glassy-card {
+  backdrop-filter: blur(20px);
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(249, 115, 22, 0.3);
+  animation: glassy-border-flow 6s ease infinite;
+  transition: all 0.3s ease;
+}
+
+.glassy-card:hover {
+  border-color: rgba(249, 115, 22, 0.8);
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 32px rgba(249, 115, 22, 0.3);
+}
+
+.dark .glassy-card {
+  background: rgba(31, 41, 55, 0.1);
+}
+
+.dark .glassy-card:hover {
+  background: rgba(31, 41, 55, 0.2);
+  box-shadow: 0 8px 32px rgba(249, 115, 22, 0.3);
+}
+
+/* Activity item animation */
+.activity-item {
+  animation: activity-slide-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  opacity: 0;
+}
+
+.activity-item:nth-child(1) { animation-delay: 0ms; }
+.activity-item:nth-child(2) { animation-delay: 100ms; }
+.activity-item:nth-child(3) { animation-delay: 200ms; }
+.activity-item:nth-child(4) { animation-delay: 300ms; }
+.activity-item:nth-child(5) { animation-delay: 400ms; }
+
+/* Activity badge pulse */
+.activity-badge-pulse {
+  animation: activity-pulse 2s ease-in-out infinite;
+}
+
+/* Glassy section header */
+.glassy-section-header {
+  background: linear-gradient(135deg, rgba(249, 115, 22, 0.1) 0%, rgba(249, 115, 22, 0.05) 100%);
+  border-left: 4px solid rgba(249, 115, 22, 0.5);
+  padding: 1rem;
+  border-radius: 0.75rem;
+  backdrop-filter: blur(10px);
+}
