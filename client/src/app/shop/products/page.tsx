@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { getAllSellerProducts } from '@/actions/productActions';
 import { addToWishlist } from '@/actions/wishlist-actions';
+import { logProductViewEvent, logWishlistEvent } from '@/actions/sellerEventNotifications';
 import { toast } from 'react-toastify';
 import { useWishlist } from '@/contexts/WishlistContext';
 import { useSession } from 'next-auth/react';
@@ -45,6 +46,7 @@ interface Product {
   updatedAt?: string | Date;
   created_at?: string | Date;
   updated_at?: string | Date;
+  sellerId?: string;
   sellerName?: string;
   sellerShopName?: string;
   sellerAddress?: string;
@@ -53,7 +55,7 @@ interface Product {
 }
 
 export default function Products() {
-  const { status } = useSession();
+  const { status, data: session } = useSession();
   const [products, setProducts] = useState<Product[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
@@ -62,6 +64,7 @@ export default function Products() {
   const [locationFilter, setLocationFilter] = useState<'all' | 'city' | 'state'>('all');
   const [userCity, setUserCity] = useState<string | null>(null);
   const [userState, setUserState] = useState<string | null>(null);
+  const [userData, setUserData] = useState<{ id: string; name: string; email: string } | null>(null);
   const { wishlistItems, addToWishlistState, isInWishlist } = useWishlist();
 
   useEffect(() => {
@@ -78,16 +81,31 @@ export default function Products() {
 
       setLoading(true);
       try {
-        // Fetch user profile to get location
+        // Fetch user profile to get location and user info
         const profileResponse = await fetch('/api/user/profile-status');
         if (profileResponse.ok) {
           const profileData = await profileResponse.json();
+          console.log('📝 Profile API Response:', profileData);
+          
           setUserCity(profileData.user.city);
           setUserState(profileData.user.state);
+          
+          const userInfo = {
+            id: profileData.user.id || profileData.user._id,
+            name: profileData.user.name,
+            email: profileData.user.email,
+          };
+          
+          setUserData(userInfo);
+          console.log('✅ User data loaded:', userInfo);
+        } else {
+          console.error('❌ Profile API error:', profileResponse.status);
         }
 
         const result = await getAllSellerProducts();
         if (result.success) {
+          console.log('✅ Products loaded:', result.products.length, 'products');
+          console.log('✅ First product:', result.products[0]);
           const mappedProducts = result.products.map((p: Product) => p);
           // Filter out products that are already in wishlist
           const filteredMapped = mappedProducts.filter(
@@ -142,7 +160,25 @@ export default function Products() {
     return Math.round(((price - offerPrice) / price) * 100);
   };
 
-  const handleOpenInGoogleMaps = (product: Product) => {
+  const handleOpenInGoogleMaps = async (product: Product) => {
+    // Log the event to seller
+    if (userData && product.sellerId) {
+      try {
+        console.log('📍 Logging view event:', { userId: userData.id, sellerId: product.sellerId, productName: product.name });
+        const result = await logProductViewEvent(
+          userData.id,
+          userData.name,
+          product.sellerId,
+          product.name
+        );
+        console.log('📍 View event logged:', result);
+      } catch (error) {
+        console.error('Error logging view event:', error);
+      }
+    } else {
+      console.warn('⚠️ Cannot log view event - userData or sellerId missing:', { userData, sellerId: product.sellerId });
+    }
+
     // Try to open the stored Google Maps URL first
     if (product.googleMapsUrl && product.googleMapsUrl.trim() !== '') {
       window.open(product.googleMapsUrl, '_blank');
@@ -164,6 +200,28 @@ export default function Products() {
       const result = await addToWishlist(productId);
       
       if (result.success) {
+        // Find the product to get seller info
+        const product = products.find(p => p.id === productId);
+        
+        console.log('❤️ Logging wishlist event:', { userData, product: product?.name, productSellerId: product?.sellerId });
+        
+        // Log the event to seller
+        if (userData && product?.sellerId) {
+          try {
+            const logResult = await logWishlistEvent(
+              userData.id,
+              userData.name,
+              product.sellerId,
+              product.name
+            );
+            console.log('❤️ Wishlist event logged:', logResult);
+          } catch (error) {
+            console.error('Error logging wishlist event:', error);
+          }
+        } else {
+          console.warn('⚠️ Cannot log wishlist event - userData or sellerId missing:', { userData, sellerId: product?.sellerId });
+        }
+        
         toast.success(result.message);
         // Update context and remove from current list
         addToWishlistState(productId);
@@ -176,6 +234,19 @@ export default function Products() {
       console.error('Error adding to wishlist:', error);
       toast.error('Failed to add to wishlist');
     }
+  };
+
+  const handleDebug = () => {
+    const debugInfo = {
+      userData,
+      productsCount: products.length,
+      firstProductSellerId: products[0]?.sellerId,
+      firstProductName: products[0]?.name,
+      userDataId: userData?.id,
+      userDataName: userData?.name,
+    };
+    console.log('🔍 DEBUG INFO:', debugInfo);
+    alert(JSON.stringify(debugInfo, null, 2));
   };
 
   // Show login prompt if user is not authenticated
@@ -223,10 +294,22 @@ export default function Products() {
       {/* Header Section */}
       <div className="border-b bg-card">
         <div className="container mx-auto max-w-7xl px-4 py-8">
-          <h1 className="text-3xl font-bold mb-2">Products</h1>
-          <p className="text-muted-foreground mb-6">
-            Discover products from local stores
-          </p>
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex-1">
+              <h1 className="text-3xl font-bold mb-2">Products</h1>
+              <p className="text-muted-foreground mb-6">
+                Discover products from local stores
+              </p>
+            </div>
+            <Button
+              onClick={handleDebug}
+              variant="ghost"
+              size="sm"
+              className="text-xs"
+            >
+              🔍 Debug
+            </Button>
+          </div>
 
           {/* Search Bar */}
           <div className="relative max-w-2xl">

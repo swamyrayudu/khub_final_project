@@ -217,7 +217,7 @@ export default function SellersAdmin() {
         <p className="text-muted-foreground mb-4">{error}</p>
         <button
           onClick={fetchSellers}
-          className="bg-primary text-primary-foreground px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors"
+          className="bg-primary text-primary-foreground px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors cursor-pointer"
         >
           Try Again
         </button>
@@ -241,7 +241,7 @@ export default function SellersAdmin() {
           <div className="flex items-center gap-3">
             <button
               onClick={toggleDarkMode}
-              className="flex items-center gap-2 px-4 py-2 rounded-lg border border-border bg-card hover:bg-accent transition-colors"
+              className="flex items-center gap-2 px-4 py-2 rounded-lg border border-border bg-card hover:bg-accent transition-colors cursor-pointer"
             >
               {darkMode ? (
                 <Sun className="w-4 h-4" />
@@ -254,7 +254,7 @@ export default function SellersAdmin() {
             <button
               onClick={fetchSellers}
               disabled={loading}
-              className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors disabled:opacity-50"
+              className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed"
             >
               <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
               Refresh
@@ -272,7 +272,7 @@ export default function SellersAdmin() {
           ].map(({ status, label, icon: Icon, color }) => {
             const count = sellers.filter(s => s.status === status).length;
             return (
-              <div key={status} className="bg-card border border-border rounded-lg p-6 hover:shadow-lg transition-shadow">
+              <div key={status} className="bg-card border border-border rounded-lg p-6 hover:shadow-lg transition-shadow cursor-pointer">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium text-muted-foreground">{label}</p>
@@ -337,7 +337,7 @@ export default function SellersAdmin() {
               </thead>
               <tbody className="divide-y divide-border">
                 {filteredSellers.map((seller) => (
-                  <tr key={seller.id} className="hover:bg-muted/30 transition-colors">
+                  <tr key={seller.id} className="hover:bg-muted/30 transition-colors cursor-pointer">
                     <td className="px-6 py-4">
                       <div className="space-y-1">
                         <div className="flex items-center gap-2">

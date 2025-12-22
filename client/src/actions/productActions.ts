@@ -130,6 +130,7 @@ export async function getAllSellerProducts() {
     const allProducts = await db
       .select({
         id: products.id,
+        sellerId: products.sellerId,
         name: products.name,
         description: products.description,
         price: products.price,
@@ -162,6 +163,7 @@ export async function getAllSellerProducts() {
 
     const transformedProducts = allProducts.map((product) => ({
       id: product.id,
+      sellerId: product.sellerId,
       name: product.name,
       description: product.description || '',
       price: parseFloat(product.price),

@@ -1,7 +1,7 @@
 'use server';
 
 import { auth } from '@/lib/userauth';
-import { db, wishlists, users } from '@/lib/db';
+import { db, wishlists, users, products, notifications, sellers } from '@/lib/db';
 import { eq, and } from 'drizzle-orm';
 
 export async function getWishlist(): Promise<{ success: boolean; items: string[] }> {
@@ -64,11 +64,37 @@ export async function addToWishlist(productId: string): Promise<{ success: boole
       return { success: false, message: 'Product already in wishlist' };
     }
 
+    // Get product and seller info for notification
+    const product = await db.query.products.findFirst({
+      where: eq(products.id, productId),
+    });
+
     // Add to wishlist
     await db.insert(wishlists).values({
       userId: user.id,
       productId: productId,
     });
+
+    // Send notification to seller if product exists
+    if (product) {
+      const userName = user.name || 'A user';
+      
+      try {
+        await db.insert(notifications).values({
+          recipientId: product.sellerId,
+          recipientType: 'seller',
+          type: 'wishlist',
+          title: `${userName} added to wishlist`,
+          message: `${userName} added "${product.name}" to their wishlist`,
+          relatedId: productId,
+          relatedType: 'product',
+          isRead: false,
+        });
+      } catch (notificationError) {
+        console.error('Failed to create notification:', notificationError);
+        // Continue anyway - notification failure shouldn't block wishlist
+      }
+    }
 
     return { success: true, message: 'Added to wishlist' };
   } catch (error) {

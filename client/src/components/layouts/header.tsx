@@ -36,7 +36,8 @@ import {
   Store,
   Bell,
   X,
-  MessageSquare
+  MessageSquare,
+  Info
 } from 'lucide-react';
 
 export default function ShopHeader() {
@@ -64,6 +65,7 @@ export default function ShopHeader() {
     { href: '/shop/products', label: 'Products', icon: Package },
     { href: '/shop/stores', label: 'Stores', icon: Store },
     { href: '/shop/map', label: 'Map', icon: MapPin },
+    { href: '/shop/about', label: 'About', icon: Info },
   ];
 
   const userNavLinks = session?.user ? [
@@ -260,6 +262,15 @@ export default function ShopHeader() {
                       </Button>
                     </Link>
                   ))}
+                  <Link
+                    href="/shop/about"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <Button variant="ghost" className="w-full justify-start gap-3">
+                      <Info className="w-5 h-5" />
+                      About
+                    </Button>
+                  </Link>
                   <Link
                     href="/shop/wishlist"
                     onClick={() => setMobileMenuOpen(false)}

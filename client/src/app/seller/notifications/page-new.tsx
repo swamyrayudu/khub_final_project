@@ -5,10 +5,10 @@ import { useRouter } from "next/navigation";
 import {
   ArrowLeft,
   MessageSquare,
+  Loader2,
   Star,
   Map,
   RefreshCw,
-  Heart,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,7 +16,9 @@ import {
   CardContent,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { getAllSellerNotifications } from "@/actions/sellerNotifications";
+import {
+  getAllSellerNotifications,
+} from "@/actions/sellerNotifications";
 
 interface UserData {
   id: string;
@@ -48,15 +50,7 @@ interface ProductReview {
   createdAt: Date;
 }
 
-interface WishlistNotification {
-  id: string;
-  customerName: string;
-  productName: string;
-  time: string;
-  createdAt: Date;
-}
-
-interface ViewNotification {
+interface ProductView {
   id: string;
   customerName: string;
   productName: string;
@@ -67,16 +61,17 @@ interface ViewNotification {
 export default function SellerNotificationsPage() {
   const router = useRouter();
   const [userData, setUserData] = useState<UserData | null>(null);
+  const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const [activeTab, setActiveTab] = useState<"messages" | "wishlist" | "views" | "reviews">(
+  const [activeTab, setActiveTab] = useState<"messages" | "reviews" | "maps">(
     "messages"
   );
 
   const [messages, setMessages] = useState<CustomerMessage[]>([]);
   const [reviews, setReviews] = useState<ProductReview[]>([]);
-  const [wishlist, setWishlist] = useState<WishlistNotification[]>([]);
-  const [views, setViews] = useState<ViewNotification[]>([]);
+  const [views, setViews] = useState<ProductView[]>([]);
 
+  // Fetch real data from server
   const fetchNotificationData = async (userId: string) => {
     try {
       const result = await getAllSellerNotifications(userId);
@@ -84,7 +79,6 @@ export default function SellerNotificationsPage() {
       if (result.success) {
         setMessages(result.messages || []);
         setReviews(result.reviews || []);
-        setWishlist(result.wishlist || []);
         setViews(result.views || []);
       }
     } catch (error) {
@@ -100,19 +94,23 @@ export default function SellerNotificationsPage() {
         const user = JSON.parse(userDataString);
         setUserData(user);
         
+        // Fetch real data
         fetchNotificationData(user.id);
       } catch (error) {
         console.error("Failed to parse user data:", error);
       }
     }
+    
+    setLoading(false);
   }, [router]);
 
+  // Set up auto-refresh every 30 seconds
   useEffect(() => {
     if (!userData?.id) return;
 
     const interval = setInterval(() => {
       fetchNotificationData(userData.id);
-    }, 30000);
+    }, 30000); // Refresh every 30 seconds
 
     return () => clearInterval(interval);
   }, [userData?.id]);
@@ -125,8 +123,21 @@ export default function SellerNotificationsPage() {
     setRefreshing(false);
   };
 
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader2 className="w-12 h-12 text-primary animate-spin" />
+      </div>
+    );
+  }
+
+  if (!userData) {
+    return null;
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/30 dark:from-slate-950 dark:via-slate-950 dark:to-slate-900/50 p-4">
+      {/* Header */}
       <div className="max-w-6xl mx-auto mb-8">
         <div className="flex items-center justify-between mb-8 animate-slide-down">
           <div className="flex items-center space-x-4">
@@ -148,6 +159,7 @@ export default function SellerNotificationsPage() {
             </div>
           </div>
 
+          {/* Refresh button */}
           <Button
             onClick={handleRefresh}
             disabled={refreshing}
@@ -160,12 +172,12 @@ export default function SellerNotificationsPage() {
           </Button>
         </div>
 
+        {/* Tab Navigation */}
         <div className="flex gap-3 mb-8 animate-slide-up" style={{ animationDelay: "100ms" }}>
           {[
             { id: "messages" as const, label: "Messages", icon: MessageSquare, count: messages.length },
-            { id: "wishlist" as const, label: "Wishlist", icon: Heart, count: wishlist.length },
-            { id: "views" as const, label: "Location Views", icon: Map, count: views.length },
             { id: "reviews" as const, label: "Reviews", icon: Star, count: reviews.length },
+            { id: "maps" as const, label: "Location Views", icon: Map, count: views.length },
           ].map((tab) => {
             const TabIcon = tab.icon;
             return (
@@ -191,8 +203,9 @@ export default function SellerNotificationsPage() {
         </div>
       </div>
 
+      {/* Content */}
       <div className="max-w-6xl mx-auto">
-        {/* MESSAGES TAB */}
+        {/* Messages Tab */}
         {activeTab === "messages" && (
           <div className="space-y-4 animate-fade-in">
             {messages.length > 0 ? (
@@ -251,100 +264,14 @@ export default function SellerNotificationsPage() {
           </div>
         )}
 
-        {/* WISHLIST TAB */}
-        {activeTab === "wishlist" && (
-          <div className="space-y-4 animate-fade-in">
-            {wishlist.length > 0 ? (
-              wishlist.map((item, index) => (
-                <Card
-                  key={item.id}
-                  className="border-border/50 bg-card/50 backdrop-blur-sm hover:shadow-lg hover:border-red-500/50 transition-all duration-300 cursor-pointer group animate-slide-up"
-                  style={{ animationDelay: `${index * 100}ms` }}
-                >
-                  <CardContent className="p-6">
-                    <div className="flex items-start justify-between">
-                      <div className="flex items-start gap-4 flex-1">
-                        <div className="w-12 h-12 bg-gradient-to-br from-red-500/30 to-red-500/10 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                          <Heart className="w-6 h-6 text-red-500 fill-red-500" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <h3 className="font-semibold text-foreground group-hover:text-red-500 transition-colors duration-300">
-                            {item.customerName}
-                          </h3>
-                          <p className="text-sm text-foreground/80 mt-1">
-                            Added <span className="font-semibold text-primary">&quot;{item.productName}&quot;</span> to wishlist
-                          </p>
-                        </div>
-                      </div>
-                      <span className="text-xs text-muted-foreground ml-4 whitespace-nowrap">
-                        {item.time}
-                      </span>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))
-            ) : (
-              <Card className="border-border/50 bg-card/50 backdrop-blur-sm animate-fade-in">
-                <CardContent className="p-12 text-center">
-                  <Heart className="w-12 h-12 text-muted-foreground/30 mx-auto mb-4" />
-                  <p className="text-muted-foreground">No wishlist adds yet</p>
-                </CardContent>
-              </Card>
-            )}
-          </div>
-        )}
-
-        {/* LOCATION VIEWS TAB */}
-        {activeTab === "views" && (
-          <div className="space-y-4 animate-fade-in">
-            {views.length > 0 ? (
-              views.map((view, index) => (
-                <Card
-                  key={view.id}
-                  className="border-border/50 bg-card/50 backdrop-blur-sm hover:shadow-lg hover:border-blue-500/50 transition-all duration-300 cursor-pointer group animate-slide-up"
-                  style={{ animationDelay: `${index * 100}ms` }}
-                >
-                  <CardContent className="p-6">
-                    <div className="flex items-start justify-between">
-                      <div className="flex items-start gap-4 flex-1">
-                        <div className="w-12 h-12 bg-gradient-to-br from-blue-500/30 to-blue-500/10 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                          <Map className="w-6 h-6 text-blue-600" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <h3 className="font-semibold text-foreground group-hover:text-blue-600 transition-colors duration-300">
-                            {view.customerName}
-                          </h3>
-                          <p className="text-sm text-foreground/80 mt-1">
-                            Viewed <span className="font-semibold text-primary">&quot;{view.productName}&quot;</span> on Google Maps
-                          </p>
-                        </div>
-                      </div>
-                      <span className="text-xs text-muted-foreground ml-4 whitespace-nowrap">
-                        {view.time}
-                      </span>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))
-            ) : (
-              <Card className="border-border/50 bg-card/50 backdrop-blur-sm animate-fade-in">
-                <CardContent className="p-12 text-center">
-                  <Map className="w-12 h-12 text-muted-foreground/30 mx-auto mb-4" />
-                  <p className="text-muted-foreground">No location views yet</p>
-                </CardContent>
-              </Card>
-            )}
-          </div>
-        )}
-
-        {/* REVIEWS TAB */}
+        {/* Reviews Tab */}
         {activeTab === "reviews" && (
           <div className="space-y-4 animate-fade-in">
             {reviews.length > 0 ? (
               reviews.map((review, index) => (
                 <Card
                   key={review.id}
-                  className="border-border/50 bg-card/50 backdrop-blur-sm hover:shadow-lg hover:border-yellow-500/50 transition-all duration-300 cursor-pointer group animate-slide-up"
+                  className="border-border/50 bg-card/50 backdrop-blur-sm hover:shadow-lg hover:border-primary/50 transition-all duration-300 cursor-pointer group animate-slide-up"
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
                   <CardContent className="p-6">
@@ -388,6 +315,51 @@ export default function SellerNotificationsPage() {
                 <CardContent className="p-12 text-center">
                   <Star className="w-12 h-12 text-muted-foreground/30 mx-auto mb-4" />
                   <p className="text-muted-foreground">No reviews yet</p>
+                </CardContent>
+              </Card>
+            )}
+          </div>
+        )}
+
+        {/* Location Views Tab */}
+        {activeTab === "maps" && (
+          <div className="space-y-4 animate-fade-in">
+            {views.length > 0 ? (
+              views.map((view, index) => (
+                <Card
+                  key={view.id}
+                  className="border-border/50 bg-card/50 backdrop-blur-sm hover:shadow-lg hover:border-primary/50 transition-all duration-300 cursor-pointer group animate-slide-up"
+                  style={{ animationDelay: `${index * 100}ms` }}
+                >
+                  <CardContent className="p-6">
+                    <div className="flex items-start justify-between">
+                      <div className="flex items-start gap-4 flex-1">
+                        <div className="w-12 h-12 bg-gradient-to-br from-blue-500/30 to-blue-500/10 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                          <Map className="w-6 h-6 text-blue-600" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors duration-300">
+                            {view.customerName}
+                          </h3>
+                          <p className="text-sm text-muted-foreground mt-1">
+                            viewed <span className="font-medium text-foreground">&quot;{view.productName}&quot;</span> on Google Maps
+                          </p>
+                        </div>
+                      </div>
+                      <div className="text-right ml-4">
+                        <p className="text-xs text-muted-foreground">
+                          {view.time}
+                        </p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))
+            ) : (
+              <Card className="border-border/50 bg-card/50 backdrop-blur-sm animate-fade-in">
+                <CardContent className="p-12 text-center">
+                  <Map className="w-12 h-12 text-muted-foreground/30 mx-auto mb-4" />
+                  <p className="text-muted-foreground">No location views yet</p>
                 </CardContent>
               </Card>
             )}

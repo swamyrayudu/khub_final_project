@@ -12,7 +12,8 @@ import {
   Menu,
   Store,
   Settings,
-  Loader2
+  Loader2,
+  Info
 } from 'lucide-react';
 
 import {
@@ -176,7 +177,10 @@ export default function SellerHeader({ onMobileMenuToggle }: SellerHeaderProps) 
           <div className="flex items-center space-x-2">
             
             {/* Notifications */}
-            <button className="p-2.5 rounded-xl hover:bg-primary/10 relative transition-all duration-300 hover:scale-110 group">
+            <button 
+              onClick={() => router.push('/seller/notifications')}
+              className="p-2.5 rounded-xl hover:bg-primary/10 relative transition-all duration-300 hover:scale-110 group"
+            >
               <Bell className="w-5 h-5 text-muted-foreground group-hover:text-primary" />
               <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-red-500 rounded-full animate-pulse"></span>
             </button>
@@ -211,11 +215,27 @@ export default function SellerHeader({ onMobileMenuToggle }: SellerHeaderProps) 
               
               <DropdownMenuContent align="end" className="w-56 mt-2 rounded-2xl border-primary/20">
                 <DropdownMenuItem 
+                  onClick={() => router.push('/seller/about')}
+                  className="cursor-pointer transition-all duration-200 hover:bg-primary/10"
+                >
+                  <Info className="w-4 h-4 mr-3 text-cyan-500" />
+                  <span>About LocalHunt</span>
+                </DropdownMenuItem>
+
+                <DropdownMenuItem 
                   onClick={() => router.push('/seller/profile')}
                   className="cursor-pointer transition-all duration-200 hover:bg-primary/10"
                 >
                   <Settings className="w-4 h-4 mr-3 text-primary" />
                   <span>Profile Settings</span>
+                </DropdownMenuItem>
+
+                <DropdownMenuItem 
+                  onClick={() => router.push('/seller/notifications')}
+                  className="cursor-pointer transition-all duration-200 hover:bg-primary/10"
+                >
+                  <Bell className="w-4 h-4 mr-3 text-blue-500" />
+                  <span>Notifications</span>
                 </DropdownMenuItem>
                 
                 <DropdownMenuSeparator className="bg-border/50" />

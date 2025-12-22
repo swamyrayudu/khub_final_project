@@ -30,7 +30,6 @@ import {
   Settings,
   RefreshCw,
   MessageSquare,
-  Eye,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -473,7 +472,7 @@ export default function SellerHomeContent() {
                           <action.icon className="w-5 h-5" />
                         </div>
                         <div className="ml-3 flex-1">
-                          <h4 className="font-semibold text-card-foreground group-hover:text-primary transition-colors duration-200">
+                          <h4 className="font-semibold text-card-foreground">
                             {action.title}
                           </h4>
                         </div>
@@ -657,14 +656,14 @@ export default function SellerHomeContent() {
           )}
 
         {/* Recent Activity */}
-        <Card className="border-border">
+        <Card className="border-border/50 bg-card/50 backdrop-blur-sm hover:shadow-lg transition-shadow duration-300 animate-slide-up" style={{ animationDelay: "400ms" }}>
           <CardHeader>
             <div className="flex items-center justify-between">
               <CardTitle className="flex items-center">
-                <Activity className="w-5 h-5 text-primary mr-2" />
+                <Activity className="w-5 h-5 text-primary mr-2 animate-bounce-subtle" />
                 Activity Overview
               </CardTitle>
-              <Button variant="ghost" size="sm">
+              <Button variant="ghost" size="sm" className="hover:bg-primary/10 transition-colors duration-300">
                 View Details
               </Button>
             </div>
@@ -675,16 +674,17 @@ export default function SellerHomeContent() {
           <CardContent>
             {products.length > 0 ? (
               <div className="space-y-4">
-                {products.slice(0, 5).map((product) => (
+                {products.slice(0, 5).map((product, index) => (
                   <div
                     key={product.id}
-                    className="flex items-center space-x-4 p-3 rounded-lg bg-muted/30"
+                    className="flex items-center space-x-4 p-4 rounded-xl bg-gradient-to-r from-background/50 to-muted/30 hover:from-primary/5 hover:to-primary/10 border border-primary/10 hover:border-primary/30 transition-all duration-300 group cursor-pointer transform hover:scale-102 animate-slide-up"
+                    style={{ animationDelay: `${index * 80}ms` }}
                   >
-                    <div className="p-2 bg-green-100 dark:bg-green-900/20 rounded-lg">
-                      <Plus className="w-4 h-4 text-green-600" />
+                    <div className="p-2.5 bg-gradient-to-br from-green-500/30 to-green-500/10 group-hover:from-green-500/50 group-hover:to-green-500/20 rounded-lg transition-all duration-300 shadow-lg shadow-green-500/20">
+                      <Plus className="w-5 h-5 text-green-600 group-hover:scale-110 transition-transform duration-300" />
                     </div>
-                    <div className="flex-1">
-                      <p className="text-sm font-medium text-card-foreground">
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-semibold text-card-foreground group-hover:text-primary transition-colors duration-300 truncate">
                         Added product: {product.name}
                       </p>
                       <p className="text-xs text-muted-foreground">
@@ -693,14 +693,14 @@ export default function SellerHomeContent() {
                           : "Recently added"}
                       </p>
                     </div>
-                    <Badge variant="secondary" className="text-xs">
+                    <Badge variant="secondary" className="text-xs bg-green-500/20 text-green-700 dark:text-green-300 border-green-500/30 group-hover:bg-green-500/30 transition-all duration-300">
                       New
                     </Badge>
                   </div>
                 ))}
               </div>
             ) : (
-              <div className="text-center py-8">
+              <div className="text-center py-8 animate-fade-in">
                 <Activity className="w-12 h-12 text-muted-foreground mx-auto mb-4 opacity-50" />
                 <p className="text-muted-foreground">No recent activity</p>
                 <p className="text-sm text-muted-foreground mt-1">
@@ -710,161 +710,52 @@ export default function SellerHomeContent() {
             )}
           </CardContent>
         </Card>
-
-        {/* Activity & Reviews Section */}
-        <div
-          className="mt-8 animate-slide-up glassy-card rounded-2xl p-1"
-          style={{ animationDelay: "450ms" }}
-        >
-          <Card className="border-0 shadow-none bg-gradient-to-br from-card to-card/50">
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <CardTitle className="flex items-center text-2xl">
-                  <Activity className="w-6 h-6 text-primary mr-3" />
-                  Recent Activity & Reviews
-                </CardTitle>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="text-primary hover:bg-primary/10"
-                >
-                  View All →
-                </Button>
-              </div>
-              <CardDescription>
-                Monitor customer interactions and store activities
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {/* Activity Feed */}
-                <div className="space-y-3">
-                  <h3 className="font-semibold text-foreground flex items-center mb-4 animate-slide-left">
-                    <div className="w-1 h-6 bg-gradient-to-b from-primary to-primary/50 rounded-full mr-3"></div>
-                    Store Activity
-                  </h3>
-
-                  {[
-                    {
-                      type: "sale",
-                      message: "New order received",
-                      time: "2 min ago",
-                      icon: ShoppingCart,
-                    },
-                    {
-                      type: "view",
-                      message: "Product viewed 45 times",
-                      time: "5 min ago",
-                      icon: Eye,
-                    },
-                    {
-                      type: "message",
-                      message: "Customer inquiry received",
-                      time: "12 min ago",
-                      icon: MessageSquare,
-                    },
-                    {
-                      type: "review",
-                      message: "New 5-star review",
-                      time: "1 hour ago",
-                      icon: Star,
-                    },
-                    {
-                      type: "stock",
-                      message: "Low stock alert",
-                      time: "2 hours ago",
-                      icon: AlertCircle,
-                    },
-                  ].map((activity, index) => (
-                    <div
-                      key={index}
-                      style={{ animationDelay: `${index * 80}ms` }}
-                      className="activity-item flex items-center gap-3 p-3 rounded-xl hover:bg-primary/10 transition-all duration-300 border border-primary/20 hover:border-primary/50 group transform hover:scale-105 hover:shadow-lg hover:shadow-primary/20"
-                    >
-                      <div className="p-2 rounded-lg bg-primary/10 activity-badge-pulse group-hover:bg-primary/20 transition-all duration-300">
-                        <activity.icon className="w-4 h-4 text-primary group-hover:scale-110 transition-transform duration-300" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-foreground group-hover:text-primary transition-colors duration-300">
-                          {activity.message}
-                        </p>
-                        <p className="text-xs text-muted-foreground">
-                          {activity.time}
-                        </p>
-                      </div>
-                      <div className="w-2 h-2 rounded-full bg-primary animate-pulse group-hover:animate-pulse-glow"></div>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Customer Reviews */}
-                <div className="space-y-3">
-                  <h3 className="font-semibold text-foreground flex items-center mb-4">
-                    <div className="w-1 h-6 bg-gradient-to-b from-primary to-primary/50 rounded-full mr-3"></div>
-                    Customer Reviews
-                  </h3>
-
-                  {[
-                    {
-                      rating: 5,
-                      name: "Raj Kumar",
-                      product: "Premium Headphones",
-                      comment: "Excellent quality and fast delivery!",
-                      helpful: 24,
-                    },
-                    {
-                      rating: 4,
-                      name: "Priya Singh",
-                      product: "Smart Watch",
-                      comment: "Good product, could be better",
-                      helpful: 12,
-                    },
-                    {
-                      rating: 5,
-                      name: "Amit Patel",
-                      product: "Wireless Charger",
-                      comment: "Amazing! Exactly what I needed",
-                      helpful: 31,
-                    },
-                  ].map((review, index) => (
-                    <div
-                      key={index}
-                      className="activity-item p-3 rounded-xl border border-primary/10 hover:border-primary/30 hover:bg-primary/5 transition-all duration-300"
-                    >
-                      <div className="flex items-start justify-between mb-2">
-                        <div>
-                          <p className="font-medium text-foreground text-sm">
-                            {review.name}
-                          </p>
-                          <p className="text-xs text-muted-foreground">
-                            {review.product}
-                          </p>
-                        </div>
-                        <div className="flex gap-0.5">
-                          {[...Array(review.rating)].map((_, i) => (
-                            <Star
-                              key={i}
-                              className="w-3 h-3 fill-yellow-400 text-yellow-400"
-                            />
-                          ))}
-                        </div>
-                      </div>
-                      <p className="text-sm text-muted-foreground mb-2">
-                        {review.comment}
-                      </p>
-                      <div className="flex items-center gap-2">
-                        <button className="text-xs text-primary hover:text-primary/80 font-semibold">
-                          👍 Helpful ({review.helpful})
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
       </div>
+
+      <style>{`
+        @keyframes slideUp {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
+
+        @keyframes bounceSubtle {
+          0%, 100% {
+            transform: translateY(0);
+          }
+          50% {
+            transform: translateY(-4px);
+          }
+        }
+
+        .animate-slide-up {
+          animation: slideUp 0.6s ease-out forwards;
+          opacity: 0;
+        }
+
+        .animate-fade-in {
+          animation: fadeIn 0.6s ease-out forwards;
+          opacity: 0;
+        }
+
+        .animate-bounce-subtle {
+          animation: bounceSubtle 3s ease-in-out infinite;
+        }
+      `}</style>
     </div>
   );
 }
