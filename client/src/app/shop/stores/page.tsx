@@ -147,7 +147,7 @@ export default function StoresPage() {
             <Input
               type="search"
               placeholder="Search stores by name, city, or state..."
-              className="pl-10 h-11"
+              className="pl-10 h-11 bg-white dark:bg-black"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />

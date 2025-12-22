@@ -230,9 +230,9 @@ export default function SellerHomeContent() {
     <div className="min-h-screen bg-gradient-to-br from-background via-muted/10 to-primary/5 py-8 px-4">
       <div className="max-w-7xl mx-auto">
         {/* Header Section */}
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-8 animate-fade-in">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-8">
           <div>
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent mb-2">
+            <h1 className="text-4xl font-bold text-foreground mb-2">
               Dashboard
             </h1>
             <p className="text-muted-foreground text-lg">
@@ -244,13 +244,13 @@ export default function SellerHomeContent() {
             </p>
           </div>
 
-          <div className="flex items-center space-x-3 mt-4 md:mt-0 animate-slide-left">
+          <div className="flex items-center space-x-3 mt-4 md:mt-0">
             <Button
               variant="outline"
               size="sm"
               onClick={handleRefresh}
               disabled={refreshing}
-              className="border-primary/30 hover:bg-primary/10 rounded-xl"
+              className="border-primary/30 rounded-xl"
             >
               {refreshing ? (
                 <Loader2 className="w-4 h-4 animate-spin mr-2" />
@@ -262,7 +262,7 @@ export default function SellerHomeContent() {
 
             <Button
               onClick={() => router.push("/seller/products/add")}
-              className="bg-gradient-to-r from-primary to-primary/80 text-primary-foreground hover:shadow-lg hover:shadow-primary/40 rounded-xl transition-all duration-300 transform hover:scale-105"
+              className="bg-primary text-primary-foreground rounded-xl shadow-lg"
             >
               <Plus className="w-4 h-4 mr-2" />
               Add Product
@@ -271,11 +271,8 @@ export default function SellerHomeContent() {
         </div>
 
         {/* Welcome Banner */}
-        <div
-          className="mb-8 animate-slide-up glassy-card rounded-2xl p-1"
-          style={{ animationDelay: "100ms" }}
-        >
-          <Card className="border-0 bg-gradient-to-r from-primary/15 via-primary/10 to-orange-500/5 shadow-none">
+        <div className="mb-8 rounded-2xl">
+          <Card className="border-border/50">
             <CardContent className="p-8">
               <div className="flex items-center justify-between">
                 <div className="flex-1">
@@ -319,8 +316,8 @@ export default function SellerHomeContent() {
                 </div>
 
                 <div className="hidden lg:flex items-center justify-center">
-                  <div className="bg-gradient-to-br from-primary/20 to-primary/5 p-6 rounded-2xl">
-                    <TrendingUp className="w-16 h-16 text-primary animate-bounce-subtle" />
+                  <div className="p-6 rounded-2xl">
+                    <TrendingUp className="w-16 h-16 text-primary" />
                   </div>
                 </div>
               </div>
@@ -331,15 +328,15 @@ export default function SellerHomeContent() {
         {/* Quick Stats */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           {/* Total Revenue */}
-          <div className="animate-slide-up" style={{ animationDelay: "150ms" }}>
-            <Card className="hover:shadow-xl hover:border-primary/50 transition-all duration-300 border-border/50 bg-gradient-to-br from-card to-card/50 hover:scale-105 transform">
+          <div>
+            <Card className="border-border/50">
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium text-muted-foreground mb-1">
                       Total Value
                     </p>
-                    <p className="text-3xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
+                    <p className="text-3xl font-bold text-foreground">
                       ₹
                       {productStats
                         ? productStats.totalValue.toLocaleString()
@@ -350,7 +347,7 @@ export default function SellerHomeContent() {
                       Inventory Value
                     </p>
                   </div>
-                  <div className="p-3 bg-gradient-to-br from-primary/30 to-primary/10 rounded-xl">
+                  <div>
                     <DollarSign className="w-6 h-6 text-primary" />
                   </div>
                 </div>
@@ -359,26 +356,26 @@ export default function SellerHomeContent() {
           </div>
 
           {/* Products */}
-          <div className="animate-slide-up" style={{ animationDelay: "200ms" }}>
-            <Card className="hover:shadow-xl hover:border-green-500/50 transition-all duration-300 border-border/50 bg-gradient-to-br from-card to-card/50 hover:scale-105 transform">
+          <div>
+            <Card className="border-border/50">
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium text-muted-foreground mb-1">
                       Products
                     </p>
-                    <p className="text-3xl font-bold text-card-foreground">
+                    <p className="text-3xl font-bold text-foreground">
                       {productStats
                         ? productStats.totalProducts
                         : products.length}
                     </p>
-                    <p className="text-xs text-green-600 dark:text-green-400 flex items-center mt-2 font-semibold">
-                      <CheckCircle className="w-3 h-3 mr-1" />
+                    <p className="text-xs flex items-center mt-2 font-semibold" style={{color: 'var(--green)'}}>
+                      <CheckCircle className="w-3 h-3 mr-1" style={{color: 'var(--green)'}} />
                       {productStats ? productStats.activeProducts : 0} Active
                     </p>
                   </div>
-                  <div className="p-3 bg-gradient-to-br from-green-500/30 to-green-500/10 rounded-xl">
-                    <Package className="w-6 h-6 text-green-600 dark:text-green-400" />
+                  <div>
+                    <Package className="w-6 h-6" style={{color: 'var(--green)'}} />
                   </div>
                 </div>
               </CardContent>
@@ -386,24 +383,24 @@ export default function SellerHomeContent() {
           </div>
 
           {/* Low Stock Alert */}
-          <div className="animate-slide-up" style={{ animationDelay: "250ms" }}>
-            <Card className="hover:shadow-xl hover:border-orange-500/50 transition-all duration-300 border-border/50 bg-gradient-to-br from-card to-card/50 hover:scale-105 transform">
+          <div>
+            <Card className="border-border/50">
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium text-muted-foreground mb-1">
                       Stock Status
                     </p>
-                    <p className="text-3xl font-bold text-card-foreground">
+                    <p className="text-3xl font-bold text-foreground">
                       {productStats ? productStats.lowStock : 0}
                     </p>
-                    <p className="text-xs text-orange-600 dark:text-orange-400 flex items-center mt-2 font-semibold">
-                      <AlertCircle className="w-3 h-3 mr-1" />
+                    <p className="text-xs flex items-center mt-2 font-semibold" style={{color: 'var(--orange)'}}>
+                      <AlertCircle className="w-3 h-3 mr-1" style={{color: 'var(--orange)'}} />
                       Low Stock Items
                     </p>
                   </div>
-                  <div className="p-3 bg-gradient-to-br from-orange-500/30 to-orange-500/10 rounded-xl">
-                    <AlertCircle className="w-6 h-6 text-orange-600 dark:text-orange-400" />
+                  <div>
+                    <AlertCircle className="w-6 h-6" style={{color: 'var(--orange)'}} />
                   </div>
                 </div>
               </CardContent>
@@ -411,28 +408,28 @@ export default function SellerHomeContent() {
           </div>
 
           {/* Average Price */}
-          <div className="animate-slide-up" style={{ animationDelay: "300ms" }}>
-            <Card className="hover:shadow-xl hover:border-purple-500/50 transition-all duration-300 border-border/50 bg-gradient-to-br from-card to-card/50 hover:scale-105 transform">
+          <div>
+            <Card className="border-border/50">
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium text-muted-foreground mb-1">
                       Avg. Price
                     </p>
-                    <p className="text-3xl font-bold text-card-foreground">
+                    <p className="text-3xl font-bold text-foreground">
                       ₹
                       {productStats
                         ? Math.round(productStats.averagePrice).toLocaleString()
                         : "0"}
                     </p>
-                    <p className="text-xs text-purple-600 dark:text-purple-400 flex items-center mt-2 font-semibold">
-                      <Award className="w-3 h-3 mr-1" />
+                    <p className="text-xs flex items-center mt-2 font-semibold" style={{color: 'var(--purple)'}}>
+                      <Award className="w-3 h-3 mr-1" style={{color: 'var(--purple)'}} />
                       {productStats ? productStats.productsWithOffers : 0} With
                       Offers
                     </p>
                   </div>
-                  <div className="p-3 bg-gradient-to-br from-purple-500/30 to-purple-500/10 rounded-xl">
-                    <Star className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+                  <div>
+                    <Star className="w-6 h-6" style={{color: 'var(--purple)'}} />
                   </div>
                 </div>
               </CardContent>
@@ -442,11 +439,8 @@ export default function SellerHomeContent() {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
           {/* Quick Actions */}
-          <div
-            className="lg:col-span-2 animate-slide-up glassy-card rounded-2xl p-1"
-            style={{ animationDelay: "350ms" }}
-          >
-            <Card className="border-0 shadow-none bg-gradient-to-br from-card to-card/50">
+          <div className="lg:col-span-2 rounded-2xl">
+            <Card className="border-border/50">
               <CardHeader>
                 <CardTitle className="flex items-center text-2xl">
                   <Zap className="w-6 h-6 text-primary mr-2" />
@@ -457,30 +451,29 @@ export default function SellerHomeContent() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {quickActions.map((action, index) => (
                     <button
                       key={index}
                       onClick={() => handleNavigation(action.href)}
-                      style={{ animationDelay: `${index * 30}ms` }}
-                      className="bg-background/50 hover:bg-primary/10 rounded-xl p-4 border border-primary/20 hover:border-primary/50 transition-all duration-300 text-left group transform hover:scale-105 animate-slide-up"
+                      className="rounded-xl p-4 border border-primary/20 text-left cursor-pointer bg-card flex items-center justify-between"
                     >
-                      <div className="flex items-center mb-3">
+                      <div className="flex items-center flex-1 min-w-0">
                         <div
-                          className={`p-2.5 ${action.color} rounded-lg group-hover:scale-120 transition-all duration-300 shadow-lg shadow-primary/20`}
+                          className={`p-2.5 ${action.color} rounded-lg shadow-lg flex-shrink-0`}
                         >
                           <action.icon className="w-5 h-5" />
                         </div>
-                        <div className="ml-3 flex-1">
-                          <h4 className="font-semibold text-card-foreground">
+                        <div className="ml-3 flex-1 min-w-0">
+                          <h4 className="font-semibold text-foreground text-sm">
                             {action.title}
                           </h4>
+                          <p className="text-xs text-muted-foreground mt-1">
+                            {action.description}
+                          </p>
                         </div>
-                        <ArrowRight className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300" />
                       </div>
-                      <p className="text-sm text-muted-foreground line-clamp-2">
-                        {action.description}
-                      </p>
+                      <ArrowRight className="w-4 h-4 text-muted-foreground ml-2 flex-shrink-0" />
                     </button>
                   ))}
                 </div>
@@ -489,11 +482,8 @@ export default function SellerHomeContent() {
           </div>
 
           {/* Recent Products */}
-          <div
-            className="animate-slide-up glassy-card rounded-2xl p-1"
-            style={{ animationDelay: "400ms" }}
-          >
-            <Card className="border-0 shadow-none bg-gradient-to-br from-card to-card/50">
+          <div className="rounded-2xl">
+            <Card className="border-border/50">
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <CardTitle className="flex items-center text-xl">
@@ -516,16 +506,15 @@ export default function SellerHomeContent() {
               <CardContent>
                 {recentProducts.length > 0 ? (
                   <div className="space-y-3">
-                    {recentProducts.map((product, index) => (
+                    {recentProducts.map((product) => (
                       <div
                         key={product.id}
-                        style={{ animationDelay: `${index * 50}ms` }}
-                        className="flex items-center space-x-3 p-3 rounded-xl hover:bg-primary/10 transition-all duration-300 cursor-pointer transform hover:scale-105 animate-fade-in group"
+                        className="flex items-center space-x-3 p-3 rounded-xl cursor-pointer"
                         onClick={() =>
                           router.push(`/seller/viewproducts/edit/${product.id}`)
                         }
                       >
-                        <div className="relative w-12 h-12 rounded-lg overflow-hidden bg-gradient-to-br from-primary/20 to-primary/10 group-hover:shadow-lg group-hover:shadow-primary/30 transition-all duration-300">
+                        <div className="relative w-12 h-12 rounded-lg overflow-hidden bg-primary/10">
                           {product.images.length > 0 ? (
                             <Image
                               src={product.images[0]}
@@ -542,7 +531,7 @@ export default function SellerHomeContent() {
                         </div>
 
                         <div className="flex-1 min-w-0">
-                          <h4 className="font-semibold text-sm text-card-foreground truncate">
+                          <h4 className="font-semibold text-sm text-foreground truncate">
                             {product.name}
                           </h4>
                           <div className="flex items-center space-x-2 mt-1">
@@ -565,14 +554,14 @@ export default function SellerHomeContent() {
                           </div>
                         </div>
 
-                        <Edit className="w-4 h-4 text-primary opacity-0 group-hover:opacity-100 transition-all duration-300" />
+                        <Edit className="w-4 h-4 text-primary" />
                       </div>
                     ))}
 
                     <Button
                       variant="outline"
                       size="sm"
-                      className="w-full border-primary/30 hover:bg-primary/10 rounded-xl"
+                      className="w-full border-primary/30 rounded-xl"
                       onClick={() => router.push("/seller/products/add")}
                     >
                       <Plus className="w-4 h-4 mr-2" />
@@ -589,7 +578,7 @@ export default function SellerHomeContent() {
                     </p>
                     <Button
                       size="sm"
-                      className="bg-gradient-to-r from-primary to-primary/80 text-primary-foreground w-full rounded-lg hover:shadow-lg hover:shadow-primary/40"
+                      className="bg-primary text-primary-foreground w-full rounded-lg"
                       onClick={() => router.push("/seller/products/add")}
                     >
                       <Plus className="w-4 h-4 mr-2" />
@@ -656,14 +645,14 @@ export default function SellerHomeContent() {
           )}
 
         {/* Recent Activity */}
-        <Card className="border-border/50 bg-card/50 backdrop-blur-sm hover:shadow-lg transition-shadow duration-300 animate-slide-up" style={{ animationDelay: "400ms" }}>
+        <Card className="border-border/50">
           <CardHeader>
             <div className="flex items-center justify-between">
               <CardTitle className="flex items-center">
-                <Activity className="w-5 h-5 text-primary mr-2 animate-bounce-subtle" />
-                Activity Overview
+                <Activity className="w-5 h-5 text-primary mr-2" />
+                <span className="text-foreground" style={{background: 'none', transition: 'none', animation: 'none'}}>Activity Overview</span>
               </CardTitle>
-              <Button variant="ghost" size="sm" className="hover:bg-primary/10 transition-colors duration-300">
+              <Button variant="ghost" size="sm">
                 View Details
               </Button>
             </div>
@@ -674,17 +663,16 @@ export default function SellerHomeContent() {
           <CardContent>
             {products.length > 0 ? (
               <div className="space-y-4">
-                {products.slice(0, 5).map((product, index) => (
+                {products.slice(0, 5).map((product) => (
                   <div
                     key={product.id}
-                    className="flex items-center space-x-4 p-4 rounded-xl bg-gradient-to-r from-background/50 to-muted/30 hover:from-primary/5 hover:to-primary/10 border border-primary/10 hover:border-primary/30 transition-all duration-300 group cursor-pointer transform hover:scale-102 animate-slide-up"
-                    style={{ animationDelay: `${index * 80}ms` }}
+                    className="flex items-center space-x-4 p-4 rounded-xl border border-primary/10 cursor-pointer"
                   >
-                    <div className="p-2.5 bg-gradient-to-br from-green-500/30 to-green-500/10 group-hover:from-green-500/50 group-hover:to-green-500/20 rounded-lg transition-all duration-300 shadow-lg shadow-green-500/20">
-                      <Plus className="w-5 h-5 text-green-600 group-hover:scale-110 transition-transform duration-300" />
+                    <div className="rounded-lg">
+                      <Plus className="w-5 h-5 text-green-600" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-semibold text-card-foreground group-hover:text-primary transition-colors duration-300 truncate">
+                      <p className="text-sm font-semibold text-foreground truncate">
                         Added product: {product.name}
                       </p>
                       <p className="text-xs text-muted-foreground">
@@ -693,14 +681,14 @@ export default function SellerHomeContent() {
                           : "Recently added"}
                       </p>
                     </div>
-                    <Badge variant="secondary" className="text-xs bg-green-500/20 text-green-700 dark:text-green-300 border-green-500/30 group-hover:bg-green-500/30 transition-all duration-300">
+                    <Badge variant="secondary" className="text-xs flex-shrink-0">
                       New
                     </Badge>
                   </div>
                 ))}
               </div>
             ) : (
-              <div className="text-center py-8 animate-fade-in">
+              <div className="text-center py-8">
                 <Activity className="w-12 h-12 text-muted-foreground mx-auto mb-4 opacity-50" />
                 <p className="text-muted-foreground">No recent activity</p>
                 <p className="text-sm text-muted-foreground mt-1">

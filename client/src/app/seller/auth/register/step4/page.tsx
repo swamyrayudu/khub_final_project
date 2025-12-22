@@ -256,7 +256,7 @@ export default function Step4() {
                   value={formData.password}
                   onChange={handleInputChange}
                   required
-                  className={`w-full px-4 py-3 pr-12 bg-background border rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 ${
+                  className={`w-full px-4 py-3 pr-12 bg-white dark:bg-slate-900 border rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary ${
                     errors.password ? 'border-destructive' : 'border-border'
                   }`}
                   placeholder="Enter your password"
@@ -298,7 +298,7 @@ export default function Step4() {
                   value={formData.confirmPassword}
                   onChange={handleInputChange}
                   required
-                  className={`w-full px-4 py-3 pr-12 bg-background border rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 ${
+                  className={`w-full px-4 py-3 pr-12 bg-white dark:bg-slate-900 border rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary ${
                     errors.confirmPassword ? 'border-destructive' : 'border-border'
                   }`}
                   placeholder="Confirm your password"

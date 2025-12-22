@@ -241,7 +241,7 @@ function LoginContent() {
                 onChange={handleInputChange}
                 required
                 disabled={isLoading}
-                className={`w-full pl-10 pr-4 py-3 bg-background border rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 disabled:opacity-50 ${
+                className={`w-full pl-10 pr-4 py-3 bg-white dark:bg-black border rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary disabled:opacity-50 ${
                   error ? 'border-destructive focus:ring-destructive focus:border-destructive' : 'border-border'
                 }`}
                 placeholder="Enter your email"
@@ -264,7 +264,7 @@ function LoginContent() {
                 onChange={handleInputChange}
                 required
                 disabled={isLoading}
-                className={`w-full pl-10 pr-12 py-3 bg-background border rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 disabled:opacity-50 ${
+                className={`w-full pl-10 pr-12 py-3 bg-white dark:bg-black border rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary disabled:opacity-50 ${
                   error ? 'border-destructive focus:ring-destructive focus:border-destructive' : 'border-border'
                 }`}
                 placeholder="Enter your password"
@@ -297,7 +297,7 @@ function LoginContent() {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full bg-primary text-primary-foreground py-3 px-6 rounded-xl font-semibold text-lg hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-card transition-all duration-200 flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl"
+            className="w-full bg-primary text-primary-foreground py-3 px-6 rounded-xl font-semibold text-lg focus:outline-none transition-all duration-200 flex items-center justify-center space-x-2 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isLoading ? (
               <>

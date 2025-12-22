@@ -7,7 +7,7 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-background dark:bg-slate-950 text-foreground border-t border-border">
+    <footer className="bg-background text-foreground border-t border-border">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Main Footer Content */}
         <div className="py-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -26,16 +26,16 @@ export default function Footer() {
               Discover unique items and support local businesses.
             </p>
             <div className="flex space-x-3">
-              <div className="w-9 h-9 rounded-full bg-muted hover:bg-blue-600 hover:text-white flex items-center justify-center transition-all duration-300 hover:scale-110 cursor-pointer">
+              <div className="w-9 h-9 rounded-full bg-muted flex items-center justify-center cursor-pointer">
                 <Facebook size={18} />
               </div>
-              <div className="w-9 h-9 rounded-full bg-muted hover:bg-sky-500 hover:text-white flex items-center justify-center transition-all duration-300 hover:scale-110 cursor-pointer">
+              <div className="w-9 h-9 rounded-full bg-muted flex items-center justify-center cursor-pointer">
                 <Twitter size={18} />
               </div>
-              <div className="w-9 h-9 rounded-full bg-muted hover:bg-pink-600 hover:text-white flex items-center justify-center transition-all duration-300 hover:scale-110 cursor-pointer">
+              <div className="w-9 h-9 rounded-full bg-muted flex items-center justify-center cursor-pointer">
                 <Instagram size={18} />
               </div>
-              <div className="w-9 h-9 rounded-full bg-muted hover:bg-blue-700 hover:text-white flex items-center justify-center transition-all duration-300 hover:scale-110 cursor-pointer">
+              <div className="w-9 h-9 rounded-full bg-muted flex items-center justify-center cursor-pointer">
                 <Linkedin size={18} />
               </div>
             </div>

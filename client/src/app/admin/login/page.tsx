@@ -159,7 +159,7 @@ export default function AdminLogin() {
                     onChange={handleInputChange}
                     required
                     disabled={isPending}
-                    className="pl-9 h-11"
+                    className="pl-9 h-11 bg-white dark:bg-black"
                     placeholder="admin@example.com"
                   />
                 </div>
@@ -180,7 +180,7 @@ export default function AdminLogin() {
                     onChange={handleInputChange}
                     required
                     disabled={isPending}
-                    className="pl-9 pr-9 h-11"
+                    className="pl-9 pr-9 h-11 bg-white dark:bg-black"
                     placeholder="Enter your password"
                   />
                   <Button

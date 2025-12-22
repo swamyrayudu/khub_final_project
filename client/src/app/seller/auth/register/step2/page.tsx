@@ -326,7 +326,7 @@ export default function Step2() {
                 value={formData.shopName}
                 onChange={handleInputChange}
                 required
-                className="w-full px-4 py-3 bg-background border border-border rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200"
+                className="w-full px-4 py-3 bg-white dark:bg-slate-900 border border-border rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
                 placeholder="Enter your shop name"
               />
             </div>
@@ -344,7 +344,7 @@ export default function Step2() {
                 value={formData.contactNumber}
                 onChange={handleInputChange}
                 required
-                className="w-full px-4 py-3 bg-background border border-border rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200"
+                className="w-full px-4 py-3 bg-white dark:bg-slate-900 border border-border rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
                 placeholder="Enter shop contact number"
               />
             </div>
@@ -369,7 +369,7 @@ export default function Step2() {
                     value={formData.country}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-4 py-3 bg-background border border-border rounded-xl text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary appearance-none cursor-pointer transition-all duration-200"
+                    className="w-full px-4 py-3 bg-white dark:bg-slate-900 border border-border rounded-xl text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary appearance-none cursor-pointer"
                   >
                     <option value="">Select Country</option>
                     {locationData.countries.map((country) => (
@@ -400,7 +400,7 @@ export default function Step2() {
                     onChange={handleInputChange}
                     required
                     disabled={!formData.country}
-                    className="w-full px-4 py-3 bg-background border border-border rounded-xl text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary appearance-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+                    className="w-full px-4 py-3 bg-white dark:bg-slate-900 border border-border rounded-xl text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary appearance-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <option value="">Select State</option>
                     {locationData.states.map((state) => (
@@ -431,7 +431,7 @@ export default function Step2() {
                     onChange={handleInputChange}
                     required
                     disabled={!formData.state}
-                    className="w-full px-4 py-3 bg-background border border-border rounded-xl text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary appearance-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+                    className="w-full px-4 py-3 bg-white dark:bg-slate-900 border border-border rounded-xl text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary appearance-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <option value="">Select City</option>
                     {locationData.cities.map((city, index) => (
@@ -462,7 +462,7 @@ export default function Step2() {
                 onChange={handleInputChange}
                 required
                 rows={4}
-                className="w-full px-4 py-3 bg-background border border-border rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary resize-none transition-all duration-200"
+                className="w-full px-4 py-3 bg-white dark:bg-slate-900 border border-border rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary resize-none"
                 placeholder="Enter detailed shop address with landmarks"
               />
             </div>
@@ -481,7 +481,7 @@ export default function Step2() {
                   onChange={handleFileChange}
                   disabled={uploading.shopId}
                   accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
-                  className="w-full px-4 py-3 bg-background border border-border rounded-xl text-foreground file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-primary file:text-primary-foreground hover:file:bg-primary/90 file:cursor-pointer disabled:opacity-50 transition-all duration-200"
+                  className="w-full px-4 py-3 bg-white dark:bg-slate-900 border border-border rounded-xl text-foreground file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-primary file:text-primary-foreground file:cursor-pointer disabled:opacity-50"
                 />
                 {uploading.shopId && (
                   <div className="absolute right-3 top-1/2 transform -translate-y-1/2">

@@ -159,7 +159,7 @@ export default function AdminHeader({
               placeholder="Search sellers, products..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 bg-background border-border/50 focus:border-ring"
+              className="pl-10 bg-white dark:bg-slate-900 border-border/50 focus:border-ring"
             />
           </form>
         </div>
@@ -274,7 +274,7 @@ export default function AdminHeader({
             placeholder="Search..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10 bg-background border-border/50"
+            className="pl-10 bg-white dark:bg-slate-900 border-border/50"
           />
         </form>
       </div>

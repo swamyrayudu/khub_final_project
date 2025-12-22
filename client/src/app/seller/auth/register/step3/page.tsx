@@ -256,7 +256,7 @@ export default function Step3() {
                   onChange={(e) => setEmail(e.target.value)}
                   required
                   disabled={isLoading}
-                  className="w-full px-4 py-3 bg-background border border-border rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary disabled:opacity-50 transition-all duration-200"
+                  className="w-full px-4 py-3 bg-white dark:bg-slate-900 border border-border rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary disabled:opacity-50"
                   placeholder="Enter your email address"
                 />
               </div>
@@ -297,7 +297,7 @@ export default function Step3() {
                   required
                   maxLength={6}
                   disabled={isLoading}
-                  className="w-full px-4 py-3 bg-background border border-border rounded-xl text-center text-2xl tracking-widest font-mono font-bold text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary disabled:opacity-50 transition-all duration-200"
+                  className="w-full px-4 py-3 bg-white dark:bg-slate-900 border border-border rounded-xl text-center text-2xl tracking-widest font-mono font-bold text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary disabled:opacity-50"
                   placeholder="000000"
                 />
                 <p className="text-xs text-muted-foreground text-center">

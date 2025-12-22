@@ -162,13 +162,13 @@ export default function SellerHeader({ onMobileMenuToggle }: SellerHeaderProps) 
           </div>
 
           {/* Search bar - hidden on mobile */}
-          <div className="hidden md:flex flex-1 max-w-md mx-8 animate-fade-in">
+          <div className="hidden md:flex flex-1 max-w-md mx-8">
             <div className="relative w-full">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-primary/50" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <input
                 type="text"
                 placeholder="Search products, orders..."
-                className="w-full pl-10 pr-4 py-2.5 bg-background/50 border border-primary/20 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-300 hover:border-primary/40"
+                className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-slate-900 border border-border rounded-xl text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary"
               />
             </div>
           </div>

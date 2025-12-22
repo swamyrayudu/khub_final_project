@@ -55,7 +55,7 @@ interface Product {
 }
 
 export default function Products() {
-  const { status, data: session } = useSession();
+  const { status } = useSession();
   const [products, setProducts] = useState<Product[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);

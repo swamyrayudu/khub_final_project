@@ -278,7 +278,7 @@ useEffect(() => {
                 value={formData.shopOwnerName}
                 onChange={handleInputChange}
                 required
-                className="w-full px-4 py-3 bg-background border border-border rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200"
+                className="w-full px-4 py-3 bg-white dark:bg-slate-900 border border-border rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
                 placeholder="Enter shop owner name"
               />
             </div>
@@ -296,7 +296,7 @@ useEffect(() => {
                 value={formData.email}
                 onChange={handleInputChange}
                 required
-                className="w-full px-4 py-3 bg-background border border-border rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200"
+                className="w-full px-4 py-3 bg-white dark:bg-slate-900 border border-border rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
                 placeholder="Enter your email"
               />
             </div>
@@ -314,7 +314,7 @@ useEffect(() => {
                 value={formData.contact}
                 onChange={handleInputChange}
                 required
-                className="w-full px-4 py-3 bg-background border border-border rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200"
+                className="w-full px-4 py-3 bg-white dark:bg-slate-900 border border-border rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
                 placeholder="Enter contact number"
               />
             </div>
@@ -354,7 +354,7 @@ useEffect(() => {
                 value={formData.permanentAddress}
                 onChange={handleInputChange}
                 rows={3}
-                className="w-full px-4 py-3 bg-background border border-border rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200"
+                className="w-full px-4 py-3 bg-white dark:bg-slate-900 border border-border rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
                 placeholder="Enter your permanent address"
               />
             </div>
@@ -373,7 +373,7 @@ useEffect(() => {
                   onChange={handleFileChange}
                   accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
                   disabled={uploading.permanentAddress}
-                  className="w-full px-4 py-3 bg-background border border-border rounded-xl text-foreground file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-primary file:text-primary-foreground hover:file:bg-primary/90 file:cursor-pointer disabled:opacity-50 transition-all duration-200"
+                  className="w-full px-4 py-3 bg-white dark:bg-slate-900 border border-border rounded-xl text-foreground file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-primary file:text-primary-foreground file:cursor-pointer disabled:opacity-50"
                 />
                 {uploading.permanentAddress && (
                   <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
@@ -418,7 +418,7 @@ useEffect(() => {
                   onChange={handleFileChange}
                   accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
                   disabled={uploading.idProof}
-                  className="w-full px-4 py-3 bg-background border border-border rounded-xl text-foreground file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-primary file:text-primary-foreground hover:file:bg-primary/90 file:cursor-pointer disabled:opacity-50 transition-all duration-200"
+                  className="w-full px-4 py-3 bg-white dark:bg-slate-900 border border-border rounded-xl text-foreground file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-primary file:text-primary-foreground file:cursor-pointer disabled:opacity-50"
                 />
                 {uploading.idProof && (
                   <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
