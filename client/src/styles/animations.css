@@ -61,6 +61,44 @@
   }
 }
 
+@keyframes buttonPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 hsl(var(--primary) / 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 10px hsl(var(--primary) / 0);
+  }
+}
+
+@keyframes buttonGlow {
+  0%, 100% {
+    text-shadow: 0 0 10px hsl(var(--primary) / 0);
+  }
+  50% {
+    text-shadow: 0 0 20px hsl(var(--primary) / 0.4);
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes buttonHoverFloat {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
 /* Shining Badge Specific */
 .badge-shine {
   position: relative;
@@ -143,6 +181,7 @@
   border: 1px solid hsl(var(--primary) / 0.2);
   overflow: hidden;
   transition: all 0.3s ease;
+  animation: slideInUp 0.6s ease-out;
 }
 
 .btn-glassy-primary::before {
@@ -178,8 +217,13 @@
 
 .btn-glassy-primary:hover {
   background: linear-gradient(135deg, hsl(var(--primary) / 0.25), hsl(var(--primary) / 0.1));
-  box-shadow: 0 8px 32px 0 hsl(var(--primary) / 0.3);
+  box-shadow: 0 8px 32px 0 hsl(var(--primary) / 0.3), 0 0 20px 0 hsl(var(--primary) / 0.2);
   border-color: hsl(var(--primary) / 0.3);
+  animation: buttonHoverFloat 2s ease-in-out;
+}
+
+.btn-glassy-primary:active {
+  transform: scale(0.98);
 }
 
 /* Secondary Button Glassy */
@@ -190,6 +234,7 @@
   border: 2px solid hsl(var(--primary) / 0.2);
   overflow: hidden;
   transition: all 0.3s ease;
+  animation: slideInUp 0.6s ease-out 0.1s both;
 }
 
 .btn-glassy-secondary::before {
@@ -225,29 +270,37 @@
 
 .btn-glassy-secondary:hover {
   background: linear-gradient(135deg, hsl(var(--primary) / 0.15), hsl(var(--primary) / 0.05));
-  box-shadow: 0 8px 32px 0 hsl(var(--primary) / 0.2);
+  box-shadow: 0 8px 32px 0 hsl(var(--primary) / 0.2), 0 0 20px 0 hsl(var(--primary) / 0.15);
   border-color: hsl(var(--primary) / 0.4);
+  animation: buttonHoverFloat 2s ease-in-out;
+}
+
+.btn-glassy-secondary:active {
+  transform: scale(0.98);
 }
 
 /* Dark mode adjustments - using CSS variables automatically applies */
 .dark .btn-glassy-primary {
-  background: linear-gradient(135deg, hsl(var(--primary) / 0.2), hsl(var(--primary) / 0.05));
-  border-color: hsl(var(--primary) / 0.3);
+  background: linear-gradient(135deg, hsl(var(--primary) / 0.4), hsl(var(--primary) / 0.25));
+  border: 2px solid hsl(var(--primary) / 0.6);
+  box-shadow: 0 0 20px hsl(var(--primary) / 0.3), inset 0 0 20px hsl(var(--primary) / 0.15);
 }
 
 .dark .btn-glassy-primary:hover {
-  background: linear-gradient(135deg, hsl(var(--primary) / 0.3), hsl(var(--primary) / 0.1));
-  box-shadow: 0 8px 32px 0 hsl(var(--primary) / 0.4);
-  border-color: hsl(var(--primary) / 0.5);
+  background: linear-gradient(135deg, hsl(var(--primary) / 0.5), hsl(var(--primary) / 0.35));
+  box-shadow: 0 8px 32px 0 hsl(var(--primary) / 0.6), 0 0 30px hsl(var(--primary) / 0.4), inset 0 0 20px hsl(var(--primary) / 0.2);
+  border-color: hsl(var(--primary) / 0.8);
 }
 
 .dark .btn-glassy-secondary {
-  background: linear-gradient(135deg, hsl(var(--primary) / 0.12), hsl(var(--primary) / 0.04));
-  border-color: hsl(var(--primary) / 0.15);
+  background: linear-gradient(135deg, hsl(var(--primary) / 0.3), hsl(var(--primary) / 0.15));
+  border: 2px solid hsl(var(--primary) / 0.5);
+  box-shadow: 0 0 15px hsl(var(--primary) / 0.25), inset 0 0 15px hsl(var(--primary) / 0.1);
 }
 
 .dark .btn-glassy-secondary:hover {
-  background: linear-gradient(135deg, hsl(var(--primary) / 0.15), hsl(var(--primary) / 0.04));
-  border-color: hsl(var(--primary) / 0.25);
+  background: linear-gradient(135deg, hsl(var(--primary) / 0.4), hsl(var(--primary) / 0.25));
+  box-shadow: 0 8px 32px 0 hsl(var(--primary) / 0.5), 0 0 25px hsl(var(--primary) / 0.35), inset 0 0 15px hsl(var(--primary) / 0.15);
+  border-color: hsl(var(--primary) / 0.7);
 }
 

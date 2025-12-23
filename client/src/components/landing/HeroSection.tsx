@@ -20,8 +20,8 @@ export default function HeroSection() {
         {/* Main Hero Content - Centered */}
         <div className="text-center space-y-6">
           {/* Badge */}
-          <div className="inline-flex items-center space-x-2 px-4 py-2 bg-primary/30 border border-primary/60 rounded-full hover:border-primary/80 transition-colors duration-300">
-            <Sparkles className="w-4 h-4 text-primary" />
+          <div className="inline-flex items-center space-x-2 px-4 py-2 bg-primary/20 backdrop-blur-md border border-primary/40 rounded-full hover:border-primary/80 transition-all duration-300 animate-pulse shadow-lg shadow-primary/30 hover:shadow-primary/50 hover:shadow-xl">
+            <Sparkles className="w-4 h-4 text-primary animate-bounce" style={{ animationDelay: '0.1s' }} />
             <span className="text-xs md:text-sm font-medium text-primary">Welcome to the Future of Shopping</span>
           </div>
 
@@ -42,14 +42,14 @@ export default function HeroSection() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-6">
             <button
               onClick={() => router.push('/shop/products')}
-              className="btn-glassy-primary group w-full sm:w-auto px-6 py-3 bg-primary text-primary-foreground rounded-lg font-semibold text-sm md:text-base transition-all duration-300 flex items-center justify-center space-x-2 hover:-translate-y-1 relative z-10 hover:bg-primary/90"
+              className="group w-full sm:w-auto px-6 py-3 bg-primary text-primary-foreground rounded-lg font-semibold text-sm md:text-base transition-all duration-300 flex items-center justify-center space-x-2 hover:-translate-y-1 hover:bg-primary/90 shadow-lg shadow-primary/50 hover:shadow-xl hover:shadow-primary/70"
             >
               <span>Start Shopping Now</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
             </button>
             <button
               onClick={() => router.push('/seller/auth/login')}
-              className="btn-glassy-secondary group w-full sm:w-auto px-6 py-3 bg-primary/20 border-2 border-primary/50 text-primary rounded-lg font-semibold text-sm md:text-base transition-all duration-300 flex items-center justify-center space-x-2 hover:-translate-y-1 relative z-10 hover:bg-primary/30 hover:border-primary/70"
+              className="group w-full sm:w-auto px-6 py-3 bg-primary/20 backdrop-blur-md border-2 border-primary/50 text-primary rounded-lg font-semibold text-sm md:text-base transition-all duration-300 flex items-center justify-center space-x-2 hover:-translate-y-1 hover:bg-primary/30 hover:border-primary/70 shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/40"
             >
               <span>Become a Seller</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />

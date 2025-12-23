@@ -28,14 +28,14 @@ export default function FinalCTASection() {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-6">
               <button
                 onClick={() => router.push('/shop/products')}
-                className="btn-glassy-primary group px-8 py-4 text-primary-foreground rounded-xl font-semibold text-lg transition-all duration-300 flex items-center space-x-2 hover:-translate-y-1 relative z-10"
+                className="group px-8 py-4 bg-primary text-primary-foreground rounded-xl font-semibold text-lg transition-all duration-300 flex items-center space-x-2 hover:-translate-y-1 hover:bg-primary/90 shadow-lg shadow-primary/50 hover:shadow-xl hover:shadow-primary/70"
               >
                 <span>Shop Now</span>
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
               </button>
               <button
                 onClick={() => router.push('/seller/auth/login')}
-                className="btn-glassy-secondary group px-8 py-4 text-foreground rounded-xl font-semibold text-lg transition-all duration-300 flex items-center space-x-2 hover:-translate-y-1 relative z-10"
+                className="group px-8 py-4 bg-primary/20 backdrop-blur-md border-2 border-primary/50 text-primary rounded-xl font-semibold text-lg transition-all duration-300 flex items-center space-x-2 hover:-translate-y-1 hover:bg-primary/30 hover:border-primary/70 shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/40"
               >
                 <span>Start Selling</span>
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />

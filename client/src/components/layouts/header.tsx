@@ -37,7 +37,9 @@ import {
   Bell,
   X,
   MessageSquare,
-  Info
+  Info,
+  Settings,
+  ShoppingBag
 } from 'lucide-react';
 
 export default function ShopHeader() {
@@ -46,16 +48,16 @@ export default function ShopHeader() {
   const [scrolled, setScrolled] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [activeNav, setActiveNav] = useState('');
   const { wishlistCount } = useWishlist();
 
-  // Prevent hydration mismatch
   useEffect(() => {
     setMounted(true);
   }, []);
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+      setScrolled(window.scrollY > 10);
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
@@ -77,69 +79,78 @@ export default function ShopHeader() {
     <header
       className={`w-full sticky top-0 z-50 transition-all duration-300 ${
         scrolled
-          ? 'bg-background/80 backdrop-blur-lg shadow-lg border-b border-border'
-          : 'bg-background shadow-sm'
+          ? 'bg-background/80 backdrop-blur-xl shadow-md border-b'
+          : 'bg-background/95 backdrop-blur-sm border-b'
       }`}
     >
-
-      {/* Main Header */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 lg:h-20">
-          {/* Logo Section */}
+        <div className="flex items-center justify-between h-16">
+          {/* Logo */}
           <div className="flex items-center gap-8">
             <Link
               href="/"
               className="flex items-center gap-3 group"
             >
               <div className="relative">
-                <div className="w-10 h-10 bg-gradient-to-br from-primary to-primary/60 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow">
-                  <Store className="w-6 h-6 text-primary-foreground" />
+                <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center shadow-sm group-hover:shadow-md transition-all duration-300 group-hover:scale-105">
+                  <Store className="w-5 h-5 text-primary-foreground transition-transform duration-300 group-hover:rotate-12" />
                 </div>
-                <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-background animate-pulse" />
+                <div className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-500 rounded-full border-2 border-background" />
               </div>
               <div className="hidden sm:block">
-                <h1 className="text-xl lg:text-2xl font-bold text-foreground">
+                <h1 className="text-xl font-bold text-foreground tracking-tight group-hover:text-primary transition-colors duration-200">
                   LocalHunt
                 </h1>
-                <p className="text-xs text-muted-foreground">Discover Local Treasures</p>
+                <p className="text-[10px] font-medium text-muted-foreground -mt-0.5">
+                  Discover Local Treasures
+                </p>
               </div>
             </Link>
 
-            {/* Desktop Navigation */}
+            {/* Desktop Nav */}
             <nav className="hidden lg:flex items-center gap-1">
               {userNavLinks.map((link) => (
-                <Link key={link.href} href={link.href}>
+                <Link 
+                  key={link.href} 
+                  href={link.href}
+                  onMouseEnter={() => setActiveNav(link.href)}
+                  onMouseLeave={() => setActiveNav('')}
+                >
                   <Button
                     variant="ghost"
-                    className="gap-2 hover:bg-primary/10 hover:text-primary transition-colors"
+                    size="sm"
+                    className={`gap-2 relative overflow-hidden group transition-all duration-200 ${
+                      activeNav === link.href ? 'text-primary bg-primary/10' : 'text-foreground'
+                    }`}
                   >
-                    <link.icon className="w-4 h-4" />
-                    {link.label}
+                    <link.icon className="w-4 h-4 transition-transform duration-200 group-hover:scale-110" />
+                    <span className="font-medium">{link.label}</span>
+                    <span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
                   </Button>
                 </Link>
               ))}
             </nav>
           </div>
 
-          {/* Search Bar - Desktop */}
+          {/* Search - Desktop */}
           <div className="hidden lg:flex flex-1 max-w-md mx-8">
             <div className="relative w-full group">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground group-focus-within:text-primary transition-colors duration-200" />
               <Input
                 type="search"
                 placeholder="Search products, stores..."
-                className="pl-10 pr-4 w-full bg-white dark:bg-black border-0 focus-visible:ring-2 focus-visible:ring-primary/20"
+                className="pl-10 pr-4 h-10 bg-muted/50 border-0 focus-visible:bg-background focus-visible:ring-2 focus-visible:ring-primary/20 transition-all duration-200"
               />
             </div>
           </div>
 
-          {/* Right Actions */}
-          <div className="flex items-center gap-2 lg:gap-3">
-            {/* Search Button - Mobile */}
+          {/* Actions */}
+          <div className="flex items-center gap-1">
+            {/* Mobile Search Toggle */}
             <Button
               variant="ghost"
               size="icon"
-              className="lg:hidden"
+              className="lg:hidden h-9 w-9 hover:bg-primary/10 hover:text-primary transition-colors duration-200"
               onClick={() => setSearchOpen(!searchOpen)}
             >
               {searchOpen ? <X className="w-5 h-5" /> : <Search className="w-5 h-5" />}
@@ -147,11 +158,15 @@ export default function ShopHeader() {
 
             {/* Wishlist */}
             <Link href="/shop/wishlist">
-              <Button variant="ghost" size="icon" className="relative hidden sm:flex">
-                <Heart className="w-5 h-5" />
+              <Button 
+                variant="ghost" 
+                size="icon"
+                className="relative hidden sm:flex h-9 w-9 hover:bg-primary/10 hover:text-primary transition-all duration-200 group"
+              >
+                <Heart className="w-5 h-5 transition-all duration-200 group-hover:scale-110 group-hover:fill-current" />
                 {wishlistCount > 0 && (
-                  <Badge className="absolute -top-1 -right-1 w-5 h-5 flex items-center justify-center p-0 text-xs bg-red-500">
-                    {wishlistCount}
+                  <Badge className="absolute -top-1 -right-1 h-5 min-w-5 flex items-center justify-center px-1 text-[10px] font-bold bg-primary text-primary-foreground border-2 border-background">
+                    {wishlistCount > 99 ? '99+' : wishlistCount}
                   </Badge>
                 )}
               </Button>
@@ -160,159 +175,178 @@ export default function ShopHeader() {
             {/* Notifications */}
             {session?.user && (
               <Link href="/shop/notifications">
-                <Button variant="ghost" size="icon" className="relative hidden sm:flex">
-                  <Bell className="w-5 h-5" />
+                <Button 
+                  variant="ghost" 
+                  size="icon"
+                  className="relative hidden sm:flex h-9 w-9 hover:bg-primary/10 hover:text-primary transition-all duration-200 group"
+                >
+                  <Bell className="w-5 h-5 transition-transform duration-200 group-hover:scale-110 group-hover:rotate-12" />
                 </Button>
               </Link>
             )}
 
             {/* Theme Toggle */}
-            <div className="hidden sm:block">
+            <div className="hidden sm:flex">
               <ModeToggle />
             </div>
 
-            {/* User Profile / Sign In */}
+            {/* User Menu */}
             {!mounted || status === 'loading' ? (
-              <div className="w-10 h-10 rounded-full bg-muted animate-pulse" />
+              <div className="w-9 h-9 rounded-full bg-muted animate-pulse ml-2" />
             ) : session?.user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button
                     variant="ghost"
-                    className="relative h-10 w-10 rounded-full ring-2 ring-primary/20 hover:ring-primary/40 transition-all"
+                    className="relative h-9 w-9 rounded-full ml-2 hover:ring-2 hover:ring-primary/20 transition-all duration-200"
                   >
-                    <Avatar className="h-9 w-9">
+                    <Avatar className="h-9 w-9 border-2 border-primary/20">
                       <AvatarImage src={session.user.image || ''} alt={session.user.name || ''} />
-                      <AvatarFallback className="bg-gradient-to-br from-primary to-primary/60 text-primary-foreground font-semibold">
-                        {session.user.name?.charAt(0) || 'U'}
+                      <AvatarFallback className="bg-primary text-primary-foreground text-sm font-semibold">
+                        {session.user.name?.charAt(0).toUpperCase() || 'U'}
                       </AvatarFallback>
                     </Avatar>
-                    <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-background" />
+                    <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 rounded-full border-2 border-background" />
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-64">
-                  <DropdownMenuLabel>
+                <DropdownMenuContent align="end" className="w-56 p-2">
+                  <DropdownMenuLabel className="pb-2">
                     <div className="flex flex-col space-y-1">
-                      <p className="text-sm font-semibold">{session.user.name}</p>
-                      <p className="text-xs text-muted-foreground">{session.user.email}</p>
+                      <p className="text-sm font-semibold leading-none">{session.user.name}</p>
+                      <p className="text-xs text-muted-foreground leading-none">{session.user.email}</p>
                     </div>
                   </DropdownMenuLabel>
-                  <DropdownMenuSeparator />
+                  <DropdownMenuSeparator className="my-1" />
                   <DropdownMenuItem asChild>
-                    <Link href="/shop/profile" className="cursor-pointer">
-                      <User className="mr-2 h-4 w-4" />
-                      My Profile
+                    <Link href="/shop/profile" className="cursor-pointer group">
+                      <User className="mr-2 h-4 w-4 transition-transform duration-200 group-hover:scale-110" />
+                      <span>Profile</span>
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link href="/shop/wishlist" className="cursor-pointer">
-                      <Heart className="mr-2 h-4 w-4" />
-                      Wishlist
+                    <Link href="/shop/orders" className="cursor-pointer group">
+                      <ShoppingBag className="mr-2 h-4 w-4 transition-transform duration-200 group-hover:scale-110" />
+                      <span>Orders</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/shop/wishlist" className="cursor-pointer group">
+                      <Heart className="mr-2 h-4 w-4 transition-transform duration-200 group-hover:scale-110" />
+                      <span>Wishlist</span>
                       {wishlistCount > 0 && (
-                        <Badge className="ml-auto" variant="secondary">
+                        <Badge variant="secondary" className="ml-auto text-xs font-semibold">
                           {wishlistCount}
                         </Badge>
                       )}
                     </Link>
                   </DropdownMenuItem>
-                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link href="/shop/settings" className="cursor-pointer group">
+                      <Settings className="mr-2 h-4 w-4 transition-transform duration-200 group-hover:scale-110" />
+                      <span>Settings</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator className="my-1" />
                   <DropdownMenuItem
                     onClick={() => signOut({ callbackUrl: '/' })}
-                    className="text-destructive focus:text-destructive cursor-pointer"
+                    className="text-destructive focus:text-destructive cursor-pointer group"
                   >
-                    <LogOut className="mr-2 h-4 w-4" />
-                    Sign Out
+                    <LogOut className="mr-2 h-4 w-4 transition-transform duration-200 group-hover:scale-110" />
+                    <span>Sign out</span>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
               <Link href="/auth">
-                <Button className="rounded-full px-6 shadow-lg hover:shadow-xl transition-all">
+                <Button 
+                  size="sm"
+                  className="ml-2 rounded-full px-5 shadow-sm hover:shadow-md transition-all duration-200 hover:scale-105 active:scale-95"
+                >
                   Sign In
                 </Button>
               </Link>
             )}
 
             {/* Mobile Menu */}
-            {!mounted ? (
-              <Button variant="ghost" size="icon" className="lg:hidden" disabled>
-                <Menu className="w-5 h-5" />
-              </Button>
-            ) : (
-            <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
-              <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="lg:hidden">
-                  <Menu className="w-5 h-5" />
-                </Button>
-              </SheetTrigger>
-              <SheetContent side="right" className="w-80">
-                <SheetHeader>
-                  <SheetTitle>Menu</SheetTitle>
-                </SheetHeader>
-                <div className="flex flex-col gap-4 mt-8">
-                  {userNavLinks.map((link) => (
-                    <Link
-                      key={link.href}
-                      href={link.href}
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      <Button variant="ghost" className="w-full justify-start gap-3">
-                        <link.icon className="w-5 h-5" />
-                        {link.label}
-                      </Button>
-                    </Link>
-                  ))}
-                  <Link
-                    href="/shop/about"
-                    onClick={() => setMobileMenuOpen(false)}
+            {mounted && (
+              <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+                <SheetTrigger asChild>
+                  <Button 
+                    variant="ghost" 
+                    size="icon"
+                    className="lg:hidden h-9 w-9 hover:bg-primary/10 hover:text-primary transition-colors duration-200"
                   >
-                    <Button variant="ghost" className="w-full justify-start gap-3">
-                      <Info className="w-5 h-5" />
-                      About
-                    </Button>
-                  </Link>
-                  <Link
-                    href="/shop/wishlist"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    <Button variant="ghost" className="w-full justify-start gap-3">
-                      <Heart className="w-5 h-5" />
-                      Wishlist
-                      {wishlistCount > 0 && (
-                        <Badge className="ml-auto" variant="secondary">
-                          {wishlistCount}
-                        </Badge>
-                      )}
-                    </Button>
-                  </Link>
-                  <div className="border-t pt-4 mt-4">
-                    <ModeToggle />
+                    <Menu className="w-5 h-5" />
+                  </Button>
+                </SheetTrigger>
+                <SheetContent side="right" className="w-72 p-0">
+                  <SheetHeader className="px-6 py-4 border-b">
+                    <SheetTitle>Menu</SheetTitle>
+                  </SheetHeader>
+                  <div className="flex flex-col py-4">
+                    <div className="px-3 space-y-1">
+                      {userNavLinks.map((link) => (
+                        <Link
+                          key={link.href}
+                          href={link.href}
+                          onClick={() => setMobileMenuOpen(false)}
+                        >
+                          <Button 
+                            variant="ghost" 
+                            className="w-full justify-start gap-3 h-11 hover:bg-primary/10 hover:text-primary transition-colors duration-200 group"
+                          >
+                            <link.icon className="w-5 h-5 transition-transform duration-200 group-hover:scale-110" />
+                            <span className="font-medium">{link.label}</span>
+                          </Button>
+                        </Link>
+                      ))}
+                      <Link
+                        href="/shop/wishlist"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        <Button 
+                          variant="ghost" 
+                          className="w-full justify-start gap-3 h-11 hover:bg-primary/10 hover:text-primary transition-colors duration-200 group"
+                        >
+                          <Heart className="w-5 h-5 transition-transform duration-200 group-hover:scale-110" />
+                          <span className="font-medium">Wishlist</span>
+                          {wishlistCount > 0 && (
+                            <Badge variant="secondary" className="ml-auto text-xs font-semibold">
+                              {wishlistCount}
+                            </Badge>
+                          )}
+                        </Button>
+                      </Link>
+                    </div>
+                    
+                    <div className="mt-4 px-6 pt-4 border-t">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm font-medium text-muted-foreground">Theme</span>
+                        <ModeToggle />
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </SheetContent>
-            </Sheet>
+                </SheetContent>
+              </Sheet>
             )}
           </div>
         </div>
 
-        {/* Mobile Search Bar */}
+        {/* Mobile Search */}
         {searchOpen && (
-          <div className="lg:hidden pb-4">
+          <div className="lg:hidden pb-4 pt-1 animate-in fade-in slide-in-from-top-2 duration-200">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <Input
                 type="search"
                 placeholder="Search products, stores..."
-                className="pl-10 pr-4 w-full bg-white dark:bg-black"
+                className="pl-10 pr-4 h-10 bg-muted/50 border-0 focus-visible:bg-background focus-visible:ring-2 focus-visible:ring-primary/20"
                 autoFocus
               />
             </div>
           </div>
         )}
       </div>
-
-      {/* Bottom Border Animation */}
-      <div className="h-0.5 bg-border" />
     </header>
   );
 }

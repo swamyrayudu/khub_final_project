@@ -27,6 +27,13 @@ export default function DualCTASection() {
   return (
     <section className="py-20 px-4">
       <div className="container mx-auto max-w-6xl">
+        {/* Shimmer CTA Section */}
+        <div className="text-center space-y-8 mb-20">
+          <button className="inline-flex h-12 animate-shimmer items-center justify-center rounded-md border border-slate-800 bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] px-6 font-medium text-slate-400 transition-colors focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50 dark:focus:ring-offset-slate-900">
+            Welcome to the Future of Shopping
+          </button>
+        </div>
+
         {/* Section Header */}
         <div className="text-center space-y-4 mb-16">
           <h2 className="text-4xl lg:text-5xl font-bold">
@@ -70,7 +77,7 @@ export default function DualCTASection() {
 
               <button
                 onClick={() => router.push('/shop/products')}
-                className="w-full btn-glassy-primary group/btn px-6 py-4 text-primary-foreground rounded-xl font-semibold transition-all duration-300 flex items-center justify-center space-x-2 hover:-translate-y-1 relative z-10"
+                className="w-full group/btn px-6 py-4 bg-primary text-primary-foreground rounded-xl font-semibold transition-all duration-300 flex items-center justify-center space-x-2 hover:-translate-y-1 hover:bg-primary/90 shadow-lg shadow-primary/50 hover:shadow-xl hover:shadow-primary/70"
               >
                 <span>Start Shopping</span>
                 <ArrowRight className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform duration-300" />
@@ -109,7 +116,7 @@ export default function DualCTASection() {
 
               <button
                 onClick={() => router.push('/seller/auth/login')}
-                className="w-full btn-glassy-secondary group/btn px-6 py-4 text-foreground rounded-xl font-semibold transition-all duration-300 flex items-center justify-center space-x-2 hover:-translate-y-1 relative z-10"
+                className="w-full group/btn px-6 py-4 bg-white dark:bg-orange-500 border-2 border-orange-500 dark:border-orange-500 text-orange-500 dark:text-white rounded-xl font-semibold transition-all duration-300 flex items-center justify-center space-x-2 hover:-translate-y-1 hover:bg-orange-50 dark:hover:bg-orange-600 hover:border-orange-600 dark:hover:border-orange-600 hover:text-orange-700 dark:hover:text-white shadow-lg dark:shadow-orange-500/50 hover:shadow-xl"
               >
                 <span>Register as Seller</span>
                 <ArrowRight className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform duration-300" />

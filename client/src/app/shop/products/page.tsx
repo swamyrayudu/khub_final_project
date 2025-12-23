@@ -421,7 +421,7 @@ export default function Products() {
               const productInWishlist = isInWishlist(product.id);
 
               return (
-                <Card key={product.id} className="group hover:shadow-md transition-shadow">
+                <Card key={product.id} className="dark:bg-black bg-white">
                   {/* Image Section */}
                   <div className="relative w-full h-48 bg-muted overflow-hidden rounded-t-lg">
                     {discount > 0 && (
