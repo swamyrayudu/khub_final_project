@@ -22,9 +22,9 @@ export async function GET() {
       count: items.length,
     });
 
-    // Add cache headers - cache for 30 minutes
-    response.headers.set('Cache-Control', 'public, max-age=1800, stale-while-revalidate=3600');
-    response.headers.set('CDN-Cache-Control', 'max-age=1800');
+    // No caching - always serve fresh carousel data for real-time updates
+    response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
+    response.headers.set('Pragma', 'no-cache');
 
     return response;
   } catch (error) {

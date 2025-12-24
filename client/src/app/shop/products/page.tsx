@@ -18,7 +18,7 @@ import {
   ShoppingBag,
 } from 'lucide-react';
 import { getAllSellerProducts } from '@/actions/productActions';
-import { addToWishlist } from '@/actions/wishlist-actions';
+import { addToWishlist, removeFromWishlist } from '@/actions/wishlist-actions';
 import { logProductViewEvent, logWishlistEvent } from '@/actions/sellerEventNotifications';
 import { toast } from 'react-toastify';
 import { useWishlist } from '@/contexts/WishlistContext';
@@ -74,35 +74,20 @@ export default function Products() {
   const [userData, setUserData] = useState<{ id: string; name: string; email: string } | null>(null);
   const [carouselItems, setCarouselItems] = useState<Array<{ id: string; image: string; title: string; description: string }>>([]);
   const [displayedCount, setDisplayedCount] = useState(PRODUCTS_PER_PAGE);
-  const { wishlistItems, addToWishlistState, isInWishlist } = useWishlist();
+  const { addToWishlistState, removeFromWishlistState, isInWishlist } = useWishlist();
 
   // Fetch carousel items first (priority)
   useEffect(() => {
     const fetchCarousel = async () => {
       try {
-        // Cache carousel data for 30 minutes
-        const cacheKey = 'carousel_items_cache';
-        const cachedData = sessionStorage.getItem(cacheKey);
-        
-        if (cachedData) {
-          try {
-            const cachedItems = JSON.parse(cachedData);
-            setCarouselItems(cachedItems);
-            return;
-          } catch {
-            // Invalid cache, fetch fresh
-          }
-        }
-
+        // Fetch fresh carousel data without caching
         const response = await fetch('/api/carousel', {
-          next: { revalidate: 1800 }, // Cache for 30 minutes
+          cache: 'no-store', // Always fetch fresh data
         });
         if (response.ok) {
           const data = await response.json();
           const activeItems = (data.items || []).filter((item: { isActive?: boolean }) => item.isActive !== false);
           setCarouselItems(activeItems);
-          // Store in session cache
-          sessionStorage.setItem(cacheKey, JSON.stringify(activeItems));
         }
       } catch (error) {
         console.error('Error fetching carousel items:', error);
@@ -110,6 +95,10 @@ export default function Products() {
     };
 
     fetchCarousel();
+    
+    // Refresh carousel every 10 seconds to catch updates from admin panel
+    const interval = setInterval(fetchCarousel, 10000);
+    return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
@@ -131,8 +120,9 @@ export default function Products() {
 
         // Check cache first
         const cacheKey = 'products_cache';
-        const cachedProducts = sessionStorage.getItem(cacheKey);
+        const profileCacheKey = 'user_profile_cache';
         
+        const cachedProducts = sessionStorage.getItem(cacheKey);
         if (cachedProducts) {
           try {
             const cached = JSON.parse(cachedProducts);
@@ -144,38 +134,49 @@ export default function Products() {
           }
         }
 
-        // Fetch user profile to get location and user info
-        const profileResponse = await fetch('/api/user/profile-status', {
-          next: { revalidate: 3600 }, // Cache for 1 hour
-        });
-        if (profileResponse.ok) {
-          const profileData = await profileResponse.json();
-          
-          setUserCity(profileData.user.city);
-          setUserState(profileData.user.state);
-          
-          const userInfo = {
-            id: profileData.user.id || profileData.user._id,
-            name: profileData.user.name,
-            email: profileData.user.email,
-          };
-          
-          setUserData(userInfo);
+        // Check for cached profile data first
+        const cachedProfile = sessionStorage.getItem(profileCacheKey);
+        if (cachedProfile) {
+          try {
+            const profileData = JSON.parse(cachedProfile);
+            setUserCity(profileData.user.city);
+            setUserState(profileData.user.state);
+            setUserData(profileData.userInfo);
+          } catch {
+            // Invalid cache, continue fetching
+          }
         } else {
-          console.error('❌ Profile API error:', profileResponse.status);
+          // Fetch user profile to get location and user info only if not cached
+          const profileResponse = await fetch('/api/user/profile-status');
+          if (profileResponse.ok) {
+            const profileData = await profileResponse.json();
+            
+            setUserCity(profileData.user.city);
+            setUserState(profileData.user.state);
+            
+            const userInfo = {
+              id: profileData.user.id || profileData.user._id,
+              name: profileData.user.name,
+              email: profileData.user.email,
+            };
+            
+            setUserData(userInfo);
+            
+            // Cache the profile data
+            sessionStorage.setItem(profileCacheKey, JSON.stringify({ user: profileData.user, userInfo }));
+          } else {
+            console.error('❌ Profile API error:', profileResponse.status);
+          }
         }
 
         const result = await getAllSellerProducts();
         if (result.success) {
           const mappedProducts = result.products.map((p: Product) => p);
-          // Filter out products that are already in wishlist
-          const filteredMapped = mappedProducts.filter(
-            (p: Product) => !wishlistItems.includes(p.id)
-          );
-          setProducts(filteredMapped);
-          setFilteredProducts(filteredMapped);
+          // Keep all products - don't filter out wishlist items
+          setProducts(mappedProducts);
+          setFilteredProducts(mappedProducts);
           // Cache products
-          sessionStorage.setItem(cacheKey, JSON.stringify(filteredMapped));
+          sessionStorage.setItem(cacheKey, JSON.stringify(mappedProducts));
         }
       } catch (error) {
         console.error('Error fetching products:', error);
@@ -184,7 +185,7 @@ export default function Products() {
       }
     }
     fetchProducts();
-  }, [wishlistItems, status]);
+  }, [status]);
 
   // Update displayed products when filtered products change or displayed count changes
   useEffect(() => {
@@ -282,39 +283,53 @@ export default function Products() {
 
   const handleAddToWishlist = async (productId: string) => {
     try {
-      const result = await addToWishlist(productId);
+      const isCurrentlyInWishlist = isInWishlist(productId);
+      
+      // Update context immediately for fast response
+      if (isCurrentlyInWishlist) {
+        removeFromWishlistState(productId);
+      } else {
+        addToWishlistState(productId);
+      }
+
+      // Make the API call
+      const result = isCurrentlyInWishlist 
+        ? await removeFromWishlist(productId)
+        : await addToWishlist(productId);
       
       if (result.success) {
-        // Find the product to get seller info
-        const product = products.find(p => p.id === productId);
-        
-        // Log the event to seller
-        if (userData && product?.sellerId) {
-          try {
-            await logWishlistEvent(
-              userData.id,
-              userData.name,
-              product.sellerId,
-              product.name
-            );
-          } catch (error) {
-            console.error('Error logging wishlist event:', error);
+        // Find the product to get seller info (only for add action)
+        if (!isCurrentlyInWishlist) {
+          const product = products.find(p => p.id === productId);
+          
+          // Log the event to seller
+          if (userData && product?.sellerId) {
+            try {
+              await logWishlistEvent(
+                userData.id,
+                userData.name,
+                product.sellerId,
+                product.name
+              );
+            } catch (error) {
+              console.error('Error logging wishlist event:', error);
+            }
           }
-        } else {
-          console.warn('⚠️ Cannot log wishlist event - userData or sellerId missing:', { userData, sellerId: product?.sellerId });
         }
         
         toast.success(result.message);
-        // Update context and remove from current list
-        addToWishlistState(productId);
-        setProducts(prev => prev.filter(p => p.id !== productId));
-        setFilteredProducts(prev => prev.filter(p => p.id !== productId));
       } else {
+        // Revert the optimistic update if API fails
+        if (isCurrentlyInWishlist) {
+          addToWishlistState(productId);
+        } else {
+          removeFromWishlistState(productId);
+        }
         toast.error(result.message);
       }
     } catch (error) {
-      console.error('Error adding to wishlist:', error);
-      toast.error('Failed to add to wishlist');
+      console.error('Error updating wishlist:', error);
+      toast.error('Failed to update wishlist');
     }
   };
 
@@ -614,14 +629,16 @@ export default function Products() {
                   <CardFooter className="flex flex-col gap-2 p-4 pt-0">
                     {/* Add to Wishlist Button */}
                     <Button
-                      className="w-full h-9"
+                      className="w-full h-9 cursor-pointer"
                       size="sm"
-                      disabled={productInWishlist}
-                      onClick={() => handleAddToWishlist(product.id)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleAddToWishlist(product.id);
+                      }}
                       variant={productInWishlist ? "secondary" : "default"}
                     >
                       <Heart className={`w-4 h-4 mr-1.5 ${productInWishlist ? 'fill-red-500 text-red-500' : ''}`} />
-                      {productInWishlist ? 'In Wishlist' : 'Add to Wishlist'}
+                      {productInWishlist ? 'Remove from Wishlist' : 'Add to Wishlist'}
                     </Button>
 
                     {/* Open in Google Maps (only if URL or coordinates exist) */}
@@ -629,8 +646,11 @@ export default function Products() {
                       <Button
                         variant="secondary"
                         size="sm"
-                        className="w-full h-9"
-                        onClick={() => handleOpenInGoogleMaps(product)}
+                        className="w-full h-9 cursor-pointer"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleOpenInGoogleMaps(product);
+                        }}
                       >
                         <ExternalLink className="w-4 h-4 mr-1.5" />
                         Open in Google Maps
