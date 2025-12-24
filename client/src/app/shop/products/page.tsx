@@ -23,6 +23,7 @@ import { toast } from 'react-toastify';
 import { useWishlist } from '@/contexts/WishlistContext';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
+import { LoadingSpinner } from '@/components/ui/loading-page';
 
 interface Product {
   id: string;
@@ -374,10 +375,7 @@ export default function Products() {
 
         {/* Loading State */}
         {loading || status === 'loading' ? (
-          <div className="flex flex-col items-center justify-center h-64">
-            <Package className="w-10 h-10 text-muted-foreground animate-pulse mb-3" />
-            <p className="text-sm text-muted-foreground">Loading products...</p>
-          </div>
+          <LoadingSpinner text="Loading products..." />
         ) : filteredProducts.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-64">
             <Package className="w-10 h-10 text-muted-foreground mb-3" />

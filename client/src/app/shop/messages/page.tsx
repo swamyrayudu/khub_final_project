@@ -17,6 +17,7 @@ import {
 import { getUserConversations, getConversation, sendMessageToSeller } from '@/actions/messageActions';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
+import { LoadingSpinner } from '@/components/ui/loading-page';
 
 interface Conversation {
   sellerId: string;
@@ -248,10 +249,7 @@ export default function MessagesPage() {
             <Card className="h-full">
               <CardContent className="p-0">
                 {loading && !selectedSeller ? (
-                  <div className="flex flex-col items-center justify-center py-12">
-                    <MessageSquare className="w-10 h-10 text-muted-foreground animate-pulse mb-3" />
-                    <p className="text-sm text-muted-foreground">Loading conversations...</p>
-                  </div>
+                  <LoadingSpinner text="Loading conversations..." />
                 ) : conversations.length === 0 ? (
                   <div className="flex flex-col items-center justify-center py-12 px-4">
                     <Inbox className="w-12 h-12 text-muted-foreground mb-3" />

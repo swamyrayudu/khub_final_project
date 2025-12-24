@@ -29,6 +29,7 @@ import {
   CardContent,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { LoadingSpinner } from "@/components/ui/loading-page";
 
 interface AdminUser {
   id: string;
@@ -173,15 +174,7 @@ export default function AdminHomeContent() {
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-background via-muted/20 to-accent/10 flex items-center justify-center">
-        <div className="text-center">
-          <div className="relative w-16 h-16 mx-auto mb-6">
-            <Loader2 className="w-16 h-16 animate-spin text-primary absolute" />
-            <div className="w-16 h-16 rounded-full border-4 border-primary/20 absolute"></div>
-          </div>
-          <p className="text-muted-foreground font-medium">
-            Loading admin dashboard...
-          </p>
-        </div>
+        <LoadingSpinner text="Loading admin dashboard..." />
       </div>
     );
   }

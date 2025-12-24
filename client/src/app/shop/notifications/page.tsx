@@ -23,6 +23,7 @@ import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { toast } from 'react-toastify';
+import { LoadingSpinner } from '@/components/ui/loading-page';
 
 interface Notification {
   id: string;
@@ -184,10 +185,7 @@ export default function NotificationsPage() {
       <div className="container mx-auto max-w-4xl px-4 py-8">
         {/* Loading State */}
         {loading || status === 'loading' ? (
-          <div className="flex flex-col items-center justify-center h-64">
-            <Bell className="w-10 h-10 text-muted-foreground animate-pulse mb-3" />
-            <p className="text-sm text-muted-foreground">Loading notifications...</p>
-          </div>
+          <LoadingSpinner text="Loading notifications..." />
         ) : notifications.length === 0 ? (
           <Card>
             <CardContent className="flex flex-col items-center justify-center py-16">

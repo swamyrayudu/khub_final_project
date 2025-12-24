@@ -21,6 +21,7 @@ import { getAllStores } from '@/actions/storeActions';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
+import { LoadingSpinner } from '@/components/ui/loading-page';
 
 interface StoreData {
   id: string;
@@ -165,10 +166,7 @@ export default function StoresPage() {
 
         {/* Loading State */}
         {loading || status === 'loading' ? (
-          <div className="flex flex-col items-center justify-center h-64">
-            <Store className="w-10 h-10 text-muted-foreground animate-pulse mb-3" />
-            <p className="text-sm text-muted-foreground">Loading stores...</p>
-          </div>
+          <LoadingSpinner text="Loading stores..." />
         ) : filteredStores.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-64">
             <Store className="w-10 h-10 text-muted-foreground mb-3" />
