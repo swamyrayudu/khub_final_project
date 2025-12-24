@@ -37,7 +37,6 @@ import {
   Bell,
   X,
   MessageSquare,
-  Info,
   Settings,
   ShoppingBag
 } from 'lucide-react';
@@ -67,7 +66,6 @@ export default function ShopHeader() {
     { href: '/shop/products', label: 'Products', icon: Package },
     { href: '/shop/stores', label: 'Stores', icon: Store },
     { href: '/shop/map', label: 'Map', icon: MapPin },
-    { href: '/shop/about', label: 'About', icon: Info },
   ];
 
   const userNavLinks = session?.user ? [
@@ -119,7 +117,7 @@ export default function ShopHeader() {
                   <Button
                     variant="ghost"
                     size="sm"
-                    className={`gap-2 relative overflow-hidden group transition-all duration-200 ${
+                    className={`gap-2 relative overflow-hidden group transition-all duration-200 cursor-pointer ${
                       activeNav === link.href ? 'text-primary bg-primary/10' : 'text-foreground'
                     }`}
                   >
@@ -155,6 +153,11 @@ export default function ShopHeader() {
             >
               {searchOpen ? <X className="w-5 h-5" /> : <Search className="w-5 h-5" />}
             </Button>
+
+            {/* Mobile Theme Toggle */}
+            <div className="lg:hidden">
+              <ModeToggle />
+            </div>
 
             {/* Wishlist */}
             <Link href="/shop/wishlist">
@@ -260,7 +263,7 @@ export default function ShopHeader() {
               <Link href="/auth">
                 <Button 
                   size="sm"
-                  className="ml-2 rounded-full px-5 shadow-sm hover:shadow-md transition-all duration-200 hover:scale-105 active:scale-95"
+                  className="ml-2 rounded-full px-5 shadow-sm hover:shadow-md transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer"
                 >
                   Sign In
                 </Button>
@@ -279,7 +282,7 @@ export default function ShopHeader() {
                     <Menu className="w-5 h-5" />
                   </Button>
                 </SheetTrigger>
-                <SheetContent side="right" className="w-72 p-0">
+                <SheetContent side="bottom" className="p-0 h-[40vh] max-h-[40vh]">
                   <SheetHeader className="px-6 py-4 border-b">
                     <SheetTitle>Menu</SheetTitle>
                   </SheetHeader>
@@ -317,13 +320,6 @@ export default function ShopHeader() {
                           )}
                         </Button>
                       </Link>
-                    </div>
-                    
-                    <div className="mt-4 px-6 pt-4 border-t">
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm font-medium text-muted-foreground">Theme</span>
-                        <ModeToggle />
-                      </div>
                     </div>
                   </div>
                 </SheetContent>

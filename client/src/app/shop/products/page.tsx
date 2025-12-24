@@ -85,7 +85,6 @@ export default function Products() {
         const profileResponse = await fetch('/api/user/profile-status');
         if (profileResponse.ok) {
           const profileData = await profileResponse.json();
-          console.log('📝 Profile API Response:', profileData);
           
           setUserCity(profileData.user.city);
           setUserState(profileData.user.state);
@@ -97,15 +96,12 @@ export default function Products() {
           };
           
           setUserData(userInfo);
-          console.log('✅ User data loaded:', userInfo);
         } else {
           console.error('❌ Profile API error:', profileResponse.status);
         }
 
         const result = await getAllSellerProducts();
         if (result.success) {
-          console.log('✅ Products loaded:', result.products.length, 'products');
-          console.log('✅ First product:', result.products[0]);
           const mappedProducts = result.products.map((p: Product) => p);
           // Filter out products that are already in wishlist
           const filteredMapped = mappedProducts.filter(
@@ -164,14 +160,12 @@ export default function Products() {
     // Log the event to seller
     if (userData && product.sellerId) {
       try {
-        console.log('📍 Logging view event:', { userId: userData.id, sellerId: product.sellerId, productName: product.name });
-        const result = await logProductViewEvent(
+        await logProductViewEvent(
           userData.id,
           userData.name,
           product.sellerId,
           product.name
         );
-        console.log('📍 View event logged:', result);
       } catch (error) {
         console.error('Error logging view event:', error);
       }
@@ -203,18 +197,15 @@ export default function Products() {
         // Find the product to get seller info
         const product = products.find(p => p.id === productId);
         
-        console.log('❤️ Logging wishlist event:', { userData, product: product?.name, productSellerId: product?.sellerId });
-        
         // Log the event to seller
         if (userData && product?.sellerId) {
           try {
-            const logResult = await logWishlistEvent(
+            await logWishlistEvent(
               userData.id,
               userData.name,
               product.sellerId,
               product.name
             );
-            console.log('❤️ Wishlist event logged:', logResult);
           } catch (error) {
             console.error('Error logging wishlist event:', error);
           }
@@ -236,18 +227,6 @@ export default function Products() {
     }
   };
 
-  const handleDebug = () => {
-    const debugInfo = {
-      userData,
-      productsCount: products.length,
-      firstProductSellerId: products[0]?.sellerId,
-      firstProductName: products[0]?.name,
-      userDataId: userData?.id,
-      userDataName: userData?.name,
-    };
-    console.log('🔍 DEBUG INFO:', debugInfo);
-    alert(JSON.stringify(debugInfo, null, 2));
-  };
 
   // Show login prompt if user is not authenticated
   if (status === 'unauthenticated') {
@@ -276,7 +255,7 @@ export default function Products() {
                   Please log in to view and purchase products from our local stores
                 </p>
                 <Link href="/auth">
-                  <Button size="lg" className="gap-2">
+                  <Button size="lg" className="gap-2 cursor-pointer">
                     <LogIn className="w-4 h-4" />
                     Sign In to Continue
                   </Button>
@@ -301,14 +280,7 @@ export default function Products() {
                 Discover products from local stores
               </p>
             </div>
-            <Button
-              onClick={handleDebug}
-              variant="ghost"
-              size="sm"
-              className="text-xs"
-            >
-              🔍 Debug
-            </Button>
+
           </div>
 
           {/* Search Bar */}

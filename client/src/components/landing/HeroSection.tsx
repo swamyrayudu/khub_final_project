@@ -50,14 +50,14 @@ export default function HeroSection() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-6 animate-in fade-in slide-in-from-bottom-8 duration-500 delay-300">
             <button
               onClick={() => router.push('/shop/products')}
-              className="w-full sm:w-auto px-6 py-3 bg-primary text-primary-foreground rounded-lg font-semibold text-sm md:text-base flex items-center justify-center space-x-2 hover:bg-primary/90 transition-all hover:scale-105"
+              className="w-full sm:w-auto px-6 py-3 bg-primary text-primary-foreground rounded-lg font-semibold text-sm md:text-base flex items-center justify-center space-x-2 hover:bg-primary/90 transition-all hover:scale-105 cursor-pointer"
             >
               <span>Start Shopping Now</span>
               <ArrowRight className="w-4 h-4" />
             </button>
             <button
               onClick={() => router.push('/seller/auth/login')}
-              className="w-full sm:w-auto px-6 py-3 bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 rounded-lg font-semibold text-sm md:text-base flex items-center justify-center space-x-2 hover:bg-slate-200 dark:hover:bg-slate-900 transition-all hover:scale-105"
+              className="w-full sm:w-auto px-6 py-3 bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 rounded-lg font-semibold text-sm md:text-base flex items-center justify-center space-x-2 hover:bg-slate-200 dark:hover:bg-slate-900 transition-all hover:scale-105 cursor-pointer"
             >
               <span>Become a Seller</span>
               <ArrowRight className="w-4 h-4" />

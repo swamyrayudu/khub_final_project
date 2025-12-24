@@ -195,7 +195,7 @@ export default function MessagesPage() {
                   Please log in to view your messages and conversations with stores
                 </p>
                 <Link href="/auth">
-                  <Button size="lg" className="gap-2">
+                  <Button size="lg" className="gap-2 cursor-pointer">
                     <LogIn className="w-4 h-4" />
                     Sign In to Continue
                   </Button>

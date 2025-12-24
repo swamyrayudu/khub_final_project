@@ -120,7 +120,7 @@ export default function StoresPage() {
                   Please log in to discover and explore local stores
                 </p>
                 <Link href="/auth">
-                  <Button size="lg" className="gap-2">
+                  <Button size="lg" className="gap-2 cursor-pointer">
                     <LogIn className="w-4 h-4" />
                     Sign In to Continue
                   </Button>
