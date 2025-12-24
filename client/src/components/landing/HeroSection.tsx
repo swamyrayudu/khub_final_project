@@ -4,6 +4,7 @@ import React from 'react';
 import { ArrowRight, Sparkles } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { EncryptedText } from '../ui/encrypted-text';
+import ColourfulText from '../ui/colourful-text';
 
 export default function HeroSection() {
   const router = useRouter();
@@ -35,8 +36,8 @@ export default function HeroSection() {
           {/* Main Headline */}
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight animate-in fade-in slide-in-from-bottom-6 duration-500 delay-100">
             <span className="block text-foreground">Discover Amazing</span>
-            <span className="block text-primary">
-              Products & Support Local
+            <span className="block">
+              <ColourfulText text="Products & Support Local" colors={["rgb(234, 179, 8)"]} />
             </span>
           </h1>
 
