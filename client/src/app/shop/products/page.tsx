@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -56,10 +57,14 @@ interface Product {
   sellerState?: string;
 }
 
+const PRODUCTS_PER_PAGE = 12; // Load 12 products at a time
+
 export default function Products() {
+  const router = useRouter();
   const { status } = useSession();
   const [products, setProducts] = useState<Product[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
+  const [displayedProducts, setDisplayedProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
@@ -68,18 +73,36 @@ export default function Products() {
   const [userState, setUserState] = useState<string | null>(null);
   const [userData, setUserData] = useState<{ id: string; name: string; email: string } | null>(null);
   const [carouselItems, setCarouselItems] = useState<Array<{ id: string; image: string; title: string; description: string }>>([]);
+  const [displayedCount, setDisplayedCount] = useState(PRODUCTS_PER_PAGE);
   const { wishlistItems, addToWishlistState, isInWishlist } = useWishlist();
 
-  // Fetch carousel items
+  // Fetch carousel items first (priority)
   useEffect(() => {
     const fetchCarousel = async () => {
       try {
-        const response = await fetch('/api/carousel');
+        // Cache carousel data for 30 minutes
+        const cacheKey = 'carousel_items_cache';
+        const cachedData = sessionStorage.getItem(cacheKey);
+        
+        if (cachedData) {
+          try {
+            const cachedItems = JSON.parse(cachedData);
+            setCarouselItems(cachedItems);
+            return;
+          } catch {
+            // Invalid cache, fetch fresh
+          }
+        }
+
+        const response = await fetch('/api/carousel', {
+          next: { revalidate: 1800 }, // Cache for 30 minutes
+        });
         if (response.ok) {
           const data = await response.json();
-          // Filter to ensure only active items are displayed
           const activeItems = (data.items || []).filter((item: { isActive?: boolean }) => item.isActive !== false);
           setCarouselItems(activeItems);
+          // Store in session cache
+          sessionStorage.setItem(cacheKey, JSON.stringify(activeItems));
         }
       } catch (error) {
         console.error('Error fetching carousel items:', error);
@@ -103,8 +126,28 @@ export default function Products() {
 
       setLoading(true);
       try {
+        // Add delay to prioritize carousel loading
+        await new Promise(resolve => setTimeout(resolve, 300));
+
+        // Check cache first
+        const cacheKey = 'products_cache';
+        const cachedProducts = sessionStorage.getItem(cacheKey);
+        
+        if (cachedProducts) {
+          try {
+            const cached = JSON.parse(cachedProducts);
+            setProducts(cached);
+            setFilteredProducts(cached);
+            setLoading(false);
+          } catch {
+            // Invalid cache, continue fetching
+          }
+        }
+
         // Fetch user profile to get location and user info
-        const profileResponse = await fetch('/api/user/profile-status');
+        const profileResponse = await fetch('/api/user/profile-status', {
+          next: { revalidate: 3600 }, // Cache for 1 hour
+        });
         if (profileResponse.ok) {
           const profileData = await profileResponse.json();
           
@@ -131,6 +174,8 @@ export default function Products() {
           );
           setProducts(filteredMapped);
           setFilteredProducts(filteredMapped);
+          // Cache products
+          sessionStorage.setItem(cacheKey, JSON.stringify(filteredMapped));
         }
       } catch (error) {
         console.error('Error fetching products:', error);
@@ -141,6 +186,28 @@ export default function Products() {
     fetchProducts();
   }, [wishlistItems, status]);
 
+  // Update displayed products when filtered products change or displayed count changes
+  useEffect(() => {
+    setDisplayedProducts(filteredProducts.slice(0, displayedCount));
+  }, [filteredProducts, displayedCount]);
+
+  // Load more products when user scrolls near bottom
+  useEffect(() => {
+    const handleScroll = () => {
+      // Check if user is near bottom of page
+      if ((window.innerHeight + document.documentElement.scrollTop) >= document.documentElement.scrollHeight - 500) {
+        setDisplayedCount(prev => {
+          const newCount = prev + PRODUCTS_PER_PAGE;
+          return newCount <= filteredProducts.length ? newCount : prev;
+        });
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [filteredProducts.length]);
+
+  // Filter products based on search, category, and location
   useEffect(() => {
     let filtered = products;
 
@@ -169,6 +236,8 @@ export default function Products() {
     }
 
     setFilteredProducts(filtered);
+    // Reset displayed count when filter changes
+    setDisplayedCount(PRODUCTS_PER_PAGE);
   }, [searchQuery, selectedCategory, products, locationFilter, userCity, userState]);
 
   const categories = ['All', ...Array.from(new Set(products.map((p) => p.category)))];
@@ -249,63 +318,66 @@ export default function Products() {
     }
   };
 
-
-  // Show login prompt if user is not authenticated
-  if (status === 'unauthenticated') {
-    return (
-      <div className="min-h-screen bg-background">
-        {/* Header Section */}
-        <div className="border-b bg-card">
-          <div className="container mx-auto max-w-7xl px-4 py-8">
-            <h1 className="text-3xl font-bold mb-2">Products</h1>
-            <p className="text-muted-foreground">
-              Discover products from local stores
-            </p>
-          </div>
-        </div>
-
-        {/* Login Required Message */}
-        <div className="container mx-auto max-w-7xl px-4 py-16">
-          <div className="max-w-md mx-auto">
-            <Card className="border-2 border-dashed">
-              <CardContent className="flex flex-col items-center justify-center py-12 px-6 text-center">
-                <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4">
-                  <ShoppingBag className="w-8 h-8 text-primary" />
-                </div>
-                <h2 className="text-2xl font-bold mb-2">Login Required</h2>
-                <p className="text-muted-foreground mb-6">
-                  Please log in to view and purchase products from our local stores
-                </p>
-                <Link href="/auth">
-                  <Button size="lg" className="gap-2 cursor-pointer">
-                    <LogIn className="w-4 h-4" />
-                    Sign In to Continue
-                  </Button>
-                </Link>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen bg-background">
-      {/* Carousel Section */}
-      <div className="w-full px-4 py-4">
+      {/* Carousel Section - Always shows at top */}
+      <div className="w-full px-4 py-4 bg-white dark:bg-slate-950">
         <div className="container mx-auto max-w-7xl">
-          <Carousel
-            items={carouselItems}
-            autoPlay={true}
-            interval={5000}
-            showDots={true}
-            showArrows={true}
-          />
+          {carouselItems.length > 0 ? (
+            <Carousel
+              items={carouselItems}
+              autoPlay={true}
+              interval={5000}
+              showDots={true}
+              showArrows={true}
+            />
+          ) : (
+            <div className="w-full h-64 bg-muted rounded-lg flex items-center justify-center">
+              <p className="text-muted-foreground">Loading carousel...</p>
+            </div>
+          )}
         </div>
       </div>
 
-      {/* Header Section */}
+      {/* Show login prompt if user is not authenticated */}
+      {status === 'unauthenticated' ? (
+        <div>
+          {/* Header Section */}
+          <div className="border-b bg-card">
+            <div className="container mx-auto max-w-7xl px-4 py-8">
+              <h1 className="text-3xl font-bold mb-2">Products</h1>
+              <p className="text-muted-foreground">
+                Discover products from local stores
+              </p>
+            </div>
+          </div>
+
+          {/* Login Required Message */}
+          <div className="container mx-auto max-w-7xl px-4 py-16">
+            <div className="max-w-md mx-auto">
+              <Card className="border-2 border-dashed">
+                <CardContent className="flex flex-col items-center justify-center py-12 px-6 text-center">
+                  <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4">
+                    <ShoppingBag className="w-8 h-8 text-primary" />
+                  </div>
+                  <h2 className="text-2xl font-bold mb-2">Login Required</h2>
+                  <p className="text-muted-foreground mb-6">
+                    Please log in to view and purchase products from our local stores
+                  </p>
+                  <Link href="/auth">
+                    <Button size="lg" className="gap-2 cursor-pointer">
+                      <LogIn className="w-4 h-4" />
+                      Sign In to Continue
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <>
+          {/* Products section - only for authenticated users */}
       <div className="border-b bg-card">
         <div className="container mx-auto max-w-7xl px-4 py-8">
           <div className="flex items-center justify-between mb-4">
@@ -408,71 +480,86 @@ export default function Products() {
         </div>
 
         {/* Loading State */}
-        {loading || status === 'loading' ? (
+        {status === 'loading' ? (
           <LoadingSpinner text="Loading products..." />
-        ) : filteredProducts.length === 0 ? (
+        ) : loading && displayedProducts.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-12">
+            <div className="w-8 h-8 border-4 border-muted border-t-primary rounded-full animate-spin mb-4"></div>
+            <p className="text-sm text-muted-foreground">Loading products...</p>
+          </div>
+        ) : displayedProducts.length === 0 && !loading ? (
           <div className="flex flex-col items-center justify-center h-64">
             <Package className="w-10 h-10 text-muted-foreground mb-3" />
             <p className="text-sm text-muted-foreground">No products found</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {filteredProducts.map((product) => {
-              const discount = calculateDiscount(product.price, product.offerPrice);
-              const finalPrice = product.offerPrice > 0 ? product.offerPrice : product.price;
-              const hasLocation = product.latitude && product.longitude;
-              const hasGoogleMapsUrl = product.googleMapsUrl && product.googleMapsUrl.trim() !== '';
-              const productInWishlist = isInWishlist(product.id);
+          <>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+              {displayedProducts.map((product) => {
+                const discount = calculateDiscount(product.price, product.offerPrice);
+                const finalPrice = product.offerPrice > 0 ? product.offerPrice : product.price;
+                const hasLocation = product.latitude && product.longitude;
+                const hasGoogleMapsUrl = product.googleMapsUrl && product.googleMapsUrl.trim() !== '';
+                const productInWishlist = isInWishlist(product.id);
 
-              return (
-                <Card key={product.id} className="dark:bg-black bg-white">
-                  {/* Image Section */}
-                  <div className="relative w-full h-48 bg-muted overflow-hidden rounded-t-lg">
-                    {discount > 0 && (
-                      <Badge className="absolute top-2 left-2 z-10 text-xs" variant="destructive">
-                        -{discount}%
-                      </Badge>
-                    )}
-                    <div className="absolute top-2 right-2 z-10 flex flex-col gap-1 items-end">
-                      {hasLocation && (
-                        <Badge className="text-xs bg-blue-600">
-                          <MapPin className="w-3 h-3 mr-1" />
-                          Location
-                        </Badge>
-                      )}
-                      {/* City/State Badge */}
-                      {userCity && product.sellerCity?.toLowerCase() === userCity.toLowerCase() && (
-                        <Badge className="text-xs bg-green-600">
-                          Your City
-                        </Badge>
-                      )}
-                      {userState && product.sellerState?.toLowerCase() === userState.toLowerCase() && 
-                       (!userCity || product.sellerCity?.toLowerCase() !== userCity.toLowerCase()) && (
-                        <Badge className="text-xs bg-amber-600">
-                          Your State
-                        </Badge>
-                      )}
-                    </div>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="absolute bottom-2 right-2 z-10 h-8 w-8 bg-background/80 hover:bg-background"
+                return (
+                  <Card 
+                    key={product.id} 
+                    className="dark:bg-black bg-white cursor-pointer hover:shadow-lg transition-shadow"
+                    onClick={() => router.push(`/shop/products/${product.id}`)}
+                  >
+                    {/* Image Section */}
+                    <div className="relative w-full h-48 bg-muted overflow-hidden rounded-t-lg"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        router.push(`/shop/products/${product.id}`);
+                      }}
                     >
-                      <Heart className="w-4 h-4" />
-                    </Button>
-                    <Image
-                      src={product.images[0] || '/placeholder-product.jpg'}
-                      alt={product.name}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
+                      {discount > 0 && (
+                        <Badge className="absolute top-2 left-2 z-10 text-xs" variant="destructive">
+                          -{discount}%
+                        </Badge>
+                      )}
+                      <div className="absolute top-2 right-2 z-10 flex flex-col gap-1 items-end">
+                        {hasLocation && (
+                          <Badge className="text-xs bg-blue-600">
+                            <MapPin className="w-3 h-3 mr-1" />
+                            Location
+                          </Badge>
+                        )}
+                        {/* City/State Badge */}
+                        {userCity && product.sellerCity?.toLowerCase() === userCity.toLowerCase() && (
+                          <Badge className="text-xs bg-green-600">
+                            Your City
+                          </Badge>
+                        )}
+                        {userState && product.sellerState?.toLowerCase() === userState.toLowerCase() && 
+                         (!userCity || product.sellerCity?.toLowerCase() !== userCity.toLowerCase()) && (
+                          <Badge className="text-xs bg-amber-600">
+                            Your State
+                          </Badge>
+                        )}
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="absolute bottom-2 right-2 z-10 h-8 w-8 bg-background/80 hover:bg-background"
+                      >
+                        <Heart className="w-4 h-4" />
+                      </Button>
+                      <Image
+                        src={product.images[0] || '/placeholder-product.jpg'}
+                        alt={product.name}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
 
-                  <CardHeader className="p-4 pb-2">
-                    <CardTitle className="text-base line-clamp-2 font-semibold">
-                      {product.name}
-                    </CardTitle>
-                    <div className="flex items-center gap-2 text-xs text-muted-foreground mt-1">
+                    <CardHeader className="p-4 pb-2">
+                      <CardTitle className="text-base line-clamp-2 font-semibold">
+                        {product.name}
+                      </CardTitle>
+                      <div className="flex items-center gap-2 text-xs text-muted-foreground mt-1">
                       <span>{product.brand}</span>
                       {product.brand && product.category && <span>•</span>}
                       <span>{product.category}</span>
@@ -553,9 +640,24 @@ export default function Products() {
                 </Card>
               );
             })}
-          </div>
+            </div>
+
+            {/* Loading indicator when more products available */}
+            {displayedCount < filteredProducts.length && (
+              <div className="flex justify-center py-8">
+                <div className="flex flex-col items-center gap-3">
+                  <div className="w-6 h-6 border-3 border-muted border-t-primary rounded-full animate-spin"></div>
+                  <p className="text-sm text-muted-foreground">
+                    Loading more products... ({displayedCount} of {filteredProducts.length})
+                  </p>
+                </div>
+              </div>
+            )}
+          </>
         )}
       </div>
+        </>
+      )}
     </div>
   );
 }

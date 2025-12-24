@@ -16,11 +16,17 @@ export async function GET() {
       .where(eq(carouselItems.isActive, true))
       .orderBy(carouselItems.order);
 
-    return NextResponse.json({
+    const response = NextResponse.json({
       success: true,
       items: items,
       count: items.length,
     });
+
+    // Add cache headers - cache for 30 minutes
+    response.headers.set('Cache-Control', 'public, max-age=1800, stale-while-revalidate=3600');
+    response.headers.set('CDN-Cache-Control', 'max-age=1800');
+
+    return response;
   } catch (error) {
     console.error('Error fetching carousel items:', error);
     return NextResponse.json(
