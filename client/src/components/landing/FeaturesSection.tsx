@@ -38,14 +38,14 @@ const features = [
 
 export default function FeaturesSection() {
   return (
-    <section className="py-24 px-4 bg-background">
+    <section className="py-16 md:py-24 px-4 bg-background">
       <div className="container mx-auto max-w-6xl">
         {/* Section Header */}
-        <div className="mb-16">
-          <h2 className="text-3xl font-semibold tracking-tight text-foreground mb-3">
+        <div className="mb-12 md:mb-16">
+          <h2 className="text-2xl md:text-3xl font-semibold tracking-tight text-foreground mb-3">
             Why LocalHunt
           </h2>
-          <p className="text-muted-foreground max-w-lg">
+          <p className="text-sm md:text-base text-muted-foreground max-w-lg">
             Everything you need to buy and sell with confidence.
           </p>
         </div>
@@ -57,16 +57,16 @@ export default function FeaturesSection() {
             return (
               <div
                 key={index}
-                className="group relative p-6 border border-border bg-card rounded-lg hover:border-foreground/20 hover:shadow-sm transition-all duration-200"
+                className="group relative p-4 md:p-6 border border-border bg-card rounded-lg hover:border-foreground/20 hover:shadow-sm transition-all duration-200"
               >
                 {/* Icon */}
-                <Icon className="w-5 h-5 text-muted-foreground mb-4 group-hover:text-foreground transition-colors duration-200" />
+                <Icon className="w-4 md:w-5 h-4 md:h-5 text-muted-foreground mb-4 group-hover:text-foreground transition-colors duration-200" />
                 
                 {/* Content */}
-                <h3 className="font-medium mb-2 text-foreground">
+                <h3 className="font-medium mb-2 text-sm md:text-base text-foreground">
                   {feature.title}
                 </h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">
+                <p className="text-xs md:text-sm text-muted-foreground leading-relaxed">
                   {feature.description}
                 </p>
               </div>

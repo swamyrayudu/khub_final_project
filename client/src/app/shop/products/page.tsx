@@ -304,7 +304,7 @@ export default function Products() {
                   variant={locationFilter === 'all' ? 'default' : 'outline'}
                   size="sm"
                   onClick={() => setLocationFilter('all')}
-                  className="gap-1 whitespace-nowrap flex-shrink-0"
+                  className="gap-1 whitespace-nowrap flex-shrink-0 dark:text-foreground dark:border-slate-700 dark:hover:bg-slate-900"
                 >
                   <Package className="w-4 h-4" />
                   All Locations
@@ -313,7 +313,7 @@ export default function Products() {
                   variant={locationFilter === 'city' ? 'default' : 'outline'}
                   size="sm"
                   onClick={() => setLocationFilter('city')}
-                  className="gap-1 whitespace-nowrap flex-shrink-0"
+                  className="gap-1 whitespace-nowrap flex-shrink-0 dark:text-foreground dark:border-slate-700 dark:hover:bg-slate-900"
                 >
                   <MapPin className="w-4 h-4" />
                   My City ({userCity})
@@ -322,7 +322,7 @@ export default function Products() {
                   variant={locationFilter === 'state' ? 'default' : 'outline'}
                   size="sm"
                   onClick={() => setLocationFilter('state')}
-                  className="gap-1 whitespace-nowrap flex-shrink-0"
+                  className="gap-1 whitespace-nowrap flex-shrink-0 dark:text-foreground dark:border-slate-700 dark:hover:bg-slate-900"
                 >
                   <MapPin className="w-4 h-4" />
                   My State ({userState})
@@ -343,7 +343,7 @@ export default function Products() {
               variant={selectedCategory === cat ? 'default' : 'ghost'}
               size="sm"
               onClick={() => setSelectedCategory(cat)}
-              className="whitespace-nowrap flex-shrink-0"
+              className="whitespace-nowrap flex-shrink-0 dark:text-foreground dark:hover:bg-slate-900"
             >
               {cat}
             </Button>
