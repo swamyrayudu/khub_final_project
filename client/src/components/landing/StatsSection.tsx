@@ -1,26 +1,55 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { getStats } from '@/actions/statsActions';
 
-const stats = [
-  {
-    number: '10K+',
-    label: 'Happy Customers',
-    description: 'Satisfied buyers shopping every day',
-  },
-  {
-    number: '5K+',
-    label: 'Active Sellers',
-    description: 'Successful businesses on our platform',
-  },
-  {
-    number: '50K+',
-    label: 'Products',
-    description: 'Diverse selection across all categories',
-  },
-];
+interface Stats {
+  users: number;
+  sellers: number;
+  products: number;
+}
 
 export default function StatsSection() {
+  const [stats, setStats] = useState<Stats>({
+    users: 0,
+    sellers: 0,
+    products: 0,
+  });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const data = await getStats();
+        setStats(data);
+      } catch (error) {
+        console.error('Error fetching stats:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStats();
+  }, []);
+
+  const statsData = [
+    {
+      number: loading ? '...' : stats.users.toLocaleString(),
+      label: 'Happy Customers',
+      description: 'Satisfied buyers shopping every day',
+    },
+    {
+      number: loading ? '...' : stats.sellers.toLocaleString(),
+      label: 'Active Sellers',
+      description: 'Successful businesses on our platform',
+    },
+    {
+      number: loading ? '...' : stats.products.toLocaleString(),
+      label: 'Products',
+      description: 'Diverse selection across all categories',
+    },
+  ];
+
   return (
     <section className="py-20 md:py-28 px-4">
       <div className="container mx-auto max-w-4xl">
@@ -36,7 +65,7 @@ export default function StatsSection() {
 
         {/* Centered Single Page Layout */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-          {stats.map((stat, index) => (
+          {statsData.map((stat, index) => (
             <div
               key={index}
               className="group relative p-8 md:p-10 bg-gradient-to-br from-primary/10 via-card/50 to-background border border-primary/30 rounded-2xl text-center hover:border-primary/60 hover:shadow-xl transition-all duration-300 hover:-translate-y-2"
@@ -44,7 +73,7 @@ export default function StatsSection() {
               {/* Background Glow */}
               <div className="absolute inset-0 bg-gradient-to-t from-primary/5 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
-            <div className="relative z-10">
+              <div className="relative z-10">
                 <div className="text-4xl md:text-5xl font-bold text-primary mb-3">
                   {stat.number}
                 </div>

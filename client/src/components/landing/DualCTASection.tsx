@@ -25,17 +25,17 @@ export default function DualCTASection() {
   const router = useRouter();
 
   return (
-    <section className="py-20 px-4">
+    <section className="py-12 px-4">
       <div className="container mx-auto max-w-6xl">
         {/* Shimmer CTA Section */}
-        <div className="text-center space-y-8 mb-20">
-          <button className="inline-flex h-12 animate-shimmer items-center justify-center rounded-md border border-slate-800 bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] px-6 font-medium text-slate-400 transition-colors focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50 dark:focus:ring-offset-slate-900">
+        <div className="text-center space-y-4 mb-12">
+          <button className="inline-flex h-12 items-center justify-center rounded-md border-2 border-slate-900 dark:border-slate-400 bg-white dark:bg-slate-900 px-6 font-medium text-slate-900 dark:text-slate-100 transition-all duration-300 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50 dark:focus:ring-offset-slate-900">
             Welcome to the Future of Shopping
           </button>
         </div>
 
         {/* Section Header */}
-        <div className="text-center space-y-4 mb-16">
+        <div className="text-center space-y-2 mb-10">
           <h2 className="text-4xl lg:text-5xl font-bold">
             Choose Your Path
           </h2>
@@ -45,26 +45,26 @@ export default function DualCTASection() {
         </div>
 
         {/* Dual Cards */}
-        <div className="grid lg:grid-cols-2 gap-8">
+        <div className="grid lg:grid-cols-2 gap-6">
           {/* Buyer Card */}
           <div className="group relative p-8 bg-gradient-to-br from-primary/10 via-primary/5 to-background border border-primary/30 rounded-3xl hover:border-primary/60 transition-all duration-300 hover:shadow-2xl">
             {/* Animated Background */}
             <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/5 to-primary/0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             
             <div className="relative">
-              <div className="flex items-center space-x-3 mb-8">
+              <div className="flex items-center space-x-3 mb-5">
                 <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                   <ShoppingIcon className="w-6 h-6 text-primary" />
                 </div>
                 <h3 className="text-3xl font-bold text-foreground">Shop with Us</h3>
               </div>
 
-              <p className="text-muted-foreground text-lg mb-8">
+              <p className="text-muted-foreground text-lg mb-5">
                 Discover amazing products from trusted sellers and support your local community.
               </p>
 
               {/* Benefits List */}
-              <ul className="space-y-3 mb-8">
+              <ul className="space-y-2 mb-5">
                 {buyerBenefits.map((benefit, index) => (
                   <li key={index} className="flex items-center space-x-3 text-foreground">
                     <div className="w-5 h-5 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
@@ -91,19 +91,19 @@ export default function DualCTASection() {
             <div className="absolute inset-0 bg-gradient-to-r from-secondary/0 via-secondary/5 to-secondary/0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             
             <div className="relative">
-              <div className="flex items-center space-x-3 mb-8">
+              <div className="flex items-center space-x-3 mb-5">
                 <div className="w-12 h-12 rounded-xl bg-secondary/20 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                   <StoreIcon className="w-6 h-6 text-secondary-foreground" />
                 </div>
                 <h3 className="text-3xl font-bold text-foreground">Sell with Us</h3>
               </div>
 
-              <p className="text-muted-foreground text-lg mb-8">
+              <p className="text-muted-foreground text-lg mb-5">
                 Build your online store and reach thousands of customers looking for great products.
               </p>
 
               {/* Benefits List */}
-              <ul className="space-y-3 mb-8">
+              <ul className="space-y-2 mb-5">
                 {sellerBenefits.map((benefit, index) => (
                   <li key={index} className="flex items-center space-x-3 text-foreground">
                     <div className="w-5 h-5 rounded-full bg-secondary/20 flex items-center justify-center flex-shrink-0">
@@ -116,7 +116,7 @@ export default function DualCTASection() {
 
               <button
                 onClick={() => router.push('/seller/auth/login')}
-                className="w-full group/btn px-6 py-4 bg-white dark:bg-orange-500 border-2 border-orange-500 dark:border-orange-500 text-orange-500 dark:text-white rounded-xl font-semibold transition-all duration-300 flex items-center justify-center space-x-2 hover:-translate-y-1 hover:bg-orange-50 dark:hover:bg-orange-600 hover:border-orange-600 dark:hover:border-orange-600 hover:text-orange-700 dark:hover:text-white shadow-lg dark:shadow-orange-500/50 hover:shadow-xl"
+                className="w-full group/btn px-6 py-4 bg-secondary text-secondary-foreground rounded-xl font-semibold transition-all duration-300 flex items-center justify-center space-x-2 hover:-translate-y-1 hover:bg-secondary/90 shadow-lg shadow-secondary/50 hover:shadow-xl hover:shadow-secondary/70"
               >
                 <span>Register as Seller</span>
                 <ArrowRight className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform duration-300" />
