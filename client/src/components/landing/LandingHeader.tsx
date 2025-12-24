@@ -11,7 +11,7 @@ interface LandingHeaderProps {
 export default function LandingHeader({ darkMode, toggleDarkMode }: LandingHeaderProps) {
   return (
     <header className="fixed w-full top-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
-      <div className="container mx-auto px-4 py-5 md:py-4 flex items-center justify-between">
+      <div className="container mx-auto px-4 py-3 md:py-4 flex items-center justify-between">
         {/* Logo */}
         <div className="flex items-center space-x-2 md:space-x-3 group cursor-pointer">
           <div className="w-8 md:w-10 h-8 md:h-10 bg-gradient-to-r from-primary to-primary/60 rounded-xl flex items-center justify-center group-hover:shadow-lg transition-all duration-300">
