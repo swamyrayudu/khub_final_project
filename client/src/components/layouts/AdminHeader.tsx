@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Bell, Menu, Moon, Sun, Shield, Search, Home, Users, Package, BarChart3, User as UserIcon, Settings, LogOut, ChevronDown, Loader2 } from 'lucide-react';
+import { Bell, Menu, Moon, Sun, Shield, Search, Home, Users, Package, BarChart3, User as UserIcon, Settings, LogOut, ChevronDown, Loader2, Image } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator, DropdownMenuLabel } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -127,6 +127,7 @@ export default function AdminHeader({
     { name: 'Dashboard', href: '/admin/home', icon: Home },
     { name: 'Sellers', href: '/admin/sellers', icon: Users },
     { name: 'Products', href: '/admin/products', icon: Package },
+    { name: 'Carousel', href: '/admin/carousel', icon: Image },
     { name: 'Analytics', href: '/admin/analytics', icon: BarChart3 },
   ];
 
@@ -230,6 +231,11 @@ export default function AdminHeader({
               <DropdownMenuItem onClick={() => router.push('/admin/settings')}>
                 <Settings className="mr-2 h-4 w-4" />
                 <span>Settings</span>
+              </DropdownMenuItem>
+
+              <DropdownMenuItem onClick={() => router.push('/admin/carousel')}>
+                <Image className="mr-2 h-4 w-4" />
+                <span>Manage Carousel</span>
               </DropdownMenuItem>
 
               <DropdownMenuSeparator />

@@ -1,6 +1,19 @@
 import { pgTable, text, timestamp, uuid, boolean, integer, varchar, numeric, json } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
 
+// Carousel table for storing carousel items
+export const carouselItems = pgTable('carousel_items', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  image: text('image').notNull(),
+  title: varchar('title', { length: 255 }).notNull(),
+  description: text('description').default('').notNull(),
+  order: integer('order').default(0).notNull(),
+  isActive: boolean('is_active').default(true).notNull(),
+  cloudinaryPublicId: varchar('cloudinary_public_id', { length: 255 }).default('').notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
 // Sellers table (unchanged)
 export const sellers = pgTable('sellers', {
   id: uuid('id').primaryKey().defaultRandom(),
@@ -246,3 +259,5 @@ export type Session = typeof sessions.$inferSelect;
 export type VerificationToken = typeof verificationTokens.$inferSelect;
 export type Wishlist = typeof wishlists.$inferSelect;
 export type NewWishlist = typeof wishlists.$inferInsert;
+export type CarouselItem = typeof carouselItems.$inferSelect;
+export type NewCarouselItem = typeof carouselItems.$inferInsert;

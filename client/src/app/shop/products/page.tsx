@@ -24,6 +24,7 @@ import { useWishlist } from '@/contexts/WishlistContext';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { LoadingSpinner } from '@/components/ui/loading-page';
+import { Carousel } from '@/components/ui/carousel';
 
 interface Product {
   id: string;
@@ -66,7 +67,27 @@ export default function Products() {
   const [userCity, setUserCity] = useState<string | null>(null);
   const [userState, setUserState] = useState<string | null>(null);
   const [userData, setUserData] = useState<{ id: string; name: string; email: string } | null>(null);
+  const [carouselItems, setCarouselItems] = useState<Array<{ id: string; image: string; title: string; description: string }>>([]);
   const { wishlistItems, addToWishlistState, isInWishlist } = useWishlist();
+
+  // Fetch carousel items
+  useEffect(() => {
+    const fetchCarousel = async () => {
+      try {
+        const response = await fetch('/api/carousel');
+        if (response.ok) {
+          const data = await response.json();
+          // Filter to ensure only active items are displayed
+          const activeItems = (data.items || []).filter((item: { isActive?: boolean }) => item.isActive !== false);
+          setCarouselItems(activeItems);
+        }
+      } catch (error) {
+        console.error('Error fetching carousel items:', error);
+      }
+    };
+
+    fetchCarousel();
+  }, []);
 
   useEffect(() => {
     async function fetchProducts() {
@@ -271,6 +292,19 @@ export default function Products() {
 
   return (
     <div className="min-h-screen bg-background">
+      {/* Carousel Section */}
+      <div className="w-full px-4 py-4">
+        <div className="container mx-auto max-w-7xl">
+          <Carousel
+            items={carouselItems}
+            autoPlay={true}
+            interval={5000}
+            showDots={true}
+            showArrows={true}
+          />
+        </div>
+      </div>
+
       {/* Header Section */}
       <div className="border-b bg-card">
         <div className="container mx-auto max-w-7xl px-4 py-8">
