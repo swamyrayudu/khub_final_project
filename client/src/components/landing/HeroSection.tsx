@@ -34,9 +34,9 @@ export default function HeroSection() {
           </div>
 
           {/* Main Headline */}
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight animate-in fade-in slide-in-from-bottom-6 duration-500 delay-100">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold leading-tight animate-in fade-in slide-in-from-bottom-6 duration-500 delay-100">
             <span className="block text-foreground">Discover Amazing</span>
-            <span className="block">
+            <span className="block whitespace-nowrap">
               <ColourfulText text="Products & Support Local" colors={["rgb(234, 179, 8)"]} />
             </span>
           </h1>
@@ -47,20 +47,20 @@ export default function HeroSection() {
           </p>
 
           {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-6 animate-in fade-in slide-in-from-bottom-8 duration-500 delay-300">
+          <div className="flex flex-row items-center justify-center gap-2 md:gap-4 pt-6 animate-in fade-in slide-in-from-bottom-8 duration-500 delay-300">
             <button
               onClick={() => router.push('/shop/products')}
-              className="w-full sm:w-auto px-6 py-3 bg-primary text-primary-foreground rounded-lg font-semibold text-sm md:text-base flex items-center justify-center space-x-2 hover:bg-primary/90 transition-all hover:scale-105 cursor-pointer"
+              className="px-3 md:px-6 py-2 md:py-3 bg-primary text-primary-foreground rounded-lg font-semibold text-xs md:text-base flex items-center justify-center space-x-1 md:space-x-2 hover:bg-primary/90 transition-all hover:scale-105 cursor-pointer whitespace-nowrap"
             >
-              <span>Start Shopping Now</span>
-              <ArrowRight className="w-4 h-4" />
+              <span>Start Shopping</span>
+              <ArrowRight className="w-3 h-3 md:w-4 md:h-4" />
             </button>
             <button
               onClick={() => router.push('/seller/auth/login')}
-              className="w-full sm:w-auto px-6 py-3 bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 rounded-lg font-semibold text-sm md:text-base flex items-center justify-center space-x-2 hover:bg-slate-200 dark:hover:bg-slate-900 transition-all hover:scale-105 cursor-pointer"
+              className="px-3 md:px-6 py-2 md:py-3 bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 rounded-lg font-semibold text-xs md:text-base flex items-center justify-center space-x-1 md:space-x-2 hover:bg-slate-200 dark:hover:bg-slate-900 transition-all hover:scale-105 cursor-pointer whitespace-nowrap"
             >
-              <span>Become a Seller</span>
-              <ArrowRight className="w-4 h-4" />
+              <span>Become Seller</span>
+              <ArrowRight className="w-3 h-3 md:w-4 md:h-4" />
             </button>
           </div>
         </div>

@@ -297,14 +297,14 @@ export default function Products() {
 
           {/* Location Filter */}
           {userCity && userState && (
-            <div className="flex items-center gap-2 flex-wrap mt-4">
-              <span className="text-sm text-muted-foreground">Show products from:</span>
-              <div className="flex gap-2">
+            <div className="mt-4">
+              <span className="text-sm text-muted-foreground block mb-2">Show products from:</span>
+              <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
                 <Button
                   variant={locationFilter === 'all' ? 'default' : 'outline'}
                   size="sm"
                   onClick={() => setLocationFilter('all')}
-                  className="gap-1"
+                  className="gap-1 whitespace-nowrap flex-shrink-0"
                 >
                   <Package className="w-4 h-4" />
                   All Locations
@@ -313,7 +313,7 @@ export default function Products() {
                   variant={locationFilter === 'city' ? 'default' : 'outline'}
                   size="sm"
                   onClick={() => setLocationFilter('city')}
-                  className="gap-1"
+                  className="gap-1 whitespace-nowrap flex-shrink-0"
                 >
                   <MapPin className="w-4 h-4" />
                   My City ({userCity})
@@ -322,7 +322,7 @@ export default function Products() {
                   variant={locationFilter === 'state' ? 'default' : 'outline'}
                   size="sm"
                   onClick={() => setLocationFilter('state')}
-                  className="gap-1"
+                  className="gap-1 whitespace-nowrap flex-shrink-0"
                 >
                   <MapPin className="w-4 h-4" />
                   My State ({userState})
@@ -335,7 +335,7 @@ export default function Products() {
 
       <div className="container mx-auto max-w-7xl px-4 py-6">
         {/* Category Filter */}
-        <div className="flex items-center gap-2 mb-6 overflow-x-auto pb-2">
+        <div className="flex items-center gap-2 mb-6 overflow-x-auto pb-2 scrollbar-hide">
           <Filter className="w-4 h-4 text-muted-foreground flex-shrink-0" />
           {categories.map((cat) => (
             <Button
@@ -343,7 +343,7 @@ export default function Products() {
               variant={selectedCategory === cat ? 'default' : 'ghost'}
               size="sm"
               onClick={() => setSelectedCategory(cat)}
-              className="whitespace-nowrap"
+              className="whitespace-nowrap flex-shrink-0"
             >
               {cat}
             </Button>
