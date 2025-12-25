@@ -39,14 +39,14 @@ export async function getProductReviews(productId: string) {
     const reviews = await db.execute(sql`
       SELECT 
         r.*,
-        u.name as user_name,
-        u.image as user_image,
+        COALESCE(u.raw_user_meta_data->>'name', u.email) as user_name,
+        u.raw_user_meta_data->>'avatar_url' as user_image,
         COALESCE(
           (SELECT json_agg(image_url) FROM review_images WHERE review_id = r.id),
           '[]'::json
         ) as images
       FROM reviews r
-      LEFT JOIN users u ON r.user_id = u.id
+      LEFT JOIN auth.users u ON r.user_id = u.id
       WHERE r.product_id = ${productId}
       ORDER BY r.created_at DESC
     `);
@@ -321,6 +321,19 @@ export async function markReviewHelpful(reviewId: string) {
       return { success: false, message: 'You must be logged in to mark reviews as helpful' };
     }
 
+    // Check if user is trying to mark their own review as helpful
+    const reviewOwner = await db.execute(sql`
+      SELECT user_id FROM reviews WHERE id = ${reviewId}
+    `);
+
+    const ownerArray = reviewOwner as unknown[];
+    if (ownerArray.length > 0) {
+      const firstRow = ownerArray[0] as Record<string, unknown>;
+      if (firstRow.user_id === userId) {
+        return { success: false, message: 'You cannot mark your own review as helpful' };
+      }
+    }
+
     // Check if already marked as helpful
     const existing = await db.execute(sql`
       SELECT id FROM review_helpful
@@ -337,7 +350,7 @@ export async function markReviewHelpful(reviewId: string) {
 
       await db.execute(sql`
         UPDATE reviews
-        SET helpful_count = helpful_count - 1
+        SET helpful_count = GREATEST(helpful_count - 1, 0)
         WHERE id = ${reviewId}
       `);
 

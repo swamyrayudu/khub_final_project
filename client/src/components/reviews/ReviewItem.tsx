@@ -83,7 +83,7 @@ export function ReviewItem({ review, isOwnReview, onReviewUpdated }: ReviewItemP
           {/* Header */}
           <div className="flex items-start justify-between">
             <div>
-              <p className="font-medium">{review.userName || 'Anonymous'}</p>
+              <p className="font-medium">{review.userName}</p>
               <div className="flex items-center gap-2 mt-1">
                 <div className="flex gap-0.5">
                   {Array.from({ length: 5 }).map((_, index) => (
@@ -152,16 +152,21 @@ export function ReviewItem({ review, isOwnReview, onReviewUpdated }: ReviewItemP
           {/* Footer */}
           <div className="flex items-center gap-4 text-xs text-muted-foreground pt-2">
             <span>{formatDate(review.createdAt)}</span>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="h-auto py-1 px-2 gap-1 hover:bg-muted"
-              onClick={handleHelpful}
-              disabled={processing}
-            >
-              <ThumbsUp className={`w-3 h-3 ${isHelpful ? 'fill-current' : ''}`} />
-              <span>Helpful ({helpfulCount})</span>
-            </Button>
+            {!isOwnReview && (
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-auto py-1 px-2 gap-1 hover:bg-muted"
+                onClick={handleHelpful}
+                disabled={processing}
+              >
+                <ThumbsUp className={`w-3 h-3 ${isHelpful ? 'fill-current' : ''}`} />
+                <span>Helpful ({helpfulCount})</span>
+              </Button>
+            )}
+            {isOwnReview && helpfulCount > 0 && (
+              <span className="text-muted-foreground">Helpful ({helpfulCount})</span>
+            )}
           </div>
         </div>
       </div>
