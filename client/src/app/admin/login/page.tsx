@@ -4,7 +4,7 @@ import React from "react";
 import { useState, useTransition, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { loginAdmin } from "@/actions/adminAuth";
-import { toast } from "react-toastify";
+import { toast } from 'sonner';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -78,8 +78,7 @@ export default function AdminLogin() {
       
       if (result.success) {
         toast.success(`Welcome back, ${result.user?.name || 'Admin'}!`, {
-          position: "top-center",
-          autoClose: 2000,
+          duration: 2000,
         });
         
         setTimeout(() => {
@@ -89,8 +88,7 @@ export default function AdminLogin() {
       } else {
         setError(result.message);
         toast.error(result.message, {
-          position: "top-right",
-          autoClose: 5000,
+          duration: 5000,
         });
       }
     });

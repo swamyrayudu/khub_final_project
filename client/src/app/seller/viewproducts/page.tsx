@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { toast } from "react-toastify";
+import { toast } from 'sonner';
 import { getSellerProducts, deleteProduct } from "@/actions/productActions";
 import DeleteConfirmationModal from "@/components/ui/delete-confirmation-modal";
 import Image from "next/image";
@@ -107,8 +107,7 @@ export default function ViewProducts() {
       
       if (result.success) {
         toast.success(result.message, {
-          position: "top-center",
-          autoClose: 3000,
+          duration: 3000,
         });
         
         // Remove product from local state
@@ -123,8 +122,7 @@ export default function ViewProducts() {
         });
       } else {
         toast.error(result.message, {
-          position: "top-right",
-          autoClose: 5000,
+          duration: 5000,
         });
       }
     } catch (error) {

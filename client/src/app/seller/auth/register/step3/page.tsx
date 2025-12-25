@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
 import { useRegistrationProtection } from '@/lib/hooks/useRegistrationProtection';
-import { toast } from 'react-toastify';
+import { toast } from 'sonner';
 import { 
   Sun, 
   Moon, 
@@ -32,8 +32,7 @@ export default function Step3() {
     const token = localStorage.getItem('authToken');
     if (token) {
       toast.warning('You are already logged in. Are you sure you want to create another account?', {
-        position: "top-center",
-        autoClose: 5000,
+        duration: 5000,
       });
     }
   }, []);

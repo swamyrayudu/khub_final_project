@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { toast } from 'react-toastify';
+import { toast } from 'sonner';
 import { 
   Bell,
   Search,
@@ -101,8 +101,7 @@ export default function SellerHeader({ onMobileMenuToggle }: SellerHeaderProps) 
       localStorage.removeItem('userData');
       
       toast.success('Successfully logged out!', {
-        position: "top-center",
-        autoClose: 2000,
+        duration: 2000,
       });
 
       setTimeout(() => {
@@ -116,8 +115,7 @@ export default function SellerHeader({ onMobileMenuToggle }: SellerHeaderProps) 
       localStorage.removeItem('userData');
       
       toast.error('Signed out (with errors)', {
-        position: "top-center",
-        autoClose: 2000,
+        duration: 2000,
       });
 
       setTimeout(() => {

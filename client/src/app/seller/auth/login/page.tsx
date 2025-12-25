@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { toast } from 'react-toastify';
+import { toast } from 'sonner';
 import { Eye, EyeOff, Sun, Moon, Mail, Lock, ArrowRight, Home, Loader2, AlertCircle } from 'lucide-react';
 import RouteProtection from '@/components/auth/RouteProtection';
 
@@ -122,8 +122,7 @@ function LoginContent() {
         const errorMessage = data.message || 'Login failed. Please check your credentials.';
         setError(errorMessage);
         toast.error(errorMessage, {
-          position: "top-right",
-          autoClose: 5000,
+          duration: 5000,
         });
         return;
       }
@@ -135,8 +134,7 @@ function LoginContent() {
       localStorage.setItem('userData', JSON.stringify(data.user));
 
       toast.success(`Welcome back, ${data.user.name || data.user.email}!`, {
-        position: "top-center",
-        autoClose: 3000,
+        duration: 3000,
       });
 
       // ✅ Enhanced status-based routing with 3 second delay
@@ -164,8 +162,7 @@ function LoginContent() {
       const errorMessage = 'Connection error. Please check your internet connection and try again.';
       setError(errorMessage);
       toast.error(errorMessage, {
-        position: "top-right",
-        autoClose: 5000,
+        duration: 5000,
       });
     } finally {
       setIsLoading(false);

@@ -20,7 +20,7 @@ import {
 import { getAllSellerProducts } from '@/actions/productActions';
 import { addToWishlist, removeFromWishlist } from '@/actions/wishlist-actions';
 import { logProductViewEvent, logWishlistEvent } from '@/actions/sellerEventNotifications';
-import { toast } from 'react-toastify';
+import { toast } from 'sonner';
 import { useWishlist } from '@/contexts/WishlistContext';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';

@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
 import { useRegistrationProtection } from '@/lib/hooks/useRegistrationProtection';
-import { toast } from 'react-toastify';
+import { toast } from 'sonner';
 import { 
   Sun, 
   Moon, 
@@ -36,8 +36,7 @@ export default function Step4() {
   const token = localStorage.getItem('authToken');
   if (token) {
     toast.warning('You are already logged in. Are you sure you want to create another account?', {
-      position: "top-center",
-      autoClose: 5000,
+      duration: 5000,
     });
   }
 }, []);
@@ -113,12 +112,7 @@ export default function Step4() {
       
       if (!step1Data || !step2Data || !step3Data) {
         toast.error("Missing registration data. Please complete all previous steps.", {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
+          duration: 5000,
         });
         return;
       }
@@ -150,12 +144,7 @@ export default function Step4() {
         
         // success toast
         toast.success("🎉 Registration Approvedful! Welcome to Localhunt!", {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
+          duration: 5000,
         });
         
         setTimeout(() => {
@@ -164,14 +153,12 @@ export default function Step4() {
         
       } else {
         toast.error(result.message || "Registration failed. Please try again.", {
-          position: "top-right",
-          autoClose: 5000,
+          duration: 5000,
         });
       }
     } catch {
       toast.error("Connection error. Please check your internet and try again.", {
-        position: "top-right",
-        autoClose: 5000,
+        duration: 5000,
       });
     } finally {
       setIsSubmitting(false);

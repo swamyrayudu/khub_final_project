@@ -22,7 +22,7 @@ import {
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
-import { toast } from 'react-toastify';
+import { toast } from 'sonner';
 import { LoadingSpinner } from '@/components/ui/loading-page';
 
 interface Notification {

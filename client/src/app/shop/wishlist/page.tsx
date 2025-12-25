@@ -13,7 +13,7 @@ import {
 } from 'lucide-react';
 import { getAllSellerProducts } from '@/actions/productActions';
 import { removeFromWishlist } from '@/actions/wishlist-actions';
-import { toast } from 'react-toastify';
+import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import { useWishlist } from '@/contexts/WishlistContext';
 

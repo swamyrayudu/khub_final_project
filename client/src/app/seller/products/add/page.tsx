@@ -2,7 +2,7 @@
 
 import React, { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
-import { toast } from 'react-toastify';
+import { toast } from 'sonner';
 import { addProduct } from '@/actions/productActions';
 import { PRODUCT_CATEGORIES } from '@/lib/constants/categories';
 import ImageUpload from '@/components/ui/image-upload';
@@ -173,8 +173,7 @@ export default function AddProductPage() {
 
         if (result.success) {
           toast.success(result.message, {
-            position: "top-center",
-            autoClose: 3000,
+            duration: 3000,
           });
 
           setFormData({
@@ -189,8 +188,7 @@ export default function AddProductPage() {
           }, 1500);
         } else {
           toast.error(result.message, {
-            position: "top-right",
-            autoClose: 5000,
+            duration: 5000,
           });
         }
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from 'next/navigation';
-import { toast } from 'react-toastify';
+import { toast } from 'sonner';
 
 export const useLogout = () => {
   const router = useRouter();
@@ -27,8 +27,7 @@ export const useLogout = () => {
       localStorage.removeItem('userData');
 
       toast.success('Approvedfully logged out!', {
-        position: "top-center",
-        autoClose: 2000,
+        duration: 2000,
       });
 
       // Redirect after showing toast
@@ -44,8 +43,7 @@ export const useLogout = () => {
       localStorage.removeUser('userData');
       
       toast.error('Signed out (with errors)', {
-        position: "top-center",
-        autoClose: 2000,
+        duration: 2000,
       });
 
       setTimeout(() => {

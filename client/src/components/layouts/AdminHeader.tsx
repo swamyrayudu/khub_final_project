@@ -6,7 +6,7 @@ import { Bell, Menu, Moon, Sun, Shield, Search, Home, Users, Package, BarChart3,
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator, DropdownMenuLabel } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { toast } from 'react-toastify';
+import { toast } from 'sonner';
 import { getUnreadContactsCount, markAllContactsAsRead } from '../../actions/notifications';
 import { logoutAdmin } from '../../actions/adminAuth';
 
@@ -91,19 +91,19 @@ export default function AdminHeader({
       document.documentElement.classList.remove('dark');
       localStorage.setItem('theme', 'light');
       setDarkMode(false);
-      toast.success('Switched to light mode', { autoClose: 2000 });
+      toast.success('Switched to light mode', { duration: 2000 });
     } else {
       document.documentElement.classList.add('dark');
       localStorage.setItem('theme', 'dark');
       setDarkMode(true);
-      toast.success('Switched to dark mode', { autoClose: 2000 });
+      toast.success('Switched to dark mode', { duration: 2000 });
     }
   };
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      toast.info(`Searching for: ${searchQuery}`, { autoClose: 3000 });
+      toast.info(`Searching for: ${searchQuery}`, { duration: 3000 });
     }
   };
 

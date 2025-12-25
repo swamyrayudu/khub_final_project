@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Plus, Trash2, Edit2, Upload, Link as LinkIcon, X, Loader2 } from 'lucide-react';
-import { toast } from 'react-toastify';
+import { toast } from 'sonner';
 
 interface CarouselItem {
   id: string;

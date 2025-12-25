@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { toast } from "react-toastify";
+import { toast } from 'sonner';
 import {
   Clock,
   RefreshCw,
@@ -95,8 +95,7 @@ export default function WaitingPageContent() {
     localStorage.removeItem("userData");
 
     toast.success("Approvedfully logged out!", {
-      position: "top-center",
-      autoClose: 2000,
+      duration: 2000,
     });
 
     // ✅ Use window.location.href for reliable redirect (fixes the main issue)
@@ -127,8 +126,7 @@ export default function WaitingPageContent() {
 
       if (data.status === 'success' || data.status === 'active' || data.status === 'success') {
         toast.success('🎉 Your account has been success! Redirecting to dashboard...', {
-          position: "top-center",
-          autoClose: 3000,
+          duration: 3000,
         });
         
         // Update user data in localStorage
@@ -141,8 +139,7 @@ export default function WaitingPageContent() {
         
       } else if (data.status === 'rejected') {
         toast.error('Your application has been rejected. Please contact support for more information.', {
-          position: "top-center",
-          autoClose: 5000,
+          duration: 5000,
         });
         
         setTimeout(() => {
@@ -151,16 +148,14 @@ export default function WaitingPageContent() {
         
       } else {
         toast.info('Your application is still under review. Please check back later.', {
-          position: "top-center",
-          autoClose: 3000,
+          duration: 3000,
         });
       }
 
     } catch (error) {
       console.error("Error checking status:", error);
       toast.error("Error checking status. Please try again later.", {
-        position: "top-right",
-        autoClose: 5000,
+        duration: 5000,
       });
     } finally {
       setIsChecking(false);

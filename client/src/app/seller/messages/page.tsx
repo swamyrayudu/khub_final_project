@@ -22,7 +22,7 @@ import {
   markSellerMessagesAsRead,
 } from '@/actions/sellerMessageActions';
 import { useRouter } from 'next/navigation';
-import { toast } from 'react-toastify';
+import { toast } from 'sonner';
 import Image from 'next/image';
 
 interface Conversation {

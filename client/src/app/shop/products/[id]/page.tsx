@@ -15,7 +15,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { toast } from 'react-toastify';
+import { toast } from 'sonner';
 import { LoadingSpinner } from '@/components/ui/loading-page';
 import { addToWishlist } from '@/actions/wishlist-actions';
 import { useWishlist } from '@/contexts/WishlistContext';

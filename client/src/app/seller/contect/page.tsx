@@ -1,73 +1,40 @@
 'use client';
 
 import React, { useRef } from 'react';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'sonner';
 import { createContactMessage } from '../../../actions/contact-actions';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Send, MessageSquare } from "lucide-react";
-import 'react-toastify/dist/ReactToastify.css';
 
 export default function SellerContact() {
   const formRef = useRef<HTMLFormElement>(null);
 
   const handleSubmit = async (formData: FormData) => {
-    const loadingToastId = toast.loading('Sending your message...', {
-      position: 'top-right',
-    });
+    const loadingToastId = toast.loading('Sending your message...');
 
     try {
       const result = await createContactMessage(formData);
       toast.dismiss(loadingToastId);
 
       if (result.success) {
-        toast.success(result.message, {
-          position: 'top-right',
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-        });
+        toast.success(result.message);
         formRef.current?.reset();
       } else {
-        toast.error(result.error, {
-          position: 'top-right',
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-        });
+        toast.error(result.error);
       }
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
       console.error('Error fetching contacts:', errorMessage, error);
       toast.dismiss(loadingToastId);
-      toast.error('Something went wrong. Please try again.', {
-        position: 'top-right',
-        autoClose: 5000,
-      });
+      toast.error('Something went wrong. Please try again.');
     }
   };
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-        className="mt-16"
-      />
 
       <div className="max-w-md w-full">
         <Card className="border-border shadow-lg">

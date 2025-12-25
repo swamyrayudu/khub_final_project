@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
 import React from 'react';
 import { Geist, Geist_Mono } from "next/font/google";
-import { ToastContainer } from 'react-toastify';
+import { Toaster } from 'sonner';
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import "./globals.css";
-import 'react-toastify/dist/ReactToastify.css';
 import { SessionProvider } from "next-auth/react";
 
 const geistSans = Geist({
@@ -40,22 +39,14 @@ export default function RootLayout({
               disableTransitionOnChange
             >
               {children}
-              {/* Toast Container with Theme Support */}
-              <ToastContainer
-                position="top-right"
-                autoClose={5000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                theme="colored"
-                toastClassName="dark:bg-gray-800 dark:text-white"
-                progressClassName="bg-primary"
-              />
             </ThemeProvider>
+            <Toaster 
+              position="top-right" 
+              richColors 
+              expand={true}
+              closeButton
+              theme="system"
+            />
           </SessionProvider>
       </body>
     </html>

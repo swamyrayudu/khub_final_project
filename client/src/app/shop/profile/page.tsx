@@ -31,7 +31,7 @@ import {
   Home,
   Shield,
 } from 'lucide-react';
-import { toast } from 'react-toastify';
+import { toast } from 'sonner';
 import { Country, State, City } from 'country-state-city';
 import { useRouter } from 'next/navigation';
 

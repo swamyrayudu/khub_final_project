@@ -15,7 +15,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { createReview } from '@/actions/reviewActions';
-import { toast } from 'react-toastify';
+import { toast } from 'sonner';
 
 interface ReviewFormProps {
   productId: string;

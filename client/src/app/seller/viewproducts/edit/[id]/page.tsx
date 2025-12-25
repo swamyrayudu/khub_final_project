@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useTransition } from 'react';
 import { useRouter, useParams } from 'next/navigation';
-import { toast } from 'react-toastify';
+import { toast } from 'sonner';
 import { getProductById, updateProduct } from '@/actions/productActions';
 import { PRODUCT_CATEGORIES } from '@/lib/constants/categories';
 import ImageUpload from '@/components/ui/image-upload';
@@ -215,8 +215,7 @@ export default function EditProductPage() {
 
         if (result.success) {
           toast.success(result.message, {
-            position: "top-center",
-            autoClose: 3000,
+            duration: 3000,
           });
 
           setTimeout(() => {
@@ -224,8 +223,7 @@ export default function EditProductPage() {
           }, 1500);
         } else {
           toast.error(result.message, {
-            position: "top-right",
-            autoClose: 5000,
+            duration: 5000,
           });
         }
 

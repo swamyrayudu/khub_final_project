@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
-import { toast } from 'react-toastify';
+import { toast } from 'sonner';
 import { useRegistrationProtection } from '@/lib/hooks/useRegistrationProtection';
 import { Sun, Moon, Upload, CheckCircle, XCircle, User, Mail, Phone, MapPin, FileText, Shield } from 'lucide-react';
 
@@ -55,8 +55,7 @@ useEffect(() => {
   const token = localStorage.getItem('authToken');
   if (token) {
     toast.warning('You are already logged in. Are you sure you want to create another account?', {
-      position: "top-center",
-      autoClose: 5000,
+      duration: 5000,
     });
   }
 }, []);

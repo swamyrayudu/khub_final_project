@@ -12,7 +12,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { markReviewHelpful, deleteReview } from '@/actions/reviewActions';
-import { toast } from 'react-toastify';
+import { toast } from 'sonner';
 import { Review } from '@/actions/reviewActions';
 
 interface ReviewItemProps {
