@@ -233,7 +233,6 @@ export default function SellerHomeContent() {
             <span className="font-semibold text-foreground">
               {userData.name}
             </span>{" "}
-            👋
           </p>
         </div>
 
@@ -413,7 +412,7 @@ export default function SellerHomeContent() {
                     <button
                       key={index}
                       onClick={() => handleNavigation(action.href)}
-                      className="flex items-center justify-between p-3 sm:p-4 rounded-lg border border-border bg-card text-left hover:bg-accent hover:border-accent-foreground/20 transition-colors"
+                      className="flex items-center justify-between p-3 sm:p-4 rounded-lg border border-border bg-card text-left hover:bg-accent hover:border-accent-foreground/20 transition-colors cursor-pointer"
                     >
                       <div className="flex items-center flex-1 min-w-0 gap-3">
                         <div className={`p-2 sm:p-2.5 ${action.color} rounded-lg flex-shrink-0`}>

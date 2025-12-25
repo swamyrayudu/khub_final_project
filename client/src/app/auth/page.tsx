@@ -1,15 +1,61 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { signIn, useSession } from 'next-auth/react';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Loader2 } from 'lucide-react';
 
 export default function AuthPage() {
   const router = useRouter();
   const { data: session, status } = useSession();
+  const [isCheckingSeller, setIsCheckingSeller] = useState(true);
+
+  // Check for admin token first
+  useEffect(() => {
+    const checkAdminAuth = () => {
+      const cookies = document.cookie.split(';');
+      const adminToken = cookies.find(cookie => cookie.trim().startsWith('admin_token='));
+      
+      if (adminToken) {
+        router.replace('/admin/home');
+        return true;
+      }
+      return false;
+    };
+
+    checkAdminAuth();
+  }, [router]);
   
+  // Check for seller token first
+  useEffect(() => {
+    const checkSellerAuth = () => {
+      try {
+        const authToken = localStorage.getItem('authToken');
+        const userDataString = localStorage.getItem('userData');
+
+        if (authToken && userDataString) {
+          const userData = JSON.parse(userDataString);
+          // Check if user is a seller
+          if (userData.role === 'seller' || userData.shopName !== undefined) {
+            // Redirect to seller dashboard
+            if (userData.status === 'pending') {
+              router.replace('/seller/auth/login/wait');
+            } else {
+              router.replace('/seller/home');
+            }
+            return;
+          }
+        }
+      } catch (error) {
+        console.error('Error checking seller auth:', error);
+      }
+      setIsCheckingSeller(false);
+    };
+
+    checkSellerAuth();
+  }, [router]);
+
   useEffect(() => {
     // If user is already authenticated, redirect to shop immediately
     if (status === 'authenticated' && session) {
@@ -18,8 +64,12 @@ export default function AuthPage() {
   }, [status, session, router]);
   
   // Don't render anything while checking auth status or if authenticated
-  if (status === 'loading' || (status === 'authenticated' && session)) {
-    return null;
+  if (isCheckingSeller || status === 'loading' || (status === 'authenticated' && session)) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <Loader2 className="w-8 h-8 text-primary animate-spin" />
+      </div>
+    );
   }
   
   return (

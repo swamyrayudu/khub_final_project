@@ -8,30 +8,28 @@ export function middleware(request: NextRequest) {
 
   // Admin auth protection
   if (adminToken) {
-    // If admin is logged in, redirect from auth pages to admin home
+    // If admin is logged in, redirect from non-admin pages to admin home
     if (
+      path === "/" ||
       path === "/admin/login" ||
       path === "/seller/auth/login" ||
       path === "/auth" ||
-      path === "/seller/auth/login/wait"
+      path === "/seller/auth/login/wait" ||
+      path.startsWith("/shop") ||
+      (path.startsWith("/seller") && !path.startsWith("/admin"))
     ) {
       return NextResponse.redirect(new URL("/admin/home", request.url));
     }
 
     // If admin is logged in and accessing admin routes, allow access
-    if (
-      path === "/admin/home" ||
-      path === "/admin/sellers" ||
-      path === "/admin/dashboard"
-    ) {
+    if (path.startsWith("/admin")) {
       return NextResponse.next();
     }
   } else {
-    // If admin is not logged in, they can't access protected routes
+    // If admin is not logged in, they can't access protected admin routes (except login)
     if (
-      path === "/admin/home" ||
-      path === "/admin/sellers" ||
-      path === "/admin/dashboard"
+      path.startsWith("/admin") && 
+      path !== "/admin/login"
     ) {
       return NextResponse.redirect(new URL("/admin/login", request.url));
     }

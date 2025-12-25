@@ -1,19 +1,58 @@
 "use client";
 
-import React, { useState } from 'react';
-import { usePathname } from 'next/navigation';
+import React, { useState, useEffect } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import SellerHeader from '@/components/seller/SellerHeader';
 import SellerSidebar from '@/components/seller/SellerSidebar';
 import Footer from '@/components/layouts/Footer';
+import { Loader2 } from 'lucide-react';
 
 export default function SellerLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const router = useRouter();
   const pathname = usePathname();
+  const { data: session, status } = useSession();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [isCheckingShopUser, setIsCheckingShopUser] = useState(true);
+
+  // Check for admin token and redirect
+  useEffect(() => {
+    const checkAdminAuth = () => {
+      const cookies = document.cookie.split(';');
+      const adminToken = cookies.find(cookie => cookie.trim().startsWith('admin_token='));
+      
+      if (adminToken) {
+        router.replace('/admin/home');
+        return true;
+      }
+      return false;
+    };
+
+    checkAdminAuth();
+  }, [router]);
+
+  // Redirect shop users to shop products
+  useEffect(() => {
+    // If user is authenticated with NextAuth (shop user), redirect to shop
+    if (status === 'authenticated' && session) {
+      // Check if this is NOT a seller trying to access seller pages
+      const authToken = localStorage.getItem('authToken');
+      if (!authToken) {
+        // This is a shop user, redirect them
+        router.replace('/shop/products');
+        return;
+      }
+    }
+    
+    if (status !== 'loading') {
+      setIsCheckingShopUser(false);
+    }
+  }, [status, session, router]);
 
   // Define routes where header should NOT be shown
   const noHeaderRoutes = [
@@ -60,6 +99,15 @@ export default function SellerLayout({
       setIsLoggingOut(false);
     }
   };
+
+  // Show loading while checking if user is a shop user
+  if (isCheckingShopUser && status === 'loading') {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Loader2 className="w-8 h-8 text-primary animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">
