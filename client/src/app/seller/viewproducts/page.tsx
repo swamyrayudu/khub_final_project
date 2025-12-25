@@ -425,14 +425,14 @@ export default function ViewProducts() {
                             <IndianRupee className="w-4 h-4" />
                             {product.offerPrice > 0 &&
                             product.offerPrice < product.price
-                              ? product.offerPrice.toFixed(2)
-                              : product.price.toFixed(2)}
+                              ? Math.round(product.offerPrice)
+                              : Math.round(product.price)}
                           </div>
                           {product.offerPrice > 0 &&
                             product.offerPrice < product.price && (
                               <div className="flex items-center text-sm text-muted-foreground line-through">
                                 <IndianRupee className="w-3 h-3" />
-                                {product.price.toFixed(2)}
+                                {Math.round(product.price)}
                               </div>
                             )}
                         </div>

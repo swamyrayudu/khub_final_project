@@ -162,13 +162,13 @@ export default function ProductDetails() {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <div className="border-b bg-card/50 sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto px-4 py-4 flex items-center gap-4">
+      <div className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-40 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center gap-4">
           <Button
             variant="ghost"
             size="icon"
             onClick={() => router.back()}
-            className="rounded-full"
+            className="rounded-full hover:bg-accent"
           >
             <ArrowLeft className="w-5 h-5" />
           </Button>
@@ -177,40 +177,45 @@ export default function ProductDetails() {
       </div>
 
       {/* Content */}
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-10">
           {/* Images Section */}
-          <div className="space-y-4">
+          <div className="lg:col-span-6 space-y-4">
             {/* Main Image */}
-            <div className="relative w-full aspect-square bg-muted rounded-lg overflow-hidden">
+            <div className="relative w-full aspect-square bg-gradient-to-br from-muted to-muted/50 rounded-xl overflow-hidden shadow-lg border border-border/50">
               <Image
                 src={product.images[selectedImage] || '/placeholder-product.jpg'}
                 alt={product.name}
                 fill
-                className="object-cover"
+                className="object-cover hover:scale-105 transition-transform duration-500"
                 priority
               />
               {discount > 0 && (
-                <Badge className="absolute top-4 left-4 bg-red-600 text-white">
-                  -{discount}%
+                <Badge className="absolute top-4 left-4 bg-red-600 hover:bg-red-700 text-white font-bold text-sm px-3 py-1.5 shadow-lg">
+                  -{discount}% OFF
                 </Badge>
               )}
               {product.quantity <= 0 && (
-                <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-                  <span className="text-white font-semibold">Out of Stock</span>
+                <div className="absolute inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center">
+                  <div className="text-center">
+                    <AlertCircle className="w-12 h-12 text-white mx-auto mb-2" />
+                    <span className="text-white font-bold text-lg">Out of Stock</span>
+                  </div>
                 </div>
               )}
             </div>
 
             {/* Thumbnail Images */}
             {product.images.length > 1 && (
-              <div className="grid grid-cols-4 gap-2">
+              <div className="grid grid-cols-5 gap-3">
                 {product.images.map((image, index) => (
                   <button
                     key={index}
                     onClick={() => setSelectedImage(index)}
-                    className={`relative aspect-square rounded-lg overflow-hidden border-2 transition-all ${
-                      selectedImage === index ? 'border-primary' : 'border-border'
+                    className={`relative aspect-square rounded-lg overflow-hidden border-2 transition-all hover:scale-105 ${
+                      selectedImage === index 
+                        ? 'border-primary shadow-md ring-2 ring-primary/20' 
+                        : 'border-border hover:border-primary/50'
                     }`}
                   >
                     <Image
@@ -226,96 +231,112 @@ export default function ProductDetails() {
           </div>
 
           {/* Product Info */}
-          <div className="space-y-6">
-            {/* Title & Rating */}
-            <div>
-              <h1 className="text-3xl font-bold mb-2">{product.name}</h1>
-              <div className="flex items-center gap-2 mb-4">
+          <div className="lg:col-span-6 space-y-6">
+            {/* Title & Category */}
+            <div className="space-y-3">
+              <div className="flex flex-wrap items-center gap-2">
                 {product.brand && (
-                  <Badge variant="secondary">{product.brand}</Badge>
+                  <Badge variant="secondary" className="text-xs font-medium px-3 py-1">
+                    {product.brand}
+                  </Badge>
                 )}
                 {product.category && (
-                  <Badge variant="outline">{product.category}</Badge>
+                  <Badge variant="outline" className="text-xs font-medium px-3 py-1">
+                    {product.category}
+                  </Badge>
                 )}
               </div>
+              <h1 className="text-3xl md:text-4xl font-bold leading-tight tracking-tight">{product.name}</h1>
             </div>
 
             {/* Price Section */}
-            <div className="space-y-2">
-              <div className="flex items-center gap-4">
-                <span className="text-4xl font-bold text-foreground">
-                  ₹{finalPrice.toLocaleString('en-IN')}
-                </span>
-                {product.offerPrice > 0 && product.price > product.offerPrice && (
-                  <span className="text-xl text-muted-foreground line-through">
-                    ₹{product.price.toLocaleString('en-IN')}
+            <div className="bg-gradient-to-r from-primary/5 to-primary/10 dark:from-primary/10 dark:to-primary/5 rounded-xl p-6 border border-primary/10">
+              <div className="space-y-3">
+                <div className="flex items-baseline gap-4 flex-wrap">
+                  <span className="text-4xl md:text-5xl font-bold text-foreground">
+                    ₹{Math.round(finalPrice).toLocaleString('en-IN')}
                   </span>
+                  {product.offerPrice > 0 && product.price > product.offerPrice && (
+                    <span className="text-2xl text-muted-foreground line-through">
+                      ₹{Math.round(product.price).toLocaleString('en-IN')}
+                    </span>
+                  )}
+                </div>
+                {discount > 0 && (
+                  <div className="flex items-center gap-2">
+                    <Badge className="bg-green-600 hover:bg-green-700 text-white font-semibold px-3 py-1">
+                      SAVE {discount}%
+                    </Badge>
+                    <span className="text-base font-semibold text-green-600">
+                      You save ₹{Math.round(product.price - product.offerPrice).toLocaleString('en-IN')}
+                    </span>
+                  </div>
                 )}
               </div>
-              {discount > 0 && (
-                <span className="text-lg font-semibold text-green-600">
-                  You save ₹{(product.price - product.offerPrice).toLocaleString('en-IN')} ({discount}%)
-                </span>
-              )}
             </div>
 
             {/* Stock Status */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 p-4 rounded-lg bg-muted/50">
               {product.quantity > 0 ? (
                 <>
-                  <CheckCircle className="w-5 h-5 text-green-600" />
-                  <span className="text-sm font-medium text-green-600">
-                    In Stock ({product.quantity} available)
+                  <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0" />
+                  <span className="text-sm font-semibold text-green-600">
+                    In Stock • {product.quantity} {product.quantity === 1 ? 'item' : 'items'} available
                   </span>
                 </>
               ) : (
                 <>
-                  <AlertCircle className="w-5 h-5 text-red-600" />
-                  <span className="text-sm font-medium text-red-600">Out of Stock</span>
+                  <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0" />
+                  <span className="text-sm font-semibold text-red-600">Currently Out of Stock</span>
                 </>
               )}
             </div>
 
             {/* Description */}
-            <div className="space-y-2">
-              <h3 className="font-semibold">Description</h3>
-              <p className="text-muted-foreground">{product.description}</p>
+            <div className="space-y-4 pb-6 border-b border-border">
+              <h3 className="text-lg font-bold">Product Description</h3>
+              <div className="space-y-2">
+                {product.description.split(/[.•]/).filter(point => point.trim()).map((point, index) => (
+                  <div key={index} className="flex gap-3 items-start">
+                    <div className="w-1.5 h-1.5 rounded-full bg-primary mt-2 flex-shrink-0" />
+                    <p className="text-muted-foreground leading-relaxed flex-1">{point.trim()}</p>
+                  </div>
+                ))}
+              </div>
             </div>
 
             {/* Product Details */}
-            <Card>
-              <CardContent className="p-6">
-                <h3 className="font-semibold mb-4">Product Details</h3>
-                <div className="space-y-3 text-sm">
-                  {product.sku && (
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">SKU:</span>
-                      <span className="font-medium">{product.sku}</span>
-                    </div>
-                  )}
-                  {product.weight && (
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">Weight:</span>
-                      <span className="font-medium">{product.weight}</span>
-                    </div>
-                  )}
-                  {product.dimensions && (
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">Dimensions:</span>
-                      <span className="font-medium">{product.dimensions}</span>
-                    </div>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
+            <div className="space-y-3">
+              <h3 className="text-lg font-bold">Product Specifications</h3>
+              <div className="grid grid-cols-1 gap-3">
+                {product.sku && (
+                  <div className="flex justify-between items-center p-3 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors">
+                    <span className="text-sm font-medium text-muted-foreground">SKU</span>
+                    <span className="text-sm font-semibold text-foreground">{product.sku}</span>
+                  </div>
+                )}
+                {product.weight && (
+                  <div className="flex justify-between items-center p-3 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors">
+                    <span className="text-sm font-medium text-muted-foreground">Weight</span>
+                    <span className="text-sm font-semibold text-foreground">{product.weight}</span>
+                  </div>
+                )}
+                {product.dimensions && (
+                  <div className="flex justify-between items-center p-3 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors">
+                    <span className="text-sm font-medium text-muted-foreground">Dimensions</span>
+                    <span className="text-sm font-semibold text-foreground">{product.dimensions}</span>
+                  </div>
+                )}
+              </div>
+            </div>
 
             {/* Action Buttons */}
-            <div className="flex gap-2 pt-4">
+            <div className="grid grid-cols-2 gap-4 pt-6">
               <Button
                 onClick={handleAddToWishlist}
                 variant={inWishlist ? 'default' : 'outline'}
                 size="lg"
-                className="flex-1 gap-2"
+                className="h-12 gap-2 font-semibold text-base"
                 disabled={product.quantity <= 0}
               >
                 <Heart className={`w-5 h-5 ${inWishlist ? 'fill-current' : ''}`} />
@@ -324,7 +345,7 @@ export default function ProductDetails() {
               <Button
                 onClick={handleContact}
                 size="lg"
-                className="flex-1 gap-2"
+                className="h-12 gap-2 font-semibold text-base bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary"
                 disabled={product.quantity <= 0}
               >
                 <MessageSquare className="w-5 h-5" />
@@ -336,41 +357,46 @@ export default function ProductDetails() {
 
         {/* Seller Information */}
         {(product.sellerShopName || product.sellerCity) && (
-          <Card className="mb-8">
-            <CardHeader>
-              <CardTitle>Seller Information</CardTitle>
+          <Card className="mb-10 overflow-hidden border-border/50 shadow-md">
+            <CardHeader className="bg-gradient-to-r from-muted/50 to-muted/30 border-b">
+              <CardTitle className="text-xl font-bold flex items-center gap-2">
+                <MapPin className="w-5 h-5 text-primary" />
+                Seller Information
+              </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
-              {product.sellerShopName && (
-                <div>
-                  <h4 className="font-semibold text-sm text-muted-foreground mb-1">Shop Name</h4>
-                  <p className="text-lg font-medium">{product.sellerShopName}</p>
-                </div>
-              )}
-              {product.sellerAddress && (
-                <div>
-                  <h4 className="font-semibold text-sm text-muted-foreground mb-1">Address</h4>
-                  <p className="text-base">{product.sellerAddress}</p>
-                </div>
-              )}
-              {(product.sellerCity || product.sellerState) && (
-                <div>
-                  <h4 className="font-semibold text-sm text-muted-foreground mb-1">Location</h4>
-                  <div className="flex items-center gap-2">
-                    <MapPin className="w-4 h-4 text-primary" />
-                    <p className="text-base">
-                      {product.sellerCity}
-                      {product.sellerCity && product.sellerState && ', '}
-                      {product.sellerState}
-                    </p>
+            <CardContent className="p-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {product.sellerShopName && (
+                  <div className="space-y-2">
+                    <h4 className="font-semibold text-sm text-muted-foreground uppercase tracking-wide">Shop Name</h4>
+                    <p className="text-lg font-bold text-foreground">{product.sellerShopName}</p>
                   </div>
-                </div>
-              )}
+                )}
+                {product.sellerAddress && (
+                  <div className="space-y-2">
+                    <h4 className="font-semibold text-sm text-muted-foreground uppercase tracking-wide">Address</h4>
+                    <p className="text-base text-foreground">{product.sellerAddress}</p>
+                  </div>
+                )}
+                {(product.sellerCity || product.sellerState) && (
+                  <div className="space-y-2">
+                    <h4 className="font-semibold text-sm text-muted-foreground uppercase tracking-wide">Location</h4>
+                    <div className="flex items-center gap-2">
+                      <MapPin className="w-4 h-4 text-primary flex-shrink-0" />
+                      <p className="text-base font-medium text-foreground">
+                        {product.sellerCity}
+                        {product.sellerCity && product.sellerState && ', '}
+                        {product.sellerState}
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </div>
               {(product.googleMapsUrl || (product.latitude && product.longitude)) && (
                 <Button
                   onClick={handleOpenInGoogleMaps}
                   variant="outline"
-                  className="w-full gap-2 mt-4"
+                  className="w-full md:w-auto gap-2 mt-6 h-11 font-semibold hover:bg-primary hover:text-primary-foreground transition-colors"
                 >
                   <MapPin className="w-4 h-4" />
                   View on Google Maps

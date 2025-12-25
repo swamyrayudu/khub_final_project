@@ -133,18 +133,20 @@ export default function SellerHeader({ onMobileMenuToggle }: SellerHeaderProps) 
 
   return (
     <header className="bg-gradient-to-r from-card via-card to-card/95 border-b border-primary/20 sticky top-0 z-30 backdrop-filter backdrop-blur-xl shadow-lg shadow-primary/10">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-14 sm:h-16">
           
           {/* Left side */}
-          <div className="flex items-center">
+          <div className="flex items-center gap-2 sm:gap-3">
             <button
               onClick={onMobileMenuToggle}
-              className="p-2 rounded-xl hover:bg-primary/10 transition-all duration-300 lg:hidden mr-2 hover:scale-110"
+              className="p-1.5 sm:p-2 rounded-xl hover:bg-primary/10 transition-all duration-300 lg:hidden hover:scale-110"
             >
-              <Menu className="w-5 h-5 text-foreground" />
+              <Menu className="w-4 h-4 sm:w-5 sm:h-5 text-foreground" />
             </button>
-            <div className="flex items-center space-x-3 animate-slide-right">
+            
+            {/* Shop info - visible on desktop only */}
+            <div className="hidden lg:flex items-center gap-3 animate-slide-right">
               <div className="bg-gradient-to-br from-primary to-primary/70 p-2.5 rounded-xl shadow-lg shadow-primary/40">
                 <Store className="w-6 h-6 text-primary-foreground" />
               </div>
@@ -172,39 +174,39 @@ export default function SellerHeader({ onMobileMenuToggle }: SellerHeaderProps) 
           </div>
 
           {/* Right side */}
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-1 sm:space-x-2">
             
             {/* Notifications */}
             <button 
               onClick={() => router.push('/seller/notifications')}
-              className="p-2.5 rounded-xl hover:bg-primary/10 relative transition-all duration-300 hover:scale-110 group"
+              className="p-1.5 sm:p-2.5 rounded-lg sm:rounded-xl hover:bg-primary/10 relative transition-all duration-300 hover:scale-110 group"
             >
-              <Bell className="w-5 h-5 text-muted-foreground group-hover:text-primary" />
-              <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-red-500 rounded-full animate-pulse"></span>
+              <Bell className="w-4 h-4 sm:w-5 sm:h-5 text-muted-foreground group-hover:text-primary" />
+              <span className="absolute top-1 right-1 sm:top-1.5 sm:right-1.5 w-2 h-2 sm:w-2.5 sm:h-2.5 bg-red-500 rounded-full animate-pulse"></span>
             </button>
 
             {/* Theme toggle */}
             <button
               onClick={toggleDarkMode}
-              className="p-2.5 rounded-xl hover:bg-primary/10 transition-all duration-300 hover:scale-110"
+              className="p-1.5 sm:p-2.5 rounded-lg sm:rounded-xl hover:bg-primary/10 transition-all duration-300 hover:scale-110"
             >
               {darkMode ? (
-                <Sun className="w-5 h-5 text-muted-foreground hover:text-primary" />
+                <Sun className="w-4 h-4 sm:w-5 sm:h-5 text-muted-foreground hover:text-primary" />
               ) : (
-                <Moon className="w-5 h-5 text-muted-foreground hover:text-primary" />
+                <Moon className="w-4 h-4 sm:w-5 sm:h-5 text-muted-foreground hover:text-primary" />
               )}
             </button>
 
             {/* User Dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="flex items-center space-x-2 p-1.5 hover:bg-primary/10 rounded-xl transition-all duration-300 group">
+                <Button variant="ghost" className="flex items-center space-x-2 p-1 sm:p-1.5 hover:bg-primary/10 rounded-lg sm:rounded-xl transition-all duration-300 group">
                   <div className="text-right hidden sm:block">
                     <p className="text-sm font-semibold text-card-foreground">{userData.name}</p>
                     <p className="text-xs text-muted-foreground">{userData.email}</p>
                   </div>
-                  <div className="w-9 h-9 bg-gradient-to-br from-primary to-primary/80 rounded-xl flex items-center justify-center shadow-lg shadow-primary/40 group-hover:scale-110 transition-all duration-300">
-                    <span className="text-primary-foreground font-bold text-sm">
+                  <div className="w-8 h-8 sm:w-9 sm:h-9 bg-gradient-to-br from-primary to-primary/80 rounded-lg sm:rounded-xl flex items-center justify-center shadow-lg shadow-primary/40 group-hover:scale-110 transition-all duration-300">
+                    <span className="text-primary-foreground font-bold text-xs sm:text-sm">
                       {userData.name.charAt(0).toUpperCase()}
                     </span>
                   </div>

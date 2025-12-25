@@ -26,7 +26,6 @@ import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { LoadingSpinner } from '@/components/ui/loading-page';
 import { Carousel } from '@/components/ui/carousel';
-import { StarRating } from '@/components/reviews/StarRating';
 import { getProductsRatings, ReviewStats } from '@/actions/reviewActions';
 import { Slider } from '@/components/ui/slider';
 import { Star } from 'lucide-react';
@@ -687,7 +686,7 @@ export default function Products() {
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 md:gap-3 auto-rows-fr">
               {displayedProducts.map((product) => {
                 const discount = calculateDiscount(product.price, product.offerPrice);
                 const finalPrice = product.offerPrice > 0 ? product.offerPrice : product.price;
@@ -698,37 +697,37 @@ export default function Products() {
                 return (
                   <Card 
                     key={product.id} 
-                    className="dark:bg-black bg-white cursor-pointer hover:shadow-lg transition-shadow"
+                    className="dark:bg-black bg-white cursor-pointer hover:shadow-lg transition-all hover:scale-[1.02] overflow-hidden flex flex-col h-full"
                     onClick={() => router.push(`/shop/products/${product.id}`)}
                   >
                     {/* Image Section */}
-                    <div className="relative w-full h-48 bg-muted overflow-hidden rounded-t-lg"
+                    <div className="relative w-full aspect-[4/3] md:aspect-[16/9] bg-muted overflow-hidden"
                       onClick={(e) => {
                         e.stopPropagation();
                         router.push(`/shop/products/${product.id}`);
                       }}
                     >
                       {discount > 0 && (
-                        <Badge className="absolute top-2 left-2 z-10 text-xs" variant="destructive">
+                        <Badge className="absolute top-1 left-1 z-10 text-[10px] px-1.5 py-0.5 font-bold" variant="destructive">
                           -{discount}%
                         </Badge>
                       )}
-                      <div className="absolute top-2 right-2 z-10 flex flex-col gap-1 items-end">
+                      <div className="absolute top-1 right-1 z-10 flex flex-col gap-0.5 items-end">
                         {hasLocation && (
-                          <Badge className="text-xs bg-blue-600">
-                            <MapPin className="w-3 h-3 mr-1" />
+                          <Badge className="text-[9px] bg-blue-600 px-1 py-0.5 hidden md:flex">
+                            <MapPin className="w-2.5 h-2.5 mr-0.5" />
                             Location
                           </Badge>
                         )}
                         {/* City/State Badge */}
                         {userCity && product.sellerCity?.toLowerCase() === userCity.toLowerCase() && (
-                          <Badge className="text-xs bg-green-600">
+                          <Badge className="text-[9px] bg-green-600 px-1 py-0.5 hidden md:flex">
                             Your City
                           </Badge>
                         )}
                         {userState && product.sellerState?.toLowerCase() === userState.toLowerCase() && 
                          (!userCity || product.sellerCity?.toLowerCase() !== userCity.toLowerCase()) && (
-                          <Badge className="text-xs bg-amber-600">
+                          <Badge className="text-[9px] bg-amber-600 px-1 py-0.5 hidden md:flex">
                             Your State
                           </Badge>
                         )}
@@ -736,9 +735,9 @@ export default function Products() {
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="absolute bottom-2 right-2 z-10 h-8 w-8 bg-background/80 hover:bg-background"
+                        className="absolute bottom-1 right-1 z-10 h-6 w-6 md:h-7 md:w-7 bg-background/80 hover:bg-background hidden md:flex"
                       >
-                        <Heart className="w-4 h-4" />
+                        <Heart className="w-3 h-3 md:w-3.5 md:h-3.5" />
                       </Button>
                       <Image
                         src={product.images[0] || '/placeholder-product.jpg'}
@@ -748,77 +747,47 @@ export default function Products() {
                       />
                     </div>
 
-                    <CardHeader className="p-4 pb-2">
-                      <CardTitle className="text-base line-clamp-2 font-semibold">
+                    <CardHeader className="p-1.5 md:p-2.5 pb-0.5 md:pb-1">
+                      <CardTitle className="text-[11px] md:text-sm line-clamp-2 font-semibold leading-tight min-h-[28px] md:min-h-[36px]">
                         {product.name}
                       </CardTitle>
-                      <div className="flex items-center justify-between gap-2 mt-1">
-                        <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                          <span>{product.brand}</span>
-                          {product.brand && product.category && <span>•</span>}
-                          <span>{product.category}</span>
+                      <div className="hidden md:flex items-center justify-between gap-1 mt-0.5">
+                        <div className="flex items-center gap-1 text-[9px] text-muted-foreground line-clamp-1">
+                          <span className="truncate">{product.brand}</span>
                         </div>
-                        {/* Rating Display */}
-                        {productRatings.get(product.id) && productRatings.get(product.id)!.totalReviews > 0 && (
-                          <StarRating
-                            rating={productRatings.get(product.id)!.averageRating}
-                            size="sm"
-                            showNumber={false}
-                            totalReviews={productRatings.get(product.id)!.totalReviews}
-                          />
-                        )}
                       </div>
                     </CardHeader>
 
-                  <CardContent className="p-4 pt-2">
-                    <p className="text-xs text-muted-foreground line-clamp-2 mb-3">
-                      {product.description}
-                    </p>
-
-                    {/* Seller Info */}
+                  <CardContent className="p-1.5 md:p-2.5 pt-0 space-y-0.5 md:space-y-1 flex-1">
+                    {/* Seller Info - Only on desktop */}
                     {(product.sellerShopName || product.sellerCity) && (
-                      <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-3 p-2 bg-muted/30 rounded">
-                        <MapPin className="w-3.5 h-3.5 flex-shrink-0" />
-                        <div className="line-clamp-1">
+                      <div className="hidden md:flex items-center gap-1 text-[9px] text-muted-foreground p-1 bg-muted/30 rounded">
+                        <MapPin className="w-2.5 h-2.5 flex-shrink-0" />
+                        <div className="line-clamp-1 text-[9px]">
                           {product.sellerShopName && (
                             <span className="font-medium text-foreground">
                               {product.sellerShopName}
                             </span>
-                          )}
-                          {product.sellerCity && (
-                            <span className="ml-1">• {product.sellerCity}</span>
                           )}
                         </div>
                       </div>
                     )}
 
                     {/* Price Section */}
-                    <div className="flex items-baseline gap-2 mb-2">
-                      <span className="text-xl font-bold">₹{finalPrice.toLocaleString()}</span>
+                    <div className="flex items-baseline gap-1 mt-auto">
+                      <span className="text-xs md:text-base font-bold">₹{Math.round(finalPrice).toLocaleString()}</span>
                       {discount > 0 && (
-                        <span className="text-sm text-muted-foreground line-through">
-                          ₹{product.price.toLocaleString()}
+                        <span className="text-[8px] md:text-[10px] text-muted-foreground line-through">
+                          ₹{Math.round(product.price).toLocaleString()}
                         </span>
                       )}
                     </div>
-
-                    {/* Stock Status */}
-                    {product.quantity <= 5 && product.quantity > 0 && (
-                      <Badge variant="outline" className="text-xs border-orange-500 text-orange-600">
-                        Only {product.quantity} left
-                      </Badge>
-                    )}
-                    {product.quantity === 0 && (
-                      <Badge variant="secondary" className="text-xs">
-                        Out of Stock
-                      </Badge>
-                    )}
                   </CardContent>
 
-                  <CardFooter className="flex flex-col gap-2 p-4 pt-0">
+                  <CardFooter className="flex flex-col gap-1 p-1.5 md:p-2.5 pt-0">
                     {/* Add to Wishlist Button */}
                     <Button
-                      className="w-full h-9 cursor-pointer"
+                      className="w-full h-6 md:h-7 cursor-pointer text-[9px] md:text-xs font-medium"
                       size="sm"
                       onClick={(e) => {
                         e.stopPropagation();
@@ -826,23 +795,25 @@ export default function Products() {
                       }}
                       variant={productInWishlist ? "secondary" : "default"}
                     >
-                      <Heart className={`w-4 h-4 mr-1.5 ${productInWishlist ? 'fill-red-500 text-red-500' : ''}`} />
-                      {productInWishlist ? 'Remove from Wishlist' : 'Add to Wishlist'}
+                      <Heart className={`w-3 h-3 mr-1 ${productInWishlist ? 'fill-red-500 text-red-500' : ''}`} />
+                      <span className="hidden md:inline">{productInWishlist ? 'Saved' : 'Wishlist'}</span>
+                      <span className="md:hidden">{productInWishlist ? 'Saved' : 'Wishlist'}</span>
                     </Button>
 
                     {/* Open in Google Maps (only if URL or coordinates exist) */}
                     {(hasGoogleMapsUrl || hasLocation) && (
                       <Button
-                        variant="secondary"
+                        variant="outline"
                         size="sm"
-                        className="w-full h-9 cursor-pointer"
+                        className="w-full h-6 md:h-7 cursor-pointer text-[9px] md:text-xs font-medium"
                         onClick={(e) => {
                           e.stopPropagation();
                           handleOpenInGoogleMaps(product);
                         }}
                       >
-                        <ExternalLink className="w-4 h-4 mr-1.5" />
-                        Open in Google Maps
+                        <ExternalLink className="w-3 h-3 mr-0.5 md:mr-1" />
+                        <span className="hidden md:inline">Location</span>
+                        <span className="md:hidden">Map</span>
                       </Button>
                     )}
                   </CardFooter>
