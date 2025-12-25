@@ -19,6 +19,7 @@ import { toast } from 'react-toastify';
 import { LoadingSpinner } from '@/components/ui/loading-page';
 import { addToWishlist } from '@/actions/wishlist-actions';
 import { useWishlist } from '@/contexts/WishlistContext';
+import { ReviewsSection } from '@/components/reviews/ReviewsSection';
 
 interface Product {
   id: string;
@@ -377,6 +378,15 @@ export default function ProductDetails() {
               )}
             </CardContent>
           </Card>
+        )}
+
+        {/* Reviews Section */}
+        {product.sellerId && (
+          <ReviewsSection
+            productId={product.id}
+            sellerId={product.sellerId}
+            productName={product.name}
+          />
         )}
       </div>
     </div>
