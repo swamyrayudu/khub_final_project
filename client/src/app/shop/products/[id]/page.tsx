@@ -11,6 +11,7 @@ import {
   CheckCircle,
   AlertCircle,
   MessageSquare,
+  Navigation,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -120,11 +121,23 @@ export default function ProductDetails() {
   };
 
   const handleOpenInGoogleMaps = () => {
-    if (product?.googleMapsUrl) {
-      window.open(product.googleMapsUrl, '_blank');
-    } else if (product?.latitude && product?.longitude) {
-      const mapsUrl = `https://www.google.com/maps/?q=${product.latitude},${product.longitude}`;
-      window.open(mapsUrl, '_blank');
+    // Redirect to internal map page
+    if (product?.latitude && product?.longitude) {
+      router.push(`/shop/map?productId=${product.id}`);
+    } else if (product?.googleMapsUrl) {
+      router.push(`/shop/map?productId=${product.id}`);
+    } else {
+      toast.error('Location not available for this product');
+    }
+  };
+
+  const handleGetDirections = () => {
+    if (product?.latitude && product?.longitude) {
+      router.push(`/shop/map?productId=${product.id}`);
+    } else if (product?.googleMapsUrl) {
+      router.push(`/shop/map?productId=${product.id}`);
+    } else {
+      toast.error('Location not available for this product');
     }
   };
 
@@ -393,14 +406,23 @@ export default function ProductDetails() {
                 )}
               </div>
               {(product.googleMapsUrl || (product.latitude && product.longitude)) && (
-                <Button
-                  onClick={handleOpenInGoogleMaps}
-                  variant="outline"
-                  className="w-full md:w-auto gap-2 mt-6 h-11 font-semibold hover:bg-primary hover:text-primary-foreground transition-colors"
-                >
-                  <MapPin className="w-4 h-4" />
-                  View on Google Maps
-                </Button>
+                <div className="flex flex-col sm:flex-row gap-3 mt-6">
+                  <Button
+                    onClick={handleGetDirections}
+                    className="flex-1 gap-2 h-11 font-semibold"
+                  >
+                    <Navigation className="w-4 h-4" />
+                    Get Directions
+                  </Button>
+                  <Button
+                    onClick={handleOpenInGoogleMaps}
+                    variant="outline"
+                    className="flex-1 gap-2 h-11 font-semibold hover:bg-primary hover:text-primary-foreground transition-colors"
+                  >
+                    <MapPin className="w-4 h-4" />
+                    View on Google Maps
+                  </Button>
+                </div>
               )}
             </CardContent>
           </Card>

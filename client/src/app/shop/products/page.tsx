@@ -13,7 +13,6 @@ import {
   Search,
   Heart,
   Filter,
-  ExternalLink,
   LogIn,
   ShoppingBag,
 } from 'lucide-react';
@@ -315,6 +314,12 @@ export default function Products() {
   };
 
   const handleOpenInGoogleMaps = async (product: Product) => {
+    // Check if product has location data
+    if (!product.latitude && !product.longitude && (!product.googleMapsUrl || product.googleMapsUrl.trim() === '')) {
+      toast.error('Location not available for this product');
+      return;
+    }
+
     // Log the event to seller
     if (userData && product.sellerId) {
       try {
@@ -331,20 +336,8 @@ export default function Products() {
       console.warn('⚠️ Cannot log view event - userData or sellerId missing:', { userData, sellerId: product.sellerId });
     }
 
-    // Try to open the stored Google Maps URL first
-    if (product.googleMapsUrl && product.googleMapsUrl.trim() !== '') {
-      window.open(product.googleMapsUrl, '_blank');
-      return;
-    }
-
-    // Fallback: use coordinates if available
-    if (product.latitude && product.longitude) {
-      const url = `https://www.google.com/maps/search/?api=1&query=${product.latitude},${product.longitude}`;
-      window.open(url, '_blank');
-      return;
-    }
-
-    toast.error('Google Maps location not available');
+    // Redirect to internal map page with product ID
+    router.push(`/shop/map?productId=${product.id}`);
   };
 
   const handleAddToWishlist = async (productId: string) => {
@@ -800,7 +793,7 @@ export default function Products() {
                       <span className="md:hidden">{productInWishlist ? 'Saved' : 'Wishlist'}</span>
                     </Button>
 
-                    {/* Open in Google Maps (only if URL or coordinates exist) */}
+                    {/* View on Map (only if URL or coordinates exist) */}
                     {(hasGoogleMapsUrl || hasLocation) && (
                       <Button
                         variant="outline"
@@ -811,7 +804,7 @@ export default function Products() {
                           handleOpenInGoogleMaps(product);
                         }}
                       >
-                        <ExternalLink className="w-3 h-3 mr-0.5 md:mr-1" />
+                        <MapPin className="w-3 h-3 mr-0.5 md:mr-1" />
                         <span className="hidden md:inline">Location</span>
                         <span className="md:hidden">Map</span>
                       </Button>

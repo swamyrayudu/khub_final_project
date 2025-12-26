@@ -120,3 +120,160 @@
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* Leaflet Map Styles */
+.leaflet-container {
+  font-family: inherit;
+  touch-action: pan-x pan-y; /* Allow map panning but prevent page scroll */
+}
+
+/* Prevent map focus from scrolling page */
+.leaflet-container:focus {
+  outline: none;
+}
+
+/* Hide routing container by default on all screens */
+.leaflet-routing-container {
+  display: none !important;
+  background: var(--card);
+  color: var(--card-foreground);
+  border-radius: var(--radius);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+/* Show routing container when toggled */
+.leaflet-routing-container.show-directions {
+  display: block !important;
+}
+
+/* Mobile-specific positioning when shown */
+@media (max-width: 768px) {
+  .leaflet-routing-container.show-directions {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    max-height: 50vh;
+    border-radius: var(--radius) var(--radius) 0 0;
+  }
+}
+
+.leaflet-routing-container h2 {
+  font-size: 14px;
+  font-weight: 600;
+  padding: 10px 12px;
+  margin: 0;
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+
+.leaflet-routing-container h3 {
+  font-size: 12px;
+  font-weight: 500;
+  padding: 8px 12px;
+  margin: 0;
+  background: var(--muted);
+}
+
+.leaflet-routing-alt {
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.leaflet-routing-alt:hover {
+  background: var(--accent);
+}
+
+.leaflet-routing-alt-minimized {
+  color: var(--muted-foreground);
+  font-style: italic;
+}
+
+.leaflet-routing-geocoders {
+  display: none;
+}
+
+.dark .leaflet-routing-container {
+  background: var(--card);
+  color: var(--card-foreground);
+}
+
+.dark .leaflet-tile-pane {
+  filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
+}
+
+.dark .leaflet-marker-icon {
+  filter: none;
+}
+
+.dark .leaflet-popup-content-wrapper {
+  background: var(--popover);
+  color: var(--popover-foreground);
+}
+
+.dark .leaflet-popup-tip {
+  background: var(--popover);
+}
+
+.leaflet-popup-content-wrapper {
+  border-radius: var(--radius);
+}
+
+.leaflet-popup-content {
+  margin: 12px;
+}
+
+/* User location tooltip */
+.user-location-tooltip {
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-weight: 600;
+  font-size: 12px;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
+}
+
+.user-location-tooltip::before {
+  border-top-color: #3b82f6;
+}
+
+/* Store tooltip */
+.store-tooltip {
+  background: #dc2626;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-weight: 600;
+  font-size: 12px;
+  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.4);
+}
+
+.store-tooltip::before {
+  border-top-color: #dc2626;
+}
+
+.dark .user-location-tooltip {
+  background: #60a5fa;
+  box-shadow: 0 2px 8px rgba(96, 165, 250, 0.4);
+}
+
+.dark .user-location-tooltip::before {
+  border-top-color: #60a5fa;
+}
+
+.dark .store-tooltip {
+  background: #f87171;
+  box-shadow: 0 2px 8px rgba(248, 113, 113, 0.4);
+}
+
+.dark .store-tooltip::before {
+  border-top-color: #f87171;
+}
