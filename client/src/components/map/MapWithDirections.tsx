@@ -103,13 +103,8 @@ export default function MapWithDirections({
         setSelectedStore(store);
         setShowDirections(true);
         
-        // Scroll to map on mobile after a short delay
-        setTimeout(() => {
-          const mapElement = document.querySelector('.leaflet-container');
-          if (mapElement && window.innerWidth < 768) {
-            mapElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          }
-        }, 500);
+        // Don't auto-scroll to prevent going above header
+        // User can manually scroll if needed
       }
     }
   }, [initialSelectedId, stores]);
@@ -236,10 +231,10 @@ export default function MapWithDirections({
                 </div>
                 <div className="flex-1 min-w-0">
                   <h3 className="font-semibold text-sm truncate">
-                    {selectedStore.shopName || 'Store'}
+                    {selectedStore.shopName || selectedStore.name}
                   </h3>
                   <p className="text-xs text-muted-foreground truncate">
-                    {selectedStore.productName || selectedStore.name}
+                    {selectedStore.address}
                   </p>
                 </div>
                 {selectedStore.price && (
@@ -281,7 +276,7 @@ export default function MapWithDirections({
                 onClick={() => handleStoreSelect(store)}
               >
                 <Store className="h-3 w-3" />
-                <span className="truncate max-w-[150px]">{store.shopName || store.name}</span>
+                <span className="truncate max-w-[150px]">{store.productName || store.name}</span>
               </Button>
             ))}
           </div>
@@ -327,8 +322,8 @@ export default function MapWithDirections({
           <CardContent className="space-y-3 pt-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <p className="text-xs text-muted-foreground uppercase tracking-wide">Product</p>
-                <p className="font-medium">{selectedStore.productName || selectedStore.name}</p>
+                <p className="text-xs text-muted-foreground uppercase tracking-wide">Shop Name</p>
+                <p className="font-medium">{selectedStore.shopName || selectedStore.name}</p>
               </div>
               {selectedStore.price && (
                 <div>
