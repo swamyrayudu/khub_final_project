@@ -158,11 +158,6 @@ export default function SellerMessagesPage() {
     return () => clearInterval(interval);
   }, [selectedUser, sellerId]);
 
-  // Auto-scroll to bottom when messages update
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
-
   const handleSendReply = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -195,43 +190,44 @@ export default function SellerMessagesPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-br from-background via-muted/20 to-accent/10">
       {/* Header */}
-      <div className="border-b bg-card sticky top-0 z-10">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center gap-4">
+      <div className="border-b bg-card/80 backdrop-blur-sm sticky top-0 z-10 shadow-sm">
+        <div className="container mx-auto px-3 sm:px-4 lg:px-6 py-3 sm:py-4">
+          <div className="flex items-center gap-3">
             <Button
               variant="ghost"
-              size="icon"
+              size="sm"
               onClick={() => router.back()}
+              className="h-9 w-9 p-0 hover:bg-muted rounded-lg"
             >
-              <ArrowLeft className="w-5 h-5" />
+              <ArrowLeft className="w-4 h-4" />
             </Button>
-            <div className="flex items-center gap-3">
-              <MessageSquare className="w-6 h-6 text-primary" />
-              <div>
-                <h1 className="text-xl font-bold">Customer Messages</h1>
-                <p className="text-sm text-muted-foreground">
-                  {conversations.length} conversation{conversations.length !== 1 ? 's' : ''}
-                </p>
-              </div>
+            <div className="bg-gradient-to-r from-primary/20 to-primary/10 w-10 h-10 sm:w-11 sm:h-11 rounded-full flex items-center justify-center flex-shrink-0">
+              <MessageSquare className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
+            </div>
+            <div>
+              <h1 className="text-lg sm:text-xl font-bold text-card-foreground">Customer Messages</h1>
+              <p className="text-xs sm:text-sm text-muted-foreground">
+                {conversations.length} conversation{conversations.length !== 1 ? 's' : ''}
+              </p>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-6">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[calc(100vh-200px)]">
+      <div className="container mx-auto px-3 sm:px-4 lg:px-6 py-4 sm:py-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 h-[calc(100vh-180px)] sm:h-[calc(100vh-200px)]">
           {/* Conversations List */}
-          <div className="lg:col-span-1 overflow-y-auto">
-            <Card className="h-full">
-              <CardHeader>
-                <CardTitle className="text-lg flex items-center gap-2">
-                  <Inbox className="w-5 h-5" />
+          <div className="lg:col-span-1 overflow-hidden rounded-xl sm:rounded-2xl">
+            <Card className="h-full border-border shadow-lg">
+              <CardHeader className="pb-3 border-b border-border/50">
+                <CardTitle className="text-base sm:text-lg flex items-center gap-2 font-semibold">
+                  <Inbox className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
                   Conversations
                 </CardTitle>
               </CardHeader>
-              <CardContent className="p-0">
+              <CardContent className="p-0 overflow-y-auto h-[calc(100%-4rem)]">
                 {loading && !selectedUser ? (
                   <div className="flex flex-col items-center justify-center py-12">
                     <MessageSquare className="w-10 h-10 text-muted-foreground animate-pulse mb-3" />
@@ -239,18 +235,18 @@ export default function SellerMessagesPage() {
                   </div>
                 ) : conversations.length === 0 ? (
                   <div className="flex flex-col items-center justify-center py-12 px-4">
-                    <Inbox className="w-12 h-12 text-muted-foreground mb-3" />
+                    <Inbox className="w-12 h-12 text-muted-foreground/50 mb-3" />
                     <p className="text-sm text-muted-foreground text-center">
                       No customer messages yet
                     </p>
                   </div>
                 ) : (
-                  <div className="divide-y">
+                  <div className="divide-y divide-border/50">
                     {conversations.map((conversation) => (
                       <div
                         key={conversation.userId}
-                        className={`p-4 cursor-pointer hover:bg-muted/50 transition-colors ${
-                          selectedUser?.userId === conversation.userId ? 'bg-muted' : ''
+                        className={`p-3 sm:p-4 cursor-pointer hover:bg-muted/50 transition-all duration-200 ${
+                          selectedUser?.userId === conversation.userId ? 'bg-muted border-l-4 border-primary' : ''
                         }`}
                         onClick={() => handleSelectUser(conversation)}
                       >
@@ -262,15 +258,15 @@ export default function SellerMessagesPage() {
                                 alt={conversation.userName || 'User'}
                                 width={40}
                                 height={40}
-                                className="rounded-full"
+                                className="rounded-full ring-2 ring-border"
                               />
                             ) : (
-                              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center">
+                              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center ring-2 ring-border">
                                 <User className="w-5 h-5 text-primary-foreground" />
                               </div>
                             )}
                             {conversation.unreadCount > 0 && (
-                              <Badge className="absolute -top-1 -right-1 w-5 h-5 flex items-center justify-center p-0 text-xs bg-destructive">
+                              <Badge className="absolute -top-1 -right-1 w-5 h-5 flex items-center justify-center p-0 text-[10px] bg-destructive hover:bg-destructive shadow-md">
                                 {conversation.unreadCount}
                               </Badge>
                             )}
@@ -281,7 +277,7 @@ export default function SellerMessagesPage() {
                               <h3 className="font-semibold text-sm truncate">
                                 {conversation.userName || 'User'}
                               </h3>
-                              <span className="text-xs text-muted-foreground flex-shrink-0">
+                              <span className="text-[10px] sm:text-xs text-muted-foreground flex-shrink-0">
                                 {conversation.lastMessageTime
                                   ? new Date(conversation.lastMessageTime).toLocaleDateString('en-US', {
                                       month: 'short',
@@ -290,12 +286,12 @@ export default function SellerMessagesPage() {
                                   : ''}
                               </span>
                             </div>
-                            <div className="flex items-center gap-1 text-xs text-muted-foreground mb-1">
-                              <Mail className="w-3 h-3" />
+                            <div className="flex items-center gap-1 text-[10px] sm:text-xs text-muted-foreground mb-1">
+                              <Mail className="w-3 h-3 flex-shrink-0" />
                               <span className="truncate">{conversation.userEmail}</span>
                             </div>
-                            <p className="text-sm text-muted-foreground line-clamp-2">
-                              {conversation.lastMessageType === 'seller' && 'You: '}
+                            <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2">
+                              {conversation.lastMessageType === 'seller' && <span className="font-medium">You: </span>}
                               {conversation.lastMessage}
                             </p>
                           </div>
@@ -309,38 +305,38 @@ export default function SellerMessagesPage() {
           </div>
 
           {/* Chat Area */}
-          <div className="lg:col-span-2">
-            <Card className="h-full flex flex-col">
+          <div className="lg:col-span-2 overflow-hidden rounded-xl sm:rounded-2xl">
+            <Card className="h-full flex flex-col border-border shadow-lg">
               {selectedUser ? (
                 <>
                   {/* Chat Header */}
-                  <CardHeader className="border-b">
+                  <CardHeader className="border-b border-border/50 bg-card py-3 sm:py-4">
                     <div className="flex items-center gap-3">
                       {selectedUser.userImage ? (
                         <Image
                           src={selectedUser.userImage}
                           alt={selectedUser.userName || 'User'}
-                          width={48}
-                          height={48}
-                          className="rounded-full"
+                          width={44}
+                          height={44}
+                          className="rounded-full ring-2 ring-border"
                         />
                       ) : (
-                        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center">
+                        <div className="w-11 h-11 rounded-full bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center ring-2 ring-border">
                           <User className="w-6 h-6 text-primary-foreground" />
                         </div>
                       )}
-                      <div>
-                        <h2 className="font-semibold">{selectedUser.userName || 'User'}</h2>
-                        <p className="text-sm text-muted-foreground">{selectedUser.userEmail}</p>
+                      <div className="flex-1 min-w-0">
+                        <h2 className="font-semibold text-sm sm:text-base truncate">{selectedUser.userName || 'User'}</h2>
+                        <p className="text-xs sm:text-sm text-muted-foreground truncate">{selectedUser.userEmail}</p>
                       </div>
                     </div>
                   </CardHeader>
 
                   {/* Messages */}
-                  <CardContent className="flex-1 overflow-y-auto p-4 space-y-4">
+                  <CardContent className="flex-1 overflow-y-auto p-3 sm:p-4 space-y-3 sm:space-y-4 bg-muted/10">
                     {messages.length === 0 ? (
                       <div className="flex items-center justify-center h-full">
-                        <p className="text-muted-foreground">No messages yet</p>
+                        <p className="text-sm text-muted-foreground">No messages yet</p>
                       </div>
                     ) : (
                       <>
@@ -352,23 +348,23 @@ export default function SellerMessagesPage() {
                             }`}
                           >
                             <div
-                              className={`max-w-[70%] rounded-lg p-3 ${
+                              className={`max-w-[85%] sm:max-w-[70%] rounded-2xl p-3 shadow-sm ${
                                 message.senderType === 'seller'
-                                  ? 'bg-primary text-primary-foreground'
-                                  : 'bg-muted'
+                                  ? 'bg-primary text-primary-foreground rounded-br-sm'
+                                  : 'bg-card text-card-foreground rounded-bl-sm border border-border'
                               }`}
                             >
-                              <p className="text-sm whitespace-pre-wrap break-words">{message.message}</p>
-                              <div className="flex items-center gap-1 mt-1">
-                                <Clock className="w-3 h-3 opacity-70" />
-                                <span className="text-xs opacity-70">
+                              <p className="text-xs sm:text-sm whitespace-pre-wrap break-words leading-relaxed">{message.message}</p>
+                              <div className="flex items-center gap-1 mt-1.5">
+                                <Clock className="w-3 h-3 opacity-60" />
+                                <span className="text-[10px] sm:text-xs opacity-60">
                                   {new Date(message.createdAt).toLocaleTimeString('en-US', {
                                     hour: '2-digit',
                                     minute: '2-digit',
                                   })}
                                 </span>
                                 {message.senderType === 'seller' && message.isRead && (
-                                  <CheckCheck className="w-3 h-3 ml-1 opacity-70" />
+                                  <CheckCheck className="w-3 h-3 ml-0.5 opacity-60" />
                                 )}
                               </div>
                             </div>
@@ -380,33 +376,35 @@ export default function SellerMessagesPage() {
                   </CardContent>
 
                   {/* Reply Form */}
-                  <div className="border-t p-4">
+                  <div className="border-t border-border/50 p-3 sm:p-4 bg-card">
                     <form onSubmit={handleSendReply} className="flex gap-2">
                       <Textarea
                         placeholder="Type your reply..."
                         value={replyMessage}
                         onChange={(e) => setReplyMessage(e.target.value)}
                         rows={2}
-                        className="resize-none"
+                        className="resize-none text-sm bg-background border-border rounded-xl"
                         disabled={sendingReply}
                       />
                       <Button
                         type="submit"
                         disabled={sendingReply || !replyMessage.trim()}
-                        className="gap-2"
+                        className="gap-2 h-auto px-4 sm:px-5 font-medium shadow-lg hover:shadow-xl transition-all"
                       >
-                        <Send className="w-4 h-4" />
-                        {sendingReply ? 'Sending...' : 'Send'}
+                        <Send className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                        <span className="hidden sm:inline">{sendingReply ? 'Sending...' : 'Send'}</span>
                       </Button>
                     </form>
                   </div>
                 </>
               ) : (
-                <CardContent className="flex-1 flex items-center justify-center">
-                  <div className="text-center">
-                    <MessageSquare className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
-                    <h3 className="text-lg font-semibold mb-2">Select a Conversation</h3>
-                    <p className="text-muted-foreground">
+                <CardContent className="flex-1 flex items-center justify-center p-6">
+                  <div className="text-center max-w-sm">
+                    <div className="bg-gradient-to-r from-primary/20 to-primary/10 w-16 h-16 sm:w-20 sm:h-20 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <MessageSquare className="w-8 h-8 sm:w-10 sm:h-10 text-primary" />
+                    </div>
+                    <h3 className="text-base sm:text-lg font-semibold mb-2">Select a Conversation</h3>
+                    <p className="text-xs sm:text-sm text-muted-foreground">
                       Choose a customer from the list to view and reply to their messages
                     </p>
                   </div>
