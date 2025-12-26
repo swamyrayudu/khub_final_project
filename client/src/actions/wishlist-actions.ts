@@ -1,7 +1,7 @@
 'use server';
 
 import { auth } from '@/lib/userauth';
-import { db, wishlists, users, products, notifications, sellers } from '@/lib/db';
+import { db, wishlists, users, products, notifications } from '@/lib/db';
 import { eq, and } from 'drizzle-orm';
 
 export async function getWishlist(): Promise<{ success: boolean; items: string[] }> {

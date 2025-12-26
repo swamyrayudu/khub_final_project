@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { carouselItems } from '@/lib/db/schema';
-import { desc } from 'drizzle-orm';
 import { ensureCarouselTableExists } from '@/lib/db/carousel-init';
 
 export async function GET() {
