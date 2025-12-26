@@ -213,52 +213,82 @@ export default function AddProductPage() {
     : 0;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-muted/20 to-accent/10 py-12 px-4">
-      <div className="max-w-4xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-background via-muted/20 to-accent/10 py-3 sm:py-6 lg:py-10 px-3 sm:px-4 lg:px-6">
+      <div className="max-w-5xl mx-auto">
         
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center space-x-4">
+        {/* Header - Mobile Optimized */}
+        <div className="mb-4 sm:mb-6 md:mb-8">
+          {/* Mobile Header */}
+          <div className="flex items-start justify-between mb-3 sm:mb-4 md:hidden">
             <Button
-              variant="outline"
+              variant="ghost"
               size="sm"
               onClick={() => router.back()}
               disabled={isPending}
-              className="bg-card border-border"
+              className="h-9 w-9 p-0 hover:bg-muted"
             >
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back
+              <ArrowLeft className="w-5 h-5" />
             </Button>
-            <div>
-              <h1 className="text-3xl font-bold text-card-foreground">Add New Product</h1>
-              <p className="text-muted-foreground">Add a new product to your inventory and start selling</p>
+            
+            <div className="flex items-center gap-2">
+              <div className="bg-gradient-to-r from-primary/20 to-primary/10 w-10 h-10 rounded-full flex items-center justify-center">
+                <ShoppingBag className="w-5 h-5 text-primary" />
+              </div>
             </div>
           </div>
           
-          <div className="bg-gradient-to-r from-primary/20 to-primary/10 w-16 h-16 rounded-full flex items-center justify-center">
-            <ShoppingBag className="w-8 h-8 text-primary" />
+          {/* Mobile Title */}
+          <div className="md:hidden text-center mb-4">
+            <h1 className="text-2xl font-bold text-card-foreground mb-1">Add New Product</h1>
+            <p className="text-sm text-muted-foreground px-2">Add a new product to your inventory and start selling</p>
+          </div>
+
+          {/* Desktop Header */}
+          <div className="hidden md:flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => router.back()}
+                disabled={isPending}
+                className="bg-card border-border"
+              >
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Back
+              </Button>
+              <div>
+                <h1 className="text-3xl font-bold text-card-foreground">Add New Product</h1>
+                <p className="text-muted-foreground">Add a new product to your inventory and start selling</p>
+              </div>
+            </div>
+            
+            <div className="bg-gradient-to-r from-primary/20 to-primary/10 w-16 h-16 rounded-full flex items-center justify-center">
+              <ShoppingBag className="w-8 h-8 text-primary" />
+            </div>
           </div>
         </div>
 
-        {/* Form Card */}
-        <div className="bg-card rounded-3xl p-8 shadow-xl border border-border backdrop-blur-sm">
-          <form onSubmit={handleSubmit} className="space-y-8">
+        {/* Form Card - Responsive Optimized */}
+        <div className="bg-card rounded-2xl lg:rounded-3xl p-4 sm:p-6 lg:p-10 shadow-2xl border border-border backdrop-blur-sm">
+          <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5 lg:space-y-7">
             
             {/* Basic Information */}
-            <Card className="border-border bg-background/50">
-              <CardHeader>
-                <CardTitle className="flex items-center space-x-2">
-                  <Package className="w-5 h-5 text-primary" />
-                  <span>Basic Information</span>
+            <Card className="border-border bg-background/50 shadow-lg hover:shadow-xl transition-shadow duration-200">
+              <CardHeader className="pb-3 sm:pb-5 lg:pb-6 border-b border-border/50">
+                <CardTitle className="flex items-center space-x-2.5 text-lg sm:text-xl lg:text-2xl">
+                  <div className="bg-primary/10 p-2 rounded-lg">
+                    <Package className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-primary" />
+                  </div>
+                  <span className="font-semibold">Basic Information</span>
                 </CardTitle>
-                <CardDescription>Enter the essential details of your product</CardDescription>
+                <CardDescription className="text-xs sm:text-sm lg:text-base mt-2">Enter the essential details of your product</CardDescription>
               </CardHeader>
-              <CardContent className="space-y-6">
+              <CardContent className="space-y-4 sm:space-y-5 lg:space-y-6 pt-4 sm:pt-5 lg:pt-6">
                 
                 {/* Product Name */}
-                <div className="space-y-2">
-                  <Label htmlFor="name" className="flex items-center text-sm font-medium text-card-foreground">
-                    <Package className="w-4 h-4 mr-2 text-primary" />
+                <div className="space-y-1.5 sm:space-y-2">
+                  <Label htmlFor="name" className="flex items-center text-xs sm:text-sm font-medium text-card-foreground">
+                    <Package className="w-3 h-3 sm:w-4 sm:h-4 mr-1.5 sm:mr-2 text-primary" />
                     Product Name *
                   </Label>
                   <Input
@@ -269,14 +299,14 @@ export default function AddProductPage() {
                     placeholder="Enter a clear, descriptive product name"
                     required
                     disabled={isPending}
-                    className={`bg-background border-border ${errors.name ? 'border-destructive' : ''}`}
+                    className={`bg-background border-border text-sm sm:text-base h-10 sm:h-11 ${errors.name ? 'border-destructive' : ''}`}
                   />
-                  {errors.name && <p className="text-sm text-destructive">{errors.name}</p>}
+                  {errors.name && <p className="text-xs sm:text-sm text-destructive">{errors.name}</p>}
                 </div>
 
                 {/* Description */}
-                <div className="space-y-2">
-                  <Label htmlFor="description" className="text-sm font-medium text-card-foreground">
+                <div className="space-y-1.5 sm:space-y-2">
+                  <Label htmlFor="description" className="text-xs sm:text-sm font-medium text-card-foreground">
                     Product Description
                   </Label>
                   <Textarea
@@ -287,14 +317,14 @@ export default function AddProductPage() {
                     placeholder="Describe your product features, benefits, and specifications..."
                     rows={4}
                     disabled={isPending}
-                    className="bg-background border-border"
+                    className="bg-background border-border text-sm sm:text-base min-h-[100px] resize-y"
                   />
                 </div>
 
                 {/* Category & Brand */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <Label htmlFor="category" className="text-sm font-medium text-card-foreground">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 lg:gap-7">
+                  <div className="space-y-1.5 sm:space-y-2">
+                    <Label htmlFor="category" className="text-xs sm:text-sm font-medium text-card-foreground">
                       Category
                     </Label>
                     <Select 
@@ -302,14 +332,14 @@ export default function AddProductPage() {
                       onValueChange={(value) => handleSelectChange('category', value)}
                       disabled={isPending}
                     >
-                      <SelectTrigger className="bg-background border-border">
+                      <SelectTrigger className="bg-background border-border h-10 sm:h-11 text-sm sm:text-base">
                         <SelectValue placeholder="Select a category" />
                       </SelectTrigger>
-                      <SelectContent>
+                      <SelectContent className="max-h-[300px]">
                         {PRODUCT_CATEGORIES.map((category) => (
-                          <SelectItem key={category.id} value={category.name}>
+                          <SelectItem key={category.id} value={category.name} className="text-sm sm:text-base">
                             <div className="flex items-center space-x-2">
-                              <span>{category.icon}</span>
+                              <span className="text-base">{category.icon}</span>
                               <span>{category.name}</span>
                             </div>
                           </SelectItem>
@@ -318,8 +348,8 @@ export default function AddProductPage() {
                     </Select>
                   </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="brand" className="text-sm font-medium text-card-foreground">
+                  <div className="space-y-1.5 sm:space-y-2">
+                    <Label htmlFor="brand" className="text-xs sm:text-sm font-medium text-card-foreground">
                       Brand
                     </Label>
                     <Input
@@ -329,7 +359,7 @@ export default function AddProductPage() {
                       onChange={handleInputChange}
                       placeholder="Enter brand name"
                       disabled={isPending}
-                      className="bg-background border-border"
+                      className="bg-background border-border text-sm sm:text-base h-10 sm:h-11"
                     />
                   </div>
                 </div>
@@ -337,19 +367,21 @@ export default function AddProductPage() {
             </Card>
 
             {/* Product Images */}
-            <Card className="border-border bg-background/50">
-              <CardHeader>
-                <CardTitle className="flex items-center space-x-2">
-                  <ImageIcon className="w-5 h-5 text-blue-600" />
-                  <span>Product Images</span>
+            <Card className="border-border bg-background/50 shadow-lg hover:shadow-xl transition-shadow duration-200">
+              <CardHeader className="pb-3 sm:pb-5 lg:pb-6 border-b border-border/50">
+                <CardTitle className="flex items-center space-x-2.5 text-lg sm:text-xl lg:text-2xl">
+                  <div className="bg-blue-600/10 p-2 rounded-lg">
+                    <ImageIcon className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-blue-600" />
+                  </div>
+                  <span className="font-semibold">Product Images</span>
                 </CardTitle>
-                <CardDescription>
+                <CardDescription className="text-xs sm:text-sm lg:text-base mt-2">
                   Upload high-quality images of your product to attract customers
                 </CardDescription>
               </CardHeader>
-              <CardContent>
-                <div className="space-y-2">
-                  <Label className="text-sm font-medium text-card-foreground">
+              <CardContent className="pt-4 sm:pt-5 lg:pt-6">
+                <div className="space-y-1.5 sm:space-y-2">
+                  <Label className="text-xs sm:text-sm font-medium text-card-foreground">
                     Product Images *
                   </Label>
                   <ImageUpload
@@ -359,28 +391,30 @@ export default function AddProductPage() {
                     maxFiles={5}
                   />
                   {errors.images && (
-                    <p className="text-sm text-destructive">{errors.images}</p>
+                    <p className="text-xs sm:text-sm text-destructive">{errors.images}</p>
                   )}
                 </div>
               </CardContent>
             </Card>
 
             {/* Pricing & Inventory */}
-            <Card className="border-border bg-background/50">
-              <CardHeader>
-                <CardTitle className="flex items-center space-x-2">
-                  <DollarSign className="w-5 h-5 text-green-600" />
-                  <span>Pricing & Inventory</span>
+            <Card className="border-border bg-background/50 shadow-lg hover:shadow-xl transition-shadow duration-200">
+              <CardHeader className="pb-3 sm:pb-5 lg:pb-6 border-b border-border/50">
+                <CardTitle className="flex items-center space-x-2.5 text-lg sm:text-xl lg:text-2xl">
+                  <div className="bg-green-600/10 p-2 rounded-lg">
+                    <DollarSign className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-green-600" />
+                  </div>
+                  <span className="font-semibold">Pricing & Inventory</span>
                 </CardTitle>
-                <CardDescription>Set your product pricing and stock information</CardDescription>
+                <CardDescription className="text-xs sm:text-sm lg:text-base mt-2">Set your product pricing and stock information</CardDescription>
               </CardHeader>
-              <CardContent className="space-y-6">
+              <CardContent className="space-y-4 sm:space-y-5 lg:space-y-6 pt-4 sm:pt-5 lg:pt-6">
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 lg:gap-7">
                   {/* Regular Price */}
-                  <div className="space-y-2">
-                    <Label htmlFor="price" className="flex items-center text-sm font-medium text-card-foreground">
-                      <DollarSign className="w-4 h-4 mr-2 text-primary" />
+                  <div className="space-y-1.5 sm:space-y-2">
+                    <Label htmlFor="price" className="flex items-center text-xs sm:text-sm font-medium text-card-foreground">
+                      <DollarSign className="w-3 h-3 sm:w-4 sm:h-4 mr-1.5 sm:mr-2 text-primary" />
                       Regular Price (₹) *
                     </Label>
                     <Input
@@ -392,20 +426,20 @@ export default function AddProductPage() {
                       value={formData.price}
                       onChange={handleInputChange}
                       placeholder="0.00"
-                      className={`bg-background border-border ${errors.price ? 'border-destructive' : ''}`}
+                      className={`bg-background border-border text-sm sm:text-base h-10 sm:h-11 ${errors.price ? 'border-destructive' : ''}`}
                       required
                       disabled={isPending}
                     />
-                    {errors.price && <p className="text-sm text-destructive">{errors.price}</p>}
+                    {errors.price && <p className="text-xs sm:text-sm text-destructive">{errors.price}</p>}
                   </div>
 
                   {/* Offer Price */}
-                  <div className="space-y-2">
-                    <Label htmlFor="offerPrice" className="flex items-center text-sm font-medium text-card-foreground">
-                      <Percent className="w-4 h-4 mr-2 text-primary" />
+                  <div className="space-y-1.5 sm:space-y-2">
+                    <Label htmlFor="offerPrice" className="flex items-center text-xs sm:text-sm font-medium text-card-foreground">
+                      <Percent className="w-3 h-3 sm:w-4 sm:h-4 mr-1.5 sm:mr-2 text-primary" />
                       Offer Price (₹)
                       {discountPercentage > 0 && (
-                        <span className="ml-2 text-green-600 text-sm">
+                        <span className="ml-2 text-green-600 text-xs sm:text-sm font-semibold">
                           ({discountPercentage}% off)
                         </span>
                       )}
@@ -419,19 +453,19 @@ export default function AddProductPage() {
                       value={formData.offerPrice}
                       onChange={handleInputChange}
                       placeholder="0.00 (optional)"
-                      className={`bg-background border-border ${errors.offerPrice ? 'border-destructive' : ''}`}
+                      className={`bg-background border-border text-sm sm:text-base h-10 sm:h-11 ${errors.offerPrice ? 'border-destructive' : ''}`}
                       disabled={isPending}
                     />
-                    {errors.offerPrice && <p className="text-sm text-destructive">{errors.offerPrice}</p>}
+                    {errors.offerPrice && <p className="text-xs sm:text-sm text-destructive">{errors.offerPrice}</p>}
                     <p className="text-xs text-muted-foreground">
                       Set a lower price to offer discounts to customers
                     </p>
                   </div>
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="quantity" className="flex items-center text-sm font-medium text-card-foreground">
-                    <Hash className="w-4 h-4 mr-2 text-primary" />
+                <div className="space-y-1.5 sm:space-y-2">
+                  <Label htmlFor="quantity" className="flex items-center text-xs sm:text-sm font-medium text-card-foreground">
+                    <Hash className="w-3 h-3 sm:w-4 sm:h-4 mr-1.5 sm:mr-2 text-primary" />
                     Quantity in Stock *
                   </Label>
                   <Input
@@ -443,30 +477,32 @@ export default function AddProductPage() {
                     value={formData.quantity}
                     onChange={handleInputChange}
                     placeholder="0"
-                    className={`bg-background border-border max-w-xs ${errors.quantity ? 'border-destructive' : ''}`}
+                    className={`bg-background border-border text-sm sm:text-base h-10 sm:h-11 w-full sm:max-w-xs ${errors.quantity ? 'border-destructive' : ''}`}
                     required
                     disabled={isPending}
                   />
-                  {errors.quantity && <p className="text-sm text-destructive">{errors.quantity}</p>}
+                  {errors.quantity && <p className="text-xs sm:text-sm text-destructive">{errors.quantity}</p>}
                 </div>
               </CardContent>
             </Card>
 
-            {/* ✅ NEW: Location Information */}
-            <Card className="border-border bg-background/50">
-              <CardHeader>
-                <CardTitle className="flex items-center space-x-2">
-                  <MapPin className="w-5 h-5 text-red-600" />
-                  <span>Location Information</span>
+            {/* Location Information */}
+            <Card className="border-border bg-background/50 shadow-lg hover:shadow-xl transition-shadow duration-200">
+              <CardHeader className="pb-3 sm:pb-5 lg:pb-6 border-b border-border/50">
+                <CardTitle className="flex items-center space-x-2.5 text-lg sm:text-xl lg:text-2xl">
+                  <div className="bg-red-600/10 p-2 rounded-lg">
+                    <MapPin className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-red-600" />
+                  </div>
+                  <span className="font-semibold">Location Information</span>
                 </CardTitle>
-                <CardDescription>
+                <CardDescription className="text-xs sm:text-sm lg:text-base mt-2">
                   Add your product&apos;s location to help customers find you
                 </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="googleMapsUrl" className="flex items-center text-sm font-medium text-card-foreground">
-                    <MapPin className="w-4 h-4 mr-2 text-primary" />
+              <CardContent className="space-y-3 sm:space-y-4 lg:space-y-5 pt-4 sm:pt-5 lg:pt-6">
+                <div className="space-y-1.5 sm:space-y-2">
+                  <Label htmlFor="googleMapsUrl" className="flex items-center text-xs sm:text-sm font-medium text-card-foreground">
+                    <MapPin className="w-3 h-3 sm:w-4 sm:h-4 mr-1.5 sm:mr-2 text-primary" />
                     Google Maps URL
                   </Label>
                   <Input
@@ -477,17 +513,17 @@ export default function AddProductPage() {
                     onChange={handleInputChange}
                     placeholder="https://maps.google.com/..."
                     disabled={isPending}
-                    className={`bg-background border-border ${errors.googleMapsUrl ? 'border-destructive' : ''}`}
+                    className={`bg-background border-border text-sm sm:text-base h-10 sm:h-11 ${errors.googleMapsUrl ? 'border-destructive' : ''}`}
                   />
                   {errors.googleMapsUrl && (
-                    <p className="text-sm text-destructive">{errors.googleMapsUrl}</p>
+                    <p className="text-xs sm:text-sm text-destructive">{errors.googleMapsUrl}</p>
                   )}
                   <p className="text-xs text-muted-foreground">
                     Paste the Google Maps link of your product location. The coordinates will be extracted automatically.
                   </p>
-                  <div className="mt-2 p-3 bg-muted/50 rounded-lg border border-border">
+                  <div className="mt-2 p-2.5 sm:p-3 bg-muted/50 rounded-lg border border-border">
                     <p className="text-xs font-medium text-card-foreground mb-1">How to get Google Maps URL:</p>
-                    <ol className="text-xs text-muted-foreground space-y-1 list-decimal list-inside">
+                    <ol className="text-xs text-muted-foreground space-y-1 list-decimal list-inside pl-1">
                       <li>Open Google Maps and search for your location</li>
                       <li>Click &quot;Share&quot; and then &quot;Copy link&quot;</li>
                       <li>Paste the link here</li>
@@ -498,18 +534,20 @@ export default function AddProductPage() {
             </Card>
 
             {/* Additional Details */}
-            <Card className="border-border bg-background/50">
-              <CardHeader>
-                <CardTitle className="flex items-center space-x-2">
-                  <Tag className="w-5 h-5 text-purple-600" />
-                  <span>Additional Details</span>
+            <Card className="border-border bg-background/50 shadow-lg hover:shadow-xl transition-shadow duration-200">
+              <CardHeader className="pb-3 sm:pb-5 lg:pb-6 border-b border-border/50">
+                <CardTitle className="flex items-center space-x-2.5 text-lg sm:text-xl lg:text-2xl">
+                  <div className="bg-purple-600/10 p-2 rounded-lg">
+                    <Tag className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-purple-600" />
+                  </div>
+                  <span className="font-semibold">Additional Details</span>
                 </CardTitle>
-                <CardDescription>Optional information to help manage your inventory</CardDescription>
+                <CardDescription className="text-xs sm:text-sm lg:text-base mt-2">Optional information to help manage your inventory</CardDescription>
               </CardHeader>
-              <CardContent className="space-y-6">
+              <CardContent className="space-y-4 sm:space-y-5 lg:space-y-6 pt-4 sm:pt-5 lg:pt-6">
                 
-                <div className="space-y-2">
-                  <Label htmlFor="sku" className="text-sm font-medium text-card-foreground">
+                <div className="space-y-1.5 sm:space-y-2">
+                  <Label htmlFor="sku" className="text-xs sm:text-sm font-medium text-card-foreground">
                     SKU (Stock Keeping Unit)
                   </Label>
                   <Input
@@ -519,18 +557,18 @@ export default function AddProductPage() {
                     onChange={handleInputChange}
                     placeholder="e.g., TSHIRT-001 (leave empty to auto-generate)"
                     disabled={isPending}
-                    className={`bg-background border-border ${errors.sku ? 'border-destructive' : ''}`}
+                    className={`bg-background border-border text-sm sm:text-base h-10 sm:h-11 ${errors.sku ? 'border-destructive' : ''}`}
                   />
-                  {errors.sku && <p className="text-sm text-destructive">{errors.sku}</p>}
+                  {errors.sku && <p className="text-xs sm:text-sm text-destructive">{errors.sku}</p>}
                   <p className="text-xs text-muted-foreground">
                     Unique identifier for inventory tracking. Auto-generated if left empty.
                   </p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <Label htmlFor="weight" className="flex items-center text-sm font-medium text-card-foreground">
-                      <Weight className="w-4 h-4 mr-2 text-primary" />
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                  <div className="space-y-1.5 sm:space-y-2">
+                    <Label htmlFor="weight" className="flex items-center text-xs sm:text-sm font-medium text-card-foreground">
+                      <Weight className="w-3 h-3 sm:w-4 sm:h-4 mr-1.5 sm:mr-2 text-primary" />
                       Weight (kg)
                     </Label>
                     <Input
@@ -542,15 +580,15 @@ export default function AddProductPage() {
                       value={formData.weight}
                       onChange={handleInputChange}
                       placeholder="0.00"
-                      className={`bg-background border-border ${errors.weight ? 'border-destructive' : ''}`}
+                      className={`bg-background border-border text-sm sm:text-base h-10 sm:h-11 ${errors.weight ? 'border-destructive' : ''}`}
                       disabled={isPending}
                     />
-                    {errors.weight && <p className="text-sm text-destructive">{errors.weight}</p>}
+                    {errors.weight && <p className="text-xs sm:text-sm text-destructive">{errors.weight}</p>}
                   </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="dimensions" className="flex items-center text-sm font-medium text-card-foreground">
-                      <Ruler className="w-4 h-4 mr-2 text-primary" />
+                  <div className="space-y-1.5 sm:space-y-2">
+                    <Label htmlFor="dimensions" className="flex items-center text-xs sm:text-sm font-medium text-card-foreground">
+                      <Ruler className="w-3 h-3 sm:w-4 sm:h-4 mr-1.5 sm:mr-2 text-primary" />
                       Dimensions
                     </Label>
                     <Input
@@ -559,14 +597,14 @@ export default function AddProductPage() {
                       value={formData.dimensions}
                       onChange={handleInputChange}
                       placeholder="e.g., 10cm × 20cm × 5cm"
-                      className="bg-background border-border"
+                      className="bg-background border-border text-sm sm:text-base h-10 sm:h-11"
                       disabled={isPending}
                     />
                   </div>
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="tags" className="text-sm font-medium text-card-foreground">
+                <div className="space-y-1.5 sm:space-y-2">
+                  <Label htmlFor="tags" className="text-xs sm:text-sm font-medium text-card-foreground">
                     Tags
                   </Label>
                   <Input
@@ -576,7 +614,7 @@ export default function AddProductPage() {
                     onChange={handleInputChange}
                     placeholder="e.g., summer, cotton, casual (comma-separated)"
                     disabled={isPending}
-                    className="bg-background border-border"
+                    className="bg-background border-border text-sm sm:text-base h-10 sm:h-11"
                   />
                   <p className="text-xs text-muted-foreground">
                     Add tags to help customers find your product. Separate with commas.
@@ -586,25 +624,25 @@ export default function AddProductPage() {
             </Card>
 
             {/* Form Actions */}
-            <div className="flex items-center justify-between pt-6 border-t border-border">
+            <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4 lg:gap-6 pt-4 sm:pt-6 lg:pt-8 border-t-2 border-border/70">
               <Button
                 type="button"
                 variant="outline"
                 onClick={handleClearForm}
                 disabled={isPending}
-                className="bg-card border-border"
+                className="bg-card border-2 border-border hover:bg-muted h-10 sm:h-11 lg:h-12 text-sm sm:text-base lg:text-lg px-6 lg:px-8 font-medium transition-all"
               >
-                <X className="w-4 h-4 mr-2" />
+                <X className="w-4 h-4 lg:w-5 lg:h-5 mr-2" />
                 Clear Form
               </Button>
               
-              <div className="flex items-center space-x-4">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-4 lg:gap-5">
                 <Button
                   type="button"
                   variant="outline"
                   onClick={() => router.back()}
                   disabled={isPending}
-                  className="bg-card border-border"
+                  className="bg-card border-2 border-border hover:bg-muted h-10 sm:h-11 lg:h-12 text-sm sm:text-base lg:text-lg px-6 lg:px-8 font-medium transition-all"
                 >
                   Cancel
                 </Button>
@@ -612,16 +650,16 @@ export default function AddProductPage() {
                 <Button
                   type="submit"
                   disabled={isPending}
-                  className="min-w-[140px] bg-primary text-primary-foreground hover:bg-primary/90"
+                  className="min-w-full sm:min-w-[140px] lg:min-w-[180px] bg-primary text-primary-foreground hover:bg-primary/90 h-10 sm:h-11 lg:h-12 text-sm sm:text-base lg:text-lg font-semibold px-8 lg:px-12 shadow-lg hover:shadow-xl transition-all"
                 >
                   {isPending ? (
                     <>
-                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      <Loader2 className="w-4 h-4 lg:w-5 lg:h-5 mr-2 animate-spin" />
                       Adding Product...
                     </>
                   ) : (
                     <>
-                      <Save className="w-4 h-4 mr-2" />
+                      <Save className="w-4 h-4 lg:w-5 lg:h-5 mr-2" />
                       Add Product
                     </>
                   )}
