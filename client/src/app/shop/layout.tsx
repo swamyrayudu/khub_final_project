@@ -27,6 +27,7 @@ export default function ShopLayout({ children } :{children:React.ReactNode}) {
       
       if (adminToken) {
         router.replace('/admin/home');
+        router.refresh(); // Force refresh to update cache
         return true;
       }
       return false;
@@ -49,8 +50,10 @@ export default function ShopLayout({ children } :{children:React.ReactNode}) {
             // Redirect to seller dashboard
             if (userData.status === 'pending') {
               router.replace('/seller/auth/login/wait');
+              router.refresh(); // Force refresh to update cache
             } else {
               router.replace('/seller/home');
+              router.refresh(); // Force refresh to update cache
             }
             return;
           }

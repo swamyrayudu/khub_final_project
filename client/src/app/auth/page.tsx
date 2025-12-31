@@ -19,6 +19,7 @@ export default function AuthPage() {
       
       if (adminToken) {
         router.replace('/admin/home');
+        router.refresh(); // Force refresh to update cache
         return true;
       }
       return false;
@@ -41,8 +42,10 @@ export default function AuthPage() {
             // Redirect to seller dashboard
             if (userData.status === 'pending') {
               router.replace('/seller/auth/login/wait');
+              router.refresh(); // Force refresh to update cache
             } else {
               router.replace('/seller/home');
+              router.refresh(); // Force refresh to update cache
             }
             return;
           }
@@ -60,6 +63,7 @@ export default function AuthPage() {
     // If user is already authenticated, redirect to shop immediately
     if (status === 'authenticated' && session) {
       router.replace('/shop/products');
+      router.refresh(); // Force refresh to ensure session is properly synced
     }
   }, [status, session, router]);
   

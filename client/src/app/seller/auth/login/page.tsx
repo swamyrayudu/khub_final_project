@@ -145,17 +145,20 @@ function LoginContent() {
         if (data.user.status === 'pending') {
           console.log('Redirecting to wait page');
           router.push('/seller/auth/login/wait');
+          router.refresh(); // Force refresh to update auth state
           return;
         }
         
         if (data.user.status === 'success' || data.user.status === 'success' || data.user.status === 'active') {
           console.log('Redirecting to home page');
           router.push('/seller/home');
+          router.refresh(); // Force refresh to update auth state
           return;
         }
 
         // Default fallback
         router.push('/seller/home');
+        router.refresh(); // Force refresh to update auth state
       }, 3000);
       
     } catch {

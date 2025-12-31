@@ -47,6 +47,7 @@ export default function RouteProtection({
       if (requireAuth && !authenticated) {
         const loginUrl = `/seller/auth/login?redirect=${encodeURIComponent(pathname)}`;
         router.replace(loginUrl);
+        router.refresh(); // Force refresh to update cache
         return;
       }
 
@@ -54,6 +55,7 @@ export default function RouteProtection({
       if (redirectIfAuth && authenticated) {
         const destination = redirectTo || '/seller/home';
         router.replace(destination);
+        router.refresh(); // Force refresh to update cache
         return;
       }
 
@@ -64,6 +66,7 @@ export default function RouteProtection({
           const destination = redirectTo || '/seller/home';
           console.log(`Custom check failed, redirecting to: ${destination}`);
           router.replace(destination);
+          router.refresh(); // Force refresh to update cache
           return;
         }
       }
