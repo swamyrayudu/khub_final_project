@@ -36,9 +36,7 @@ import {
   Store,
   Bell,
   X,
-  MessageSquare,
-  Settings,
-  ShoppingBag
+  MessageSquare
 } from 'lucide-react';
 
 export default function ShopHeader() {
@@ -227,12 +225,6 @@ export default function ShopHeader() {
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link href="/shop/orders" className="cursor-pointer group">
-                      <ShoppingBag className="mr-2 h-4 w-4 transition-transform duration-200 group-hover:scale-110" />
-                      <span>Orders</span>
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
                     <Link href="/shop/wishlist" className="cursor-pointer group">
                       <Heart className="mr-2 h-4 w-4 transition-transform duration-200 group-hover:scale-110" />
                       <span>Wishlist</span>
@@ -241,12 +233,6 @@ export default function ShopHeader() {
                           {wishlistCount}
                         </Badge>
                       )}
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link href="/shop/settings" className="cursor-pointer group">
-                      <Settings className="mr-2 h-4 w-4 transition-transform duration-200 group-hover:scale-110" />
-                      <span>Settings</span>
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator className="my-1" />

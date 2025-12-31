@@ -86,32 +86,57 @@ export default function Products() {
   const [showFilters, setShowFilters] = useState(false);
   const [productRatings, setProductRatings] = useState<Map<string, ReviewStats>>(new Map());
 
-  // Fetch carousel items first (priority)
+  // Fetch carousel items first (priority) with smart caching
   useEffect(() => {
-    const fetchCarousel = async () => {
+    const CAROUSEL_CACHE_KEY = 'carousel_cache';
+    const CAROUSEL_CACHE_DURATION = 30000; // 30 seconds cache
+
+    const fetchCarousel = async (useCache = true) => {
       try {
-        // Fetch fresh carousel data without caching
+        // Check cache first for instant display
+        if (useCache) {
+          const cached = sessionStorage.getItem(CAROUSEL_CACHE_KEY);
+          if (cached) {
+            const { data, timestamp } = JSON.parse(cached);
+            const isValid = Date.now() - timestamp < CAROUSEL_CACHE_DURATION;
+            if (isValid && data.length > 0) {
+              setCarouselItems(data);
+              return;
+            }
+          }
+        }
+
         const response = await fetch('/api/carousel', {
-          cache: 'no-store', // Always fetch fresh data
+          cache: 'no-store',
         });
         if (response.ok) {
           const data = await response.json();
           const activeItems = (data.items || []).filter((item: { isActive?: boolean }) => item.isActive !== false);
           setCarouselItems(activeItems);
+          // Cache carousel data
+          sessionStorage.setItem(CAROUSEL_CACHE_KEY, JSON.stringify({
+            data: activeItems,
+            timestamp: Date.now()
+          }));
         }
       } catch (error) {
         console.error('Error fetching carousel items:', error);
       }
     };
 
-    fetchCarousel();
+    fetchCarousel(true); // Use cache on initial load
     
-    // Refresh carousel every 10 seconds to catch updates from admin panel
-    const interval = setInterval(fetchCarousel, 10000);
+    // Refresh carousel every 30 seconds (reduced from 10s for better performance)
+    const interval = setInterval(() => fetchCarousel(false), 30000);
     return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
+    const PRODUCTS_CACHE_KEY = 'products_cache';
+    const PROFILE_CACHE_KEY = 'user_profile_cache';
+    const RATINGS_CACHE_KEY = 'products_ratings_cache';
+    const CACHE_DURATION = 60000; // 1 minute cache
+
     async function fetchProducts() {
       // Don't fetch products if user is not authenticated
       if (status === 'unauthenticated') {
@@ -123,75 +148,104 @@ export default function Products() {
         return;
       }
 
-      setLoading(true);
+      // Immediately load from cache for instant display
+      let usedCache = false;
       try {
-        // Add delay to prioritize carousel loading
-        await new Promise(resolve => setTimeout(resolve, 300));
-
-        // Check cache first
-        const cacheKey = 'products_cache';
-        const profileCacheKey = 'user_profile_cache';
+        const cachedProducts = sessionStorage.getItem(PRODUCTS_CACHE_KEY);
+        const cachedProfile = sessionStorage.getItem(PROFILE_CACHE_KEY);
+        const cachedRatings = sessionStorage.getItem(RATINGS_CACHE_KEY);
         
-        const cachedProducts = sessionStorage.getItem(cacheKey);
-        if (cachedProducts) {
-          try {
-            const cached = JSON.parse(cachedProducts);
-            setProducts(cached);
-            setFilteredProducts(cached);
-            setLoading(false);
-          } catch {
-            // Invalid cache, continue fetching
+        if (cachedProducts && cachedProfile) {
+          const productsData = JSON.parse(cachedProducts);
+          const profileData = JSON.parse(cachedProfile);
+          
+          const productsValid = Date.now() - (productsData.timestamp || 0) < CACHE_DURATION;
+          const profileValid = Date.now() - (profileData.timestamp || 0) < CACHE_DURATION;
+          
+          if (productsValid && productsData.data?.length > 0) {
+            setProducts(productsData.data);
+            setFilteredProducts(productsData.data);
+            usedCache = true;
           }
-        }
-
-        // Check for cached profile data first
-        const cachedProfile = sessionStorage.getItem(profileCacheKey);
-        if (cachedProfile) {
-          try {
-            const profileData = JSON.parse(cachedProfile);
+          
+          if (profileValid && profileData.user) {
             setUserCity(profileData.user.city);
             setUserState(profileData.user.state);
             setUserData(profileData.userInfo);
-          } catch {
-            // Invalid cache, continue fetching
           }
-        } else {
-          // Fetch user profile to get location and user info only if not cached
-          const profileResponse = await fetch('/api/user/profile-status');
-          if (profileResponse.ok) {
-            const profileData = await profileResponse.json();
-            
-            setUserCity(profileData.user.city);
-            setUserState(profileData.user.state);
-            
-            const userInfo = {
-              id: profileData.user.id || profileData.user._id,
-              name: profileData.user.name,
-              email: profileData.user.email,
-            };
-            
-            setUserData(userInfo);
-            
-            // Cache the profile data
-            sessionStorage.setItem(profileCacheKey, JSON.stringify({ user: profileData.user, userInfo }));
-          } else {
-            console.error('❌ Profile API error:', profileResponse.status);
+          
+          if (cachedRatings) {
+            const ratingsData = JSON.parse(cachedRatings);
+            if (Date.now() - (ratingsData.timestamp || 0) < CACHE_DURATION) {
+              setProductRatings(new Map(Object.entries(ratingsData.data)));
+            }
+          }
+          
+          if (usedCache) {
+            setLoading(false);
           }
         }
+      } catch {
+        // Invalid cache, continue fetching
+      }
 
-        const result = await getAllSellerProducts();
-        if (result.success) {
-          const mappedProducts = result.products.map((p: Product) => p);
-          // Keep all products - don't filter out wishlist items
+      // Fetch fresh data in background (or immediately if no cache)
+      if (!usedCache) {
+        setLoading(true);
+      }
+
+      try {
+        // Fetch profile and products in parallel for faster loading
+        const [profileResponse, productsResult] = await Promise.all([
+          sessionStorage.getItem(PROFILE_CACHE_KEY) 
+            ? Promise.resolve(null) 
+            : fetch('/api/user/profile-status'),
+          getAllSellerProducts()
+        ]);
+
+        // Handle profile response
+        if (profileResponse?.ok) {
+          const profileData = await profileResponse.json();
+          setUserCity(profileData.user.city);
+          setUserState(profileData.user.state);
+          
+          const userInfo = {
+            id: profileData.user.id || profileData.user._id,
+            name: profileData.user.name,
+            email: profileData.user.email,
+          };
+          setUserData(userInfo);
+          
+          // Cache profile with timestamp
+          sessionStorage.setItem(PROFILE_CACHE_KEY, JSON.stringify({ 
+            user: profileData.user, 
+            userInfo,
+            timestamp: Date.now() 
+          }));
+        }
+
+        // Handle products
+        if (productsResult.success) {
+          const mappedProducts = productsResult.products.map((p: Product) => p);
           setProducts(mappedProducts);
           setFilteredProducts(mappedProducts);
-          // Cache products
-          sessionStorage.setItem(cacheKey, JSON.stringify(mappedProducts));
           
-          // Fetch ratings for all products
+          // Cache products with timestamp
+          sessionStorage.setItem(PRODUCTS_CACHE_KEY, JSON.stringify({
+            data: mappedProducts,
+            timestamp: Date.now()
+          }));
+          
+          // Fetch ratings in background (don't block UI)
           const productIds = mappedProducts.map((p: Product) => p.id);
-          const ratings = await getProductsRatings(productIds);
-          setProductRatings(ratings);
+          getProductsRatings(productIds).then(ratings => {
+            setProductRatings(ratings);
+            // Cache ratings
+            sessionStorage.setItem(RATINGS_CACHE_KEY, JSON.stringify({
+              data: Object.fromEntries(ratings),
+              timestamp: Date.now()
+            }));
+          });
         }
       } catch (error) {
         console.error('Error fetching products:', error);
@@ -485,7 +539,7 @@ export default function Products() {
                   variant={locationFilter === 'all' ? 'default' : 'outline'}
                   size="sm"
                   onClick={() => setLocationFilter('all')}
-                  className="gap-1 whitespace-nowrap flex-shrink-0 dark:text-foreground dark:border-slate-700 dark:hover:bg-slate-900"
+                  className="gap-1 whitespace-nowrap shrink-0 dark:text-foreground dark:border-slate-700 dark:hover:bg-slate-900"
                 >
                   <Package className="w-4 h-4" />
                   All Locations
@@ -494,7 +548,7 @@ export default function Products() {
                   variant={locationFilter === 'city' ? 'default' : 'outline'}
                   size="sm"
                   onClick={() => setLocationFilter('city')}
-                  className="gap-1 whitespace-nowrap flex-shrink-0 dark:text-foreground dark:border-slate-700 dark:hover:bg-slate-900"
+                  className="gap-1 whitespace-nowrap shrink-0 dark:text-foreground dark:border-slate-700 dark:hover:bg-slate-900"
                 >
                   <MapPin className="w-4 h-4" />
                   My City ({userCity})
@@ -503,7 +557,7 @@ export default function Products() {
                   variant={locationFilter === 'state' ? 'default' : 'outline'}
                   size="sm"
                   onClick={() => setLocationFilter('state')}
-                  className="gap-1 whitespace-nowrap flex-shrink-0 dark:text-foreground dark:border-slate-700 dark:hover:bg-slate-900"
+                  className="gap-1 whitespace-nowrap shrink-0 dark:text-foreground dark:border-slate-700 dark:hover:bg-slate-900"
                 >
                   <MapPin className="w-4 h-4" />
                   My State ({userState})
@@ -517,14 +571,14 @@ export default function Products() {
       <div className="container mx-auto max-w-7xl px-4 py-6">
         {/* Category Filter */}
         <div className="flex items-center gap-2 mb-6 overflow-x-auto pb-2 scrollbar-hide">
-          <Filter className="w-4 h-4 text-muted-foreground flex-shrink-0" />
+          <Filter className="w-4 h-4 text-muted-foreground shrink-0" />
           {categories.map((cat) => (
             <Button
               key={cat}
               variant={selectedCategory === cat ? 'default' : 'ghost'}
               size="sm"
               onClick={() => setSelectedCategory(cat)}
-              className="whitespace-nowrap flex-shrink-0 dark:text-foreground dark:hover:bg-slate-900"
+              className="whitespace-nowrap shrink-0 dark:text-foreground dark:hover:bg-slate-900"
             >
               {cat}
             </Button>
@@ -539,19 +593,19 @@ export default function Products() {
               variant="outline"
               size="sm"
               onClick={() => setShowFilters(!showFilters)}
-              className="gap-2 flex-shrink-0"
+              className="gap-2 shrink-0"
             >
               <Filter className="w-4 h-4" />
               {showFilters ? 'Hide Filters' : 'Show Filters'}
             </Button>
             
             {/* Sort Dropdown */}
-            <div className="flex items-center gap-2 flex-shrink-0">
+            <div className="flex items-center gap-2 shrink-0">
               <span className="text-sm text-muted-foreground whitespace-nowrap">Sort by:</span>
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as 'newest' | 'price-low' | 'price-high' | 'rating')}
-                className="text-sm border rounded-md px-2 md:px-3 py-1.5 bg-background min-w-[140px]"
+                className="text-sm border rounded-md px-2 md:px-3 py-1.5 bg-background min-w-35"
               >
                 <option value="newest">Newest First</option>
                 <option value="price-low">Price: Low to High</option>
@@ -591,7 +645,7 @@ export default function Products() {
                     <button
                       key={rating}
                       onClick={() => setMinRating(rating)}
-                      className={`flex items-center gap-1 px-2 md:px-3 py-1.5 rounded-md text-xs border transition-colors flex-shrink-0 ${
+                      className={`flex items-center gap-1 px-2 md:px-3 py-1.5 rounded-md text-xs border transition-colors shrink-0 ${
                         minRating === rating
                           ? 'bg-primary text-primary-foreground border-primary'
                           : 'bg-background hover:bg-muted'
@@ -616,7 +670,7 @@ export default function Products() {
                     variant={stockStatus === 'all' ? 'default' : 'outline'}
                     size="sm"
                     onClick={() => setStockStatus('all')}
-                    className="flex-shrink-0"
+                    className="shrink-0"
                   >
                     All
                   </Button>
@@ -624,7 +678,7 @@ export default function Products() {
                     variant={stockStatus === 'in-stock' ? 'default' : 'outline'}
                     size="sm"
                     onClick={() => setStockStatus('in-stock')}
-                    className="flex-shrink-0"
+                    className="shrink-0"
                   >
                     In Stock
                   </Button>
@@ -632,7 +686,7 @@ export default function Products() {
                     variant={stockStatus === 'low-stock' ? 'default' : 'outline'}
                     size="sm"
                     onClick={() => setStockStatus('low-stock')}
-                    className="flex-shrink-0"
+                    className="shrink-0"
                   >
                     Low Stock
                   </Button>
@@ -679,7 +733,7 @@ export default function Products() {
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 md:gap-3 auto-rows-fr">
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-2 md:gap-3 auto-rows-fr">
               {displayedProducts.map((product) => {
                 const discount = calculateDiscount(product.price, product.offerPrice);
                 const finalPrice = product.offerPrice > 0 ? product.offerPrice : product.price;
@@ -694,7 +748,7 @@ export default function Products() {
                     onClick={() => router.push(`/shop/products/${product.id}`)}
                   >
                     {/* Image Section */}
-                    <div className="relative w-full aspect-[4/3] md:aspect-[16/9] bg-muted overflow-hidden"
+                    <div className="relative w-full aspect-4/3 md:aspect-video bg-muted overflow-hidden"
                       onClick={(e) => {
                         e.stopPropagation();
                         router.push(`/shop/products/${product.id}`);
@@ -741,7 +795,7 @@ export default function Products() {
                     </div>
 
                     <CardHeader className="p-1.5 md:p-2.5 pb-0.5 md:pb-1">
-                      <CardTitle className="text-[11px] md:text-sm line-clamp-2 font-semibold leading-tight min-h-[28px] md:min-h-[36px]">
+                      <CardTitle className="text-[11px] md:text-sm line-clamp-2 font-semibold leading-tight min-h-7 md:min-h-9">
                         {product.name}
                       </CardTitle>
                       <div className="hidden md:flex items-center justify-between gap-1 mt-0.5">
@@ -755,7 +809,7 @@ export default function Products() {
                     {/* Seller Info - Only on desktop */}
                     {(product.sellerShopName || product.sellerCity) && (
                       <div className="hidden md:flex items-center gap-1 text-[9px] text-muted-foreground p-1 bg-muted/30 rounded">
-                        <MapPin className="w-2.5 h-2.5 flex-shrink-0" />
+                        <MapPin className="w-2.5 h-2.5 shrink-0" />
                         <div className="line-clamp-1 text-[9px]">
                           {product.sellerShopName && (
                             <span className="font-medium text-foreground">
