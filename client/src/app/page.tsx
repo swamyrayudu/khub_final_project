@@ -100,7 +100,7 @@ export default function Home() {
   // Show loading while checking auth
   if (isLoading || status === 'loading' || (status === 'authenticated' && session)) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
+      <div className="min-h-screen bg-background flex items-center justify-center" suppressHydrationWarning>
         <div className="text-center space-y-4">
           <Loader2 className="w-10 h-10 text-primary animate-spin mx-auto" />
           <p className="text-muted-foreground text-sm">Loading...</p>
