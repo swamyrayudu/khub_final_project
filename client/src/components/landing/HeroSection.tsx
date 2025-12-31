@@ -4,7 +4,6 @@ import React from 'react';
 import { ArrowRight, Sparkles } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { EncryptedText } from '../ui/encrypted-text';
-import ColourfulText from '../ui/colourful-text';
 
 export default function HeroSection() {
   const router = useRouter();
