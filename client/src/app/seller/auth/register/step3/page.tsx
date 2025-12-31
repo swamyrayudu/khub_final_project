@@ -173,7 +173,7 @@ export default function Step3() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-muted/20 to-accent/10 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-300">
+    <div className="min-h-screen bg-linear-to-br from-background via-muted/20 to-accent/10 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-300">
       <div className="max-w-md w-full space-y-8">
         
         {/* Theme Toggle */}
@@ -207,7 +207,7 @@ export default function Step3() {
 
           {/* Header */}
           <div className="text-center mb-8">
-            <div className="bg-gradient-to-r from-primary/20 to-primary/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+            <div className="bg-linear-to-r from-primary/20 to-primary/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
               {step === 'email' && <Mail className="w-8 h-8 text-primary" />}
               {step === 'otp' && <Shield className="w-8 h-8 text-primary" />}
               {step === 'verified' && <CheckCircle className="w-8 h-8 text-green-600" />}
