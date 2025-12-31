@@ -29,7 +29,7 @@ export default function DualCTASection() {
       <div className="container mx-auto max-w-6xl">
         {/* Shimmer CTA Section */}
         <div className="text-center space-y-4 mb-12">
-          <button className="inline-flex h-10 md:h-12 items-center justify-center rounded-md border-2 border-slate-900 dark:border-slate-400 bg-white dark:bg-slate-900 px-4 md:px-6 font-medium text-xs md:text-sm text-slate-900 dark:text-slate-100 transition-all duration-300 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50 dark:focus:ring-offset-slate-900">
+          <button className="inline-flex h-10 md:h-12 items-center justify-center rounded-md border-2 border-slate-900 dark:border-slate-400 bg-white dark:bg-slate-900 px-4 md:px-6 font-medium text-xs md:text-sm text-slate-900 dark:text-slate-100 transition-all duration-300 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50 dark:focus:ring-offset-slate-900 cursor-pointer">
             Welcome to the Future of Shopping
           </button>
         </div>
@@ -77,7 +77,7 @@ export default function DualCTASection() {
 
               <button
                 onClick={() => router.push('/shop/products')}
-                className="w-full group/btn px-4 md:px-6 py-2 md:py-4 bg-primary text-primary-foreground rounded-xl font-semibold text-sm md:text-base transition-all duration-300 flex items-center justify-center space-x-2 hover:-translate-y-1 hover:bg-primary/90 shadow-lg shadow-primary/50 hover:shadow-xl hover:shadow-primary/70"
+                className="w-full group/btn px-4 md:px-6 py-2 md:py-4 bg-primary text-primary-foreground rounded-xl font-semibold text-sm md:text-base transition-all duration-300 flex items-center justify-center space-x-2 hover:-translate-y-1 hover:bg-primary/90 shadow-lg shadow-primary/50 hover:shadow-xl hover:shadow-primary/70 cursor-pointer"
               >
                 <span>Start Shopping</span>
                 <ArrowRight className="w-4 md:w-5 h-4 md:h-5 group-hover/btn:translate-x-1 transition-transform duration-300" />
@@ -116,7 +116,7 @@ export default function DualCTASection() {
 
               <button
                 onClick={() => router.push('/seller/auth/login')}
-                className="w-full group/btn px-4 md:px-6 py-2 md:py-4 bg-secondary text-secondary-foreground rounded-xl font-semibold text-sm md:text-base transition-all duration-300 flex items-center justify-center space-x-2 hover:-translate-y-1 hover:bg-secondary/90 shadow-lg shadow-secondary/50 hover:shadow-xl hover:shadow-secondary/70"
+                className="w-full group/btn px-4 md:px-6 py-2 md:py-4 bg-secondary text-secondary-foreground rounded-xl font-semibold text-sm md:text-base transition-all duration-300 flex items-center justify-center space-x-2 hover:-translate-y-1 hover:bg-secondary/90 shadow-lg shadow-secondary/50 hover:shadow-xl hover:shadow-secondary/70 cursor-pointer"
               >
                 <span>Register as Seller</span>
                 <ArrowRight className="w-4 md:w-5 h-4 md:h-5 group-hover/btn:translate-x-1 transition-transform duration-300" />

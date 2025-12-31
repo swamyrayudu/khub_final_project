@@ -176,7 +176,7 @@ function LoginContent() {
       <div className="w-full max-w-md flex justify-between items-center mb-8">
         <button
           onClick={() => router.push('/')}
-          className="flex items-center space-x-2 text-muted-foreground hover:text-foreground transition-colors duration-200"
+          className="flex items-center space-x-2 text-muted-foreground hover:text-foreground transition-colors duration-200 cursor-pointer"
         >
           <Home className="w-5 h-5" />
           <span className="text-sm">Back to Home</span>
@@ -184,7 +184,7 @@ function LoginContent() {
         
         <button
           onClick={toggleDarkMode}
-          className="p-2 rounded-lg bg-card border border-border hover:bg-accent hover:text-accent-foreground transition-all duration-200"
+          className="p-2 rounded-lg bg-card border border-border hover:bg-accent hover:text-accent-foreground transition-all duration-200 cursor-pointer"
           aria-label="Toggle dark mode"
         >
           {darkMode ? (
@@ -213,8 +213,8 @@ function LoginContent() {
 
         {/* Redirect Notice */}
         {redirectTo !== '/seller/home' && (
-          <div className="mb-6 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
-            <p className="text-sm text-blue-700 dark:text-blue-400">
+          <div className="mb-6 bg-primary/10 dark:bg-primary/20 border border-primary/20 dark:border-primary/30 rounded-lg p-4">
+            <p className="text-sm text-primary dark:text-primary">
               You&apos;ll be redirected to your requested page after login.
             </p>
           </div>
@@ -270,7 +270,7 @@ function LoginContent() {
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
                 disabled={isLoading}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 p-1 text-muted-foreground hover:text-foreground transition-colors duration-200 disabled:opacity-50"
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 p-1 text-muted-foreground hover:text-foreground transition-colors duration-200 disabled:opacity-50 cursor-pointer"
                 tabIndex={-1}
               >
                 {showPassword ? (
@@ -285,7 +285,7 @@ function LoginContent() {
           {/* Error Message */}
           {error && (
             <div className="bg-destructive/10 border border-destructive/20 text-destructive px-4 py-3 rounded-xl text-sm flex items-center space-x-2">
-              <AlertCircle className="w-4 h-4 flex-shrink-0" />
+              <AlertCircle className="w-4 h-4 shrink-0" />
               <span>{error}</span>
             </div>
           )}
@@ -311,13 +311,23 @@ function LoginContent() {
         </form>
 
         {/* Footer */}
-        <div className="mt-8 text-center">
+        <div className="mt-8 space-y-4 text-center">
+          {/* Forgot Password Link */}
+          <button
+            onClick={() => router.push('/seller/auth/forgot-password')}
+            disabled={isLoading}
+            className="text-primary hover:text-primary/80 font-medium text-sm transition-colors duration-200 disabled:opacity-50 cursor-pointer"
+          >
+            Forgot Password?
+          </button>
+
+          {/* Sign Up Link */}
           <p className="text-muted-foreground text-sm">
             Don&apos;t have an account?{' '}
             <button
               onClick={() => router.push('/seller/auth/register/step1')}
               disabled={isLoading}
-              className="text-primary hover:text-primary/80 font-medium transition-colors duration-200 disabled:opacity-50"
+              className="text-primary hover:text-primary/80 font-medium transition-colors duration-200 disabled:opacity-50 cursor-pointer"
             >
               Sign up as Seller
             </button>

@@ -25,13 +25,13 @@ export default function LandingHeader({ darkMode, toggleDarkMode }: LandingHeade
         {/* Theme Toggle */}
         <button
           onClick={toggleDarkMode}
-          className="p-2 rounded-lg bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-800 transition-all duration-200"
+          className="p-2 rounded-lg bg-primary/10 dark:bg-primary/20 border border-primary/30 dark:border-primary/40 hover:bg-primary/20 dark:hover:bg-primary/30 transition-all duration-200 cursor-pointer"
           aria-label="Toggle dark mode"
         >
           {darkMode ? (
-            <Sun className="w-4 md:w-5 h-4 md:h-5 text-yellow-500" />
+            <Sun className="w-4 md:w-5 h-4 md:h-5 text-primary" />
           ) : (
-            <Moon className="w-4 md:w-5 h-4 md:h-5 text-slate-700" />
+            <Moon className="w-4 md:w-5 h-4 md:h-5 text-primary" />
           )}
         </button>
       </div>

@@ -58,6 +58,7 @@ export default function SellerLayout({
   const noHeaderRoutes = [
     '/seller/auth/login',
     '/seller/auth/login/wait',
+    '/seller/auth/forgot-password',
     '/seller/auth/register/step1',
     '/seller/auth/register/step2',
     '/seller/auth/register/step3',

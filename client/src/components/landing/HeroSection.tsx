@@ -36,8 +36,8 @@ export default function HeroSection() {
           {/* Main Headline */}
           <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold leading-tight animate-in fade-in slide-in-from-bottom-6 duration-500 delay-100">
             <span className="block text-foreground">Discover Amazing</span>
-            <span className="block whitespace-nowrap">
-              <ColourfulText text="Products & Support Local" colors={["rgb(234, 179, 8)"]} />
+            <span className="block whitespace-nowrap text-primary">
+              Products & Support Local
             </span>
           </h1>
 

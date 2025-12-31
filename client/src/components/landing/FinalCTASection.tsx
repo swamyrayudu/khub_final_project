@@ -28,14 +28,14 @@ export default function FinalCTASection() {
             <div className="flex flex-row items-center justify-center gap-2 md:gap-3 pt-6">
               <button
                 onClick={() => router.push('/shop/products')}
-                className="group px-3 md:px-8 py-2 md:py-4 bg-primary text-primary-foreground rounded-xl font-semibold text-xs md:text-lg transition-all duration-300 flex items-center space-x-1 md:space-x-2 hover:-translate-y-1 hover:bg-primary/90 shadow-lg shadow-primary/50 hover:shadow-xl hover:shadow-primary/70 whitespace-nowrap"
+                className="group px-3 md:px-8 py-2 md:py-4 bg-primary text-primary-foreground rounded-xl font-semibold text-xs md:text-lg transition-all duration-300 flex items-center space-x-1 md:space-x-2 hover:-translate-y-1 hover:bg-primary/90 shadow-lg shadow-primary/50 hover:shadow-xl hover:shadow-primary/70 whitespace-nowrap cursor-pointer"
               >
                 <span>Shop Now</span>
                 <ArrowRight className="w-3 md:w-5 h-3 md:h-5 group-hover:translate-x-1 transition-transform duration-300" />
               </button>
               <button
                 onClick={() => router.push('/seller/auth/login')}
-                className="group px-3 md:px-8 py-2 md:py-4 bg-primary/20 backdrop-blur-md border-2 border-primary/50 text-primary rounded-xl font-semibold text-xs md:text-lg transition-all duration-300 flex items-center space-x-1 md:space-x-2 hover:-translate-y-1 hover:bg-primary/30 hover:border-primary/70 shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/40 whitespace-nowrap"
+                className="group px-3 md:px-8 py-2 md:py-4 bg-primary/20 backdrop-blur-md border-2 border-primary/50 text-primary rounded-xl font-semibold text-xs md:text-lg transition-all duration-300 flex items-center space-x-1 md:space-x-2 hover:-translate-y-1 hover:bg-primary/30 hover:border-primary/70 shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/40 whitespace-nowrap cursor-pointer"
               >
                 <span>Start Selling</span>
                 <ArrowRight className="w-3 md:w-5 h-3 md:h-5 group-hover:translate-x-1 transition-transform duration-300" />
