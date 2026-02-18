@@ -14,7 +14,7 @@ import { Loader2 } from "lucide-react";
 
 export default function ShopLayout({ children } :{children:React.ReactNode}) {
   const router = useRouter();
-  const { data: session, status } = useSession();
+  const { data: session, status, update } = useSession();
   const [showLocationModal, setShowLocationModal] = useState(false);
   const [isCheckingProfile, setIsCheckingProfile] = useState(true);
   const [isCheckingSeller, setIsCheckingSeller] = useState(true);
@@ -27,7 +27,6 @@ export default function ShopLayout({ children } :{children:React.ReactNode}) {
       
       if (adminToken) {
         router.replace('/admin/home');
-        router.refresh(); // Force refresh to update cache
         return true;
       }
       return false;
@@ -50,10 +49,8 @@ export default function ShopLayout({ children } :{children:React.ReactNode}) {
             // Redirect to seller dashboard
             if (userData.status === 'pending') {
               router.replace('/seller/auth/login/wait');
-              router.refresh(); // Force refresh to update cache
             } else {
               router.replace('/seller/home');
-              router.refresh(); // Force refresh to update cache
             }
             return;
           }
@@ -98,8 +95,8 @@ export default function ShopLayout({ children } :{children:React.ReactNode}) {
 
   const handleLocationSet = () => {
     setShowLocationModal(false);
-    // Optionally reload the page to refresh session data
-    window.location.reload();
+    // Refresh session data without a full page reload
+    update();
   };
 
   // Show loading while checking seller auth

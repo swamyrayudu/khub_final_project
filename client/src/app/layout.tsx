@@ -34,6 +34,7 @@ export default function RootLayout({
           <SessionProvider 
             refetchInterval={0}
             refetchOnWindowFocus={false}
+            refetchWhenOffline={false}
             basePath="/api/auth"
           >
             <ThemeProvider

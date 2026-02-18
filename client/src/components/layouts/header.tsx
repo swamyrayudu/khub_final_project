@@ -40,7 +40,7 @@ import {
 } from 'lucide-react';
 
 export default function ShopHeader() {
-  const { data: session, status } = useSession();
+  const { data: session, status, update } = useSession();
   const [mounted, setMounted] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -50,6 +50,9 @@ export default function ShopHeader() {
 
   useEffect(() => {
     setMounted(true);
+    // Force session refresh on mount to pick up newly set session cookies
+    // (e.g. after Google OAuth redirect completes)
+    update();
   }, []);
 
   useEffect(() => {
