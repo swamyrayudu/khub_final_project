@@ -123,9 +123,11 @@ export async function getProductRatingStats(productId: string): Promise<ReviewSt
  */
 export async function getProductsRatings(productIds: string[]): Promise<Map<string, ReviewStats>> {
   try {
+    if (productIds.length === 0) return new Map();
+
     const result = await db.execute(sql`
       SELECT * FROM product_ratings_summary
-      WHERE product_id = ANY(${productIds})
+      WHERE product_id = ANY(${sql.raw(`ARRAY[${productIds.map(id => `'${id}'`).join(',')}]::uuid[]`)})
     `);
 
     const ratingsMap = new Map<string, ReviewStats>();

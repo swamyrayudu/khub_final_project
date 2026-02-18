@@ -31,7 +31,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-          <SessionProvider>
+          <SessionProvider 
+            refetchInterval={0}
+            refetchOnWindowFocus={true}
+            basePath="/api/auth"
+          >
             <ThemeProvider
               attribute="class"
               defaultTheme="system"

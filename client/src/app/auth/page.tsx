@@ -60,12 +60,12 @@ export default function AuthPage() {
   }, [router]);
 
   useEffect(() => {
-    // If user is already authenticated, redirect to shop immediately
+    // If user is already authenticated, redirect to shop immediately  
     if (status === 'authenticated' && session) {
-      router.replace('/shop/products');
-      router.refresh(); // Force refresh to ensure session is properly synced
+      // Use window.location for clean redirect without cache issues
+      window.location.href = '/shop/products';
     }
-  }, [status, session, router]);
+  }, [status, session]);
   
   // Don't render anything while checking auth status or if authenticated
   if (isCheckingSeller || status === 'loading' || (status === 'authenticated' && session)) {

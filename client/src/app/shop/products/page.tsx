@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -23,7 +23,6 @@ import { toast } from 'sonner';
 import { useWishlist } from '@/contexts/WishlistContext';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
-import { LoadingSpinner } from '@/components/ui/loading-page';
 import { Carousel } from '@/components/ui/carousel';
 import { getProductsRatings, ReviewStats } from '@/actions/reviewActions';
 import { Slider } from '@/components/ui/slider';
@@ -59,7 +58,7 @@ interface Product {
   sellerState?: string;
 }
 
-const PRODUCTS_PER_PAGE = 12; // Load 12 products at a time
+const PRODUCTS_PER_PAGE = 10; // Load 10 products at a time
 
 export default function Products() {
   const router = useRouter();
@@ -261,21 +260,26 @@ export default function Products() {
     setDisplayedProducts(filteredProducts.slice(0, displayedCount));
   }, [filteredProducts, displayedCount]);
 
-  // Load more products when user scrolls near bottom
-  useEffect(() => {
-    const handleScroll = () => {
-      // Check if user is near bottom of page
-      if ((window.innerHeight + document.documentElement.scrollTop) >= document.documentElement.scrollHeight - 500) {
-        setDisplayedCount(prev => {
-          const newCount = prev + PRODUCTS_PER_PAGE;
-          return newCount <= filteredProducts.length ? newCount : prev;
-        });
-      }
-    };
+  // Infinite scroll: observe sentinel to load next batch
+  const sentinelRef = useRef<HTMLDivElement | null>(null);
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [filteredProducts.length]);
+  useEffect(() => {
+    const sentinel = sentinelRef.current;
+    if (!sentinel) return;
+    if (displayedCount >= filteredProducts.length) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setDisplayedCount(prev => Math.min(prev + PRODUCTS_PER_PAGE, filteredProducts.length));
+        }
+      },
+      { rootMargin: '300px', threshold: 0 }
+    );
+
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  }, [displayedCount, filteredProducts.length]);
 
   // Filter products based on search, category, location, price, rating, and stock
   useEffect(() => {
@@ -719,14 +723,12 @@ export default function Products() {
         </div>
 
         {/* Loading State */}
-        {status === 'loading' ? (
-          <LoadingSpinner text="Loading products..." />
-        ) : loading && displayedProducts.length === 0 ? (
+        {status === 'loading' || (loading && products.length === 0) ? (
           <div className="flex flex-col items-center justify-center py-12">
             <div className="w-8 h-8 border-4 border-muted border-t-primary rounded-full animate-spin mb-4"></div>
             <p className="text-sm text-muted-foreground">Loading products...</p>
           </div>
-        ) : displayedProducts.length === 0 && !loading ? (
+        ) : displayedProducts.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-64">
             <Package className="w-10 h-10 text-muted-foreground mb-3" />
             <p className="text-sm text-muted-foreground">No products found</p>
@@ -869,11 +871,14 @@ export default function Products() {
             })}
             </div>
 
+            {/* Sentinel for infinite scroll — always in DOM so observer can attach */}
+            <div ref={sentinelRef} className="w-full h-4" />
+
             {/* Loading indicator when more products available */}
             {displayedCount < filteredProducts.length && (
-              <div className="flex justify-center py-8">
-                <div className="flex flex-col items-center gap-3">
-                  <div className="w-6 h-6 border-3 border-muted border-t-primary rounded-full animate-spin"></div>
+              <div className="flex justify-center py-4">
+                <div className="flex flex-col items-center gap-2">
+                  <div className="w-7 h-7 border-4 border-muted border-t-primary rounded-full animate-spin"></div>
                   <p className="text-sm text-muted-foreground">
                     Loading more products... ({displayedCount} of {filteredProducts.length})
                   </p>
