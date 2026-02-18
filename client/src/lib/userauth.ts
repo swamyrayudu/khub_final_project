@@ -40,7 +40,7 @@ export const authOptions: NextAuthConfig = {
     },
   },
   callbacks: {
-    async signIn({ user, account }) {
+    async signIn({ account }) {
       // Ensure user data is saved to database on sign in
       if (account?.provider === 'google') {
         return true;
@@ -64,7 +64,7 @@ export const authOptions: NextAuthConfig = {
       }
       return session;
     },
-    async jwt({ token, user, account, trigger }) {
+    async jwt({ token, user, trigger }) {
       // Initial sign in
       if (user) {
         token.id = user.id;
