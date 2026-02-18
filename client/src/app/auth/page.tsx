@@ -10,6 +10,7 @@ export default function AuthPage() {
   const router = useRouter();
   const { data: session, status } = useSession();
   const [isCheckingSeller, setIsCheckingSeller] = useState(true);
+  const [isSigningIn, setIsSigningIn] = useState(false);
 
   // Check for admin token first
   useEffect(() => {
@@ -19,7 +20,6 @@ export default function AuthPage() {
       
       if (adminToken) {
         router.replace('/admin/home');
-        router.refresh(); // Force refresh to update cache
         return true;
       }
       return false;
@@ -42,10 +42,8 @@ export default function AuthPage() {
             // Redirect to seller dashboard
             if (userData.status === 'pending') {
               router.replace('/seller/auth/login/wait');
-              router.refresh(); // Force refresh to update cache
             } else {
               router.replace('/seller/home');
-              router.refresh(); // Force refresh to update cache
             }
             return;
           }
@@ -62,13 +60,22 @@ export default function AuthPage() {
   useEffect(() => {
     // If user is already authenticated, redirect to shop immediately  
     if (status === 'authenticated' && session) {
-      // Use window.location for clean redirect without cache issues
-      window.location.href = '/shop/products';
+      window.location.replace('/shop/products');
     }
   }, [status, session]);
   
+  const handleGoogleSignIn = async () => {
+    if (isSigningIn) return;
+    setIsSigningIn(true);
+    try {
+      await signIn('google', { callbackUrl: '/shop/products', redirect: true });
+    } catch {
+      setIsSigningIn(false);
+    }
+  };
+
   // Don't render anything while checking auth status or if authenticated
-  if (isCheckingSeller || status === 'loading' || (status === 'authenticated' && session)) {
+  if (isCheckingSeller || status === 'loading' || status === 'authenticated' || isSigningIn) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
         <Loader2 className="w-8 h-8 text-primary animate-spin" />
@@ -102,9 +109,10 @@ export default function AuthPage() {
         
         {/* Google Sign In Button */}
         <Button
-          onClick={() => signIn('google', { callbackUrl: '/shop/products' })}
+          onClick={handleGoogleSignIn}
           className="w-full cursor-pointer"
           variant="outline"
+          disabled={isSigningIn}
         >
           <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
             <path

@@ -33,7 +33,7 @@ export default function RootLayout({
       >
           <SessionProvider 
             refetchInterval={0}
-            refetchOnWindowFocus={true}
+            refetchOnWindowFocus={false}
             basePath="/api/auth"
           >
             <ThemeProvider
